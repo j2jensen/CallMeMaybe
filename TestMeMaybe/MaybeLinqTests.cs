@@ -13,26 +13,27 @@ namespace TestMeMaybe
         {
             var q =
                 from m in Maybe.Empty<int>()
-                select m.ToString(CultureInfo.InvariantCulture);
+                select m;
             Assert.AreEqual("", string.Join(",", q));
         }
 
         [Test]
-        public void TestValueSelectLinq()
+        public void TestSelectLinq()
         {
-            var q =
-                from m in Maybe.From(1)
-                select m.ToString(CultureInfo.InvariantCulture);
-            Assert.AreEqual("1", string.Join(",", q));
+            Assert.AreEqual(1, Maybe.From(1).Single());
+            Assert.AreEqual("hi", Maybe.From("hi").Single());
         }
 
         [Test]
-        public void TestReferenceSelectLinq()
+        public void TestSelectManyLinq()
         {
             var q =
-                from m in Maybe.From("hi")
-                select m.ToString(CultureInfo.InvariantCulture);
-            Assert.AreEqual("hi", string.Join(",", q));
+                (from number in Maybe.From(1)
+                    from name in Maybe.From("hi")
+                    select new {number, name})
+                    .Single();
+            Assert.AreEqual(1, q.number);
+            Assert.AreEqual("hi", q.name);
         }
     }
 }

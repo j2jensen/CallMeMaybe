@@ -173,10 +173,10 @@ namespace TestMeMaybe
         [Test]
         public void TestToString()
         {
-            Assert.AreEqual("", Maybe.Empty<int>());
-            Assert.AreEqual("", Maybe.Empty<string>());
-            Assert.AreEqual("1", Maybe.From(1));
-            Assert.AreEqual("hi", Maybe.From("hi"));
+            Assert.AreEqual("", Maybe.Empty<int>().ToString());
+            Assert.AreEqual("", Maybe.Empty<string>().ToString());
+            Assert.AreEqual("1", Maybe.From(1).ToString());
+            Assert.AreEqual("hi", Maybe.From("hi").ToString());
         }
 
         private string FooDo(Maybe<int> number, Maybe<string> name)
