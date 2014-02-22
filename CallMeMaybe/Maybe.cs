@@ -24,7 +24,14 @@ namespace CallMeMaybe
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Maybe<T> && Equals((Maybe<T>) obj);
+            var maybe = obj as IMaybe;
+            if (maybe == null) return false;
+            if (!maybe.HasValue)
+            {
+                return !HasValue;
+            }
+
+            throw new NotImplementedException();
         }
 
         public override int GetHashCode()
