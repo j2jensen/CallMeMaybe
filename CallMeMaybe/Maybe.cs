@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CallMeMaybe
 {
-    public struct Maybe<T> : IEquatable<Maybe<T>>
+    public struct Maybe<T> : IEquatable<Maybe<T>>, IMaybe<T>
     {
         private readonly T _value;
         private readonly bool _hasValue;
@@ -15,6 +15,7 @@ namespace CallMeMaybe
             _value = value;
         }
 
+        #region Equality
         public bool Equals(Maybe<T> other)
         {
             return _hasValue.Equals(other._hasValue) && EqualityComparer<T>.Default.Equals(_value, other._value);
@@ -43,6 +44,16 @@ namespace CallMeMaybe
         {
             return !left.Equals(right);
         }
+        #endregion
+    }
+
+    public interface IMaybe
+    {
+        bool HasValue { get; }
+    }
+
+    public interface IMaybe<out T> : IMaybe
+    {
     }
 
     public static class Maybe
