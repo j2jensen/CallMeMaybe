@@ -158,24 +158,22 @@ namespace TestMeMaybe
         {
             Maybe<int> number = 1;
             Assert.IsTrue(number.HasValue);
-            FooDo(1, "hi");
+            FooDo(0, "hi");
         }
 
         [Test]
         public void TestNullImplicitCasting()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                Maybe<string> number = null;
-            });
+#pragma warning disable 168
+            Assert.Throws<ArgumentNullException>(() => { Maybe<string> number = null; });
+#pragma warning restore 168
+            Assert.Throws<ArgumentNullException>(() => FooDo(0, null));
         }
 
         private string FooDo(Maybe<int> number, Maybe<string> name)
         {
             return number + ": " + name;
         }
-
-        // TODO: Test LINQ-style operators (including multiple selectManys)
 
         // Basic class, useful for testing.
         public class Foo
