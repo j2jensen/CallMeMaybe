@@ -42,7 +42,7 @@ namespace CallMeMaybe
 
         public override string ToString()
         {
-            return _hasValue ? "" : _value.ToString();
+            return _hasValue ? _value.ToString() : "";
         }
 
         #region Equality
