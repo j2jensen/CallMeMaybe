@@ -1,12 +1,12 @@
 ﻿using CallMeMaybe;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace TestMeMaybe
 {
-    [TestClass]
+    [TestFixture]
     public class MaybeTests
     {
-        [TestMethod]
+        [Test]
         public void TestUninitializedValues()
         {
             var foo = new Foo();
