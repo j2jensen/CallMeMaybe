@@ -15,6 +15,14 @@ namespace CallMeMaybe
 
         public Maybe(T value)
         {
+            // Since the whole purpose of this class is to avoid null values,
+            // We're going to fail fast if someone tries providing one to us.
+            if (ReferenceEquals(null, value))
+            {
+                throw new ArgumentNullException(
+                    "value", "Cannot create a Maybe from a null value. Try Maybe.Empty<T>() instead.");
+            }
+
             _hasValue = true;
             _value = value;
         }
