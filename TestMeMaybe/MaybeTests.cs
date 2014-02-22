@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using CallMeMaybe;
 using NUnit.Framework;
 
@@ -91,7 +93,7 @@ namespace TestMeMaybe
             var nameC = Maybe.From("hello");
 
             Assert.AreEqual(nameA, nameA);
-            Assert.IsTrue(nameA.Equals((object)nameA));
+            Assert.IsTrue(nameA.Equals((object) nameA));
             Assert.AreEqual(nameA, nameB);
             Assert.AreEqual(nameB, nameA);
             Assert.AreNotEqual(nameA, nameC);
@@ -111,7 +113,8 @@ namespace TestMeMaybe
         {
             var nameA = Maybe.From("hi");
             var numberA = Maybe.From(1);
-            Assert.AreNotEqual(nameA, numberA);            
+            Assert.AreNotEqual(nameA, numberA);
+            Assert.AreNotEqual(numberA, nameA);
         }
 
         [Test]
@@ -130,10 +133,31 @@ namespace TestMeMaybe
         {
             var emptyName = Maybe.Empty<string>();
             Assert.AreNotEqual(emptyName, "hi");
+            Assert.AreNotEqual("hi", emptyName);
         }
 
-        // TODO: Test implicit casting
+        [Test]
+        public void TestHashCodeDistribution()
+        {
+            var max = 100;
+            var maybes = Enumerable.Range(1, max)
+                .Select(Maybe.From)
+                .Select(m => m.GetHashCode());
+            // I am intentionally invoking these twice, in order to ensure
+            // that GetHashCode produces consistent values.
+            // ReSharper disable PossibleMultipleEnumeration
+            var hashCodes1 = maybes.ToList();
+            var hashCodes2 = maybes.ToList();
+            // ReSharper restore PossibleMultipleEnumeration
+            Assert.IsTrue(hashCodes1.SequenceEqual(hashCodes2), "The same values should produce the same hash codes.");
 
+            var maxModThirteenCollisions = hashCodes1.GroupBy(c => c % 13).Max(c => c.Count());
+            // We can accept as many as twice the ideal number of collisions.
+            Assert.IsTrue(maxModThirteenCollisions < (max / 13) * 2, "GetHashCode should avoid producing likely collisions: " + maxModThirteenCollisions);
+        }
+
+
+        // TODO: Test implicit casting
         // TODO: Test LINQ-style operators (including multiple selectManys)
 
         // Basic class, useful for testing.
