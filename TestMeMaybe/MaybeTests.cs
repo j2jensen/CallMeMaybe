@@ -16,6 +16,20 @@ namespace TestMeMaybe
             Assert.IsFalse(foo.Name.HasValue, "Uninitialized values should have no value.");
         }
 
+        [Test]
+        public void TestInitializedValues()
+        {
+            var foo = new Foo
+            {
+                Name = Maybe.From("Name")
+            };
+
+            Assert.IsNotNull(foo.Name);
+            Assert.IsTrue(foo.Name.HasValue);
+            //Assert.IsFalse(foo.Number.HasValue, "Uninitialized values should have no value.");
+            //Assert.IsFalse(foo.Name.HasValue, "Uninitialized values should have no value.");
+        }
+
         // TODO: Test implicit casting
 
         // TODO: Test LINQ-style operators (including multiple selectManys)
