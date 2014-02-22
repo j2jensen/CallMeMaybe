@@ -21,13 +21,14 @@ namespace TestMeMaybe
         {
             var foo = new Foo
             {
-                Name = Maybe.From("Name")
+                Name = Maybe.From("Name"),
+                Number = Maybe.From(1)
             };
 
             Assert.IsNotNull(foo.Name);
             Assert.IsTrue(foo.Name.HasValue);
-            //Assert.IsFalse(foo.Number.HasValue, "Uninitialized values should have no value.");
-            //Assert.IsFalse(foo.Name.HasValue, "Uninitialized values should have no value.");
+            Assert.IsNotNull(foo.Number);
+            Assert.IsTrue(foo.Number.HasValue);
         }
 
         // TODO: Test implicit casting
