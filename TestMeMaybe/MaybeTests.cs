@@ -107,6 +107,14 @@ namespace TestMeMaybe
         }
 
         [Test]
+        public void TestEqualityForDifferentMaybeTypes()
+        {
+            var nameA = Maybe.From("hi");
+            var numberA = Maybe.From(1);
+            Assert.AreNotEqual(nameA, numberA);            
+        }
+
+        [Test]
         public void TestEmptyAndNonEmptyEquality()
         {
             var nameValue = Maybe.From("hi");
