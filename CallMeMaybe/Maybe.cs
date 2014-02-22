@@ -25,6 +25,11 @@ namespace CallMeMaybe
             return _hasValue;
         }
 
+        public static implicit operator Maybe<T>(T value)
+        {
+            return new Maybe<T>(value);
+        }
+
         #region Equality
 
         public bool Equals(Maybe<T> other)

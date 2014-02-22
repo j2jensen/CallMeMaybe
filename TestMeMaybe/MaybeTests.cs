@@ -156,8 +156,13 @@ namespace TestMeMaybe
             Assert.IsTrue(maxModThirteenCollisions < (max / 13) * 2, "GetHashCode should avoid producing likely collisions: " + maxModThirteenCollisions);
         }
 
+        [Test]
+        public void TestImplicitCasting()
+        {
+            Maybe<int> number = 1;
+            Assert.IsTrue(number.HasValue);
+        }
 
-        // TODO: Test implicit casting
         // TODO: Test LINQ-style operators (including multiple selectManys)
 
         // Basic class, useful for testing.
