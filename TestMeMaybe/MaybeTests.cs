@@ -47,10 +47,14 @@ namespace TestMeMaybe
         [Test]
         public void TestEmptyEquality()
         {
-            var emptyNumber = Maybe.Empty<int>();
+            var emptyNumber1 = Maybe.Empty<int>();
+            var emptyNumber2 = Maybe.Empty<int>();
             var emptyName = Maybe.Empty<string>();
 
-            Assert.AreEqual(emptyNumber, emptyName, "All empty maybes should be equal, just as null == null");
+            Assert.AreEqual(emptyNumber1, emptyNumber2, "All empty maybes should be object-equal, just as null == null");
+            Assert.AreEqual(emptyNumber1, emptyName, "All empty maybes should be object-equal, just as null == null");
+            Assert.IsTrue(emptyNumber1 == emptyNumber2, "All empty maybes should be equal, just as null == null");
+            Assert.IsFalse(emptyNumber1 != emptyNumber2, "All empty maybes should be equal, just as null == null");
         }
         // TODO: Test implicit casting
 
