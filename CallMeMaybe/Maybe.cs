@@ -19,6 +19,12 @@ namespace CallMeMaybe
             _value = value;
         }
 
+        bool IMaybe.TryGetValue(out object value)
+        {
+            value = _value;
+            return _hasValue;
+        }
+
         #region Equality
 
         public bool Equals(Maybe<T> other)
@@ -32,11 +38,14 @@ namespace CallMeMaybe
             if (ReferenceEquals(null, obj)) return false;
             var maybe = obj as IMaybe;
             if (maybe == null) return false;
-            if (!maybe.HasValue)
+            object value;
+            if (!maybe.TryGetValue(out value))
             {
+                // If the other one doesn't have a value, then we're
+                // only "equal" if this one doesn't either.
                 return !HasValue;
             }
-            return Equals(_value, ((Maybe<T>) obj)._value);
+            return Equals(_value, value);
         }
 
         public override int GetHashCode()
@@ -63,6 +72,7 @@ namespace CallMeMaybe
     public interface IMaybe
     {
         bool HasValue { get; }
+        bool TryGetValue(out object value);
     }
 
     public interface IMaybe<out T> : IMaybe
