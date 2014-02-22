@@ -91,6 +91,7 @@ namespace TestMeMaybe
             var nameC = Maybe.From("hello");
 
             Assert.AreEqual(nameA, nameA);
+            Assert.IsTrue(nameA.Equals((object)nameA));
             Assert.AreEqual(nameA, nameB);
             Assert.AreEqual(nameB, nameA);
             Assert.AreNotEqual(nameA, nameC);
@@ -114,6 +115,13 @@ namespace TestMeMaybe
             Assert.AreNotEqual(emptyName, nameValue);
             Assert.IsFalse(emptyName == nameValue);
             Assert.IsFalse(nameValue == emptyName);
+        }
+
+        [Test]
+        public void TestEqualityAgainstOtherTypes()
+        {
+            var emptyName = Maybe.Empty<string>();
+            Assert.AreNotEqual(emptyName, "hi");
         }
 
         // TODO: Test implicit casting

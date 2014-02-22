@@ -7,7 +7,11 @@ namespace CallMeMaybe
     {
         private readonly T _value;
         private readonly bool _hasValue;
-        public bool HasValue { get { return _hasValue; } }
+
+        public bool HasValue
+        {
+            get { return _hasValue; }
+        }
 
         public Maybe(T value)
         {
@@ -16,9 +20,11 @@ namespace CallMeMaybe
         }
 
         #region Equality
+
         public bool Equals(Maybe<T> other)
         {
-            return _hasValue.Equals(other._hasValue) && EqualityComparer<T>.Default.Equals(_value, other._value);
+            return _hasValue == other._hasValue && 
+                (!_hasValue || EqualityComparer<T>.Default.Equals(_value, other._value));
         }
 
         public override bool Equals(object obj)
@@ -30,8 +36,7 @@ namespace CallMeMaybe
             {
                 return !HasValue;
             }
-
-            throw new NotImplementedException();
+            return Equals(_value, ((Maybe<T>) obj)._value);
         }
 
         public override int GetHashCode()
@@ -51,6 +56,7 @@ namespace CallMeMaybe
         {
             return !left.Equals(right);
         }
+
         #endregion
     }
 
