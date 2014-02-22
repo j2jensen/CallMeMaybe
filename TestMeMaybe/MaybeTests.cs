@@ -31,6 +31,20 @@ namespace TestMeMaybe
             Assert.IsTrue(foo.Number.HasValue);
         }
 
+        [Test]
+        public void TestEmpty()
+        {
+            var emptyNumber = Maybe.Empty<int>();
+            var emptyName = Maybe.Empty<string>();
+
+            Assert.IsNotNull(emptyNumber);
+            Assert.IsNotNull(emptyName);
+
+            Assert.IsFalse(emptyNumber.HasValue);
+            Assert.IsFalse(emptyName.HasValue);
+
+        }
+
         // TODO: Test implicit casting
 
         // TODO: Test LINQ-style operators (including multiple selectManys)

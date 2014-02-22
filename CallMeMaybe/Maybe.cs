@@ -19,6 +19,10 @@
         {
             return new Maybe<T>(value);
         }
-        
+
+        public static Maybe<T> Empty<T>()
+        {
+            return new Maybe<T>();
+        }
     }
 }
