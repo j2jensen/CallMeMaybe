@@ -170,6 +170,15 @@ namespace TestMeMaybe
             Assert.Throws<ArgumentNullException>(() => FooDo(0, null));
         }
 
+        [Test]
+        public void TestToString()
+        {
+            Assert.AreEqual("", Maybe.Empty<int>());
+            Assert.AreEqual("", Maybe.Empty<string>());
+            Assert.AreEqual("1", Maybe.From(1));
+            Assert.AreEqual("hi", Maybe.From("hi"));
+        }
+
         private string FooDo(Maybe<int> number, Maybe<string> name)
         {
             return number + ": " + name;
