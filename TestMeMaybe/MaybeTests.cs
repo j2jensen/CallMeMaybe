@@ -42,9 +42,16 @@ namespace TestMeMaybe
 
             Assert.IsFalse(emptyNumber.HasValue);
             Assert.IsFalse(emptyName.HasValue);
-
         }
 
+        [Test]
+        public void TestEmptyEquality()
+        {
+            var emptyNumber = Maybe.Empty<int>();
+            var emptyName = Maybe.Empty<string>();
+
+            Assert.AreEqual(emptyNumber, emptyName, "All empty maybes should be equal, just as null == null");
+        }
         // TODO: Test implicit casting
 
         // TODO: Test LINQ-style operators (including multiple selectManys)
