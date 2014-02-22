@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text;
 using CallMeMaybe;
@@ -77,8 +77,6 @@ namespace TestMeMaybe
             Assert.AreNotEqual(numberC, numberA);
             Assert.AreNotEqual(numberB, numberC);
             Assert.AreNotEqual(numberC, numberB);
-// ReSharper disable once EqualExpressionComparison
-            Assert.IsTrue(numberA == numberA);
             Assert.IsTrue(numberA == numberB);
             Assert.IsTrue(numberB == numberA);
             Assert.IsFalse(numberA == numberC);
@@ -100,8 +98,6 @@ namespace TestMeMaybe
             Assert.AreNotEqual(nameC, nameA);
             Assert.AreNotEqual(nameB, nameC);
             Assert.AreNotEqual(nameC, nameB);
-// ReSharper disable once EqualExpressionComparison
-            Assert.IsTrue(nameA == nameA);
             Assert.IsTrue(nameA == nameB);
             Assert.IsTrue(nameB == nameA);
             Assert.IsFalse(nameA == nameC);
@@ -139,7 +135,7 @@ namespace TestMeMaybe
         [Test]
         public void TestHashCodeDistribution()
         {
-            var max = 100;
+            const int max = 100;
             var maybes = Enumerable.Range(1, max)
                 .Select(Maybe.From)
                 .Select(m => m.GetHashCode());
@@ -151,9 +147,10 @@ namespace TestMeMaybe
             // ReSharper restore PossibleMultipleEnumeration
             Assert.IsTrue(hashCodes1.SequenceEqual(hashCodes2), "The same values should produce the same hash codes.");
 
-            var maxModThirteenCollisions = hashCodes1.GroupBy(c => c % 13).Max(c => c.Count());
+            var maxModThirteenCollisions = hashCodes1.GroupBy(c => c%13).Max(c => c.Count());
             // We can accept as many as twice the ideal number of collisions.
-            Assert.IsTrue(maxModThirteenCollisions < (max / 13) * 2, "GetHashCode should avoid producing likely collisions: " + maxModThirteenCollisions);
+            Assert.IsTrue(maxModThirteenCollisions < (max/13)*2,
+                "GetHashCode should avoid producing likely collisions: " + maxModThirteenCollisions);
         }
 
         [Test]
@@ -161,6 +158,21 @@ namespace TestMeMaybe
         {
             Maybe<int> number = 1;
             Assert.IsTrue(number.HasValue);
+            FooDo(1, "hi");
+        }
+
+        [Test]
+        public void TestNullImplicitCasting()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                Maybe<string> number = null;
+            });
+        }
+
+        private string FooDo(Maybe<int> number, Maybe<string> name)
+        {
+            return number + ": " + name;
         }
 
         // TODO: Test LINQ-style operators (including multiple selectManys)
