@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CallMeMaybe
 {
-    public struct Maybe<T> : IEquatable<Maybe<T>>, IMaybe<T>
+    public struct Maybe<T> : IEquatable<Maybe<T>>, IEnumerable<T>, IMaybe
     {
         private readonly T _value;
         private readonly bool _hasValue;
@@ -38,12 +40,23 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        public override string ToString()
+        {
+            return _hasValue ? "" : _value.ToString();
+        }
+
         #region Equality
 
         public bool Equals(Maybe<T> other)
         {
             return _hasValue == other._hasValue && 
                 (!_hasValue || EqualityComparer<T>.Default.Equals(_value, other._value));
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            var collection = _hasValue ? new[] {_value} : new T[0];
+            return collection.AsEnumerable().GetEnumerator();
         }
 
         public override bool Equals(object obj)
@@ -69,6 +82,11 @@ namespace CallMeMaybe
             }
         }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<T>)this).GetEnumerator();
+        }
+
         public static bool operator ==(Maybe<T> left, Maybe<T> right)
         {
             return left.Equals(right);
@@ -86,10 +104,6 @@ namespace CallMeMaybe
     {
         bool HasValue { get; }
         bool TryGetValue(out object value);
-    }
-
-    public interface IMaybe<out T> : IMaybe
-    {
     }
 
     public static class Maybe
