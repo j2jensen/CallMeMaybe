@@ -22,6 +22,21 @@ namespace TestMeMaybe
             Assert.AreEqual("1,2", string.Join(",", q));
         }
 
+
+        [Test]
+        public void TestMultipleTypeValuedStringJoin()
+        {
+            var q = Maybe.From<object>(1).Concat(Maybe.From("hi"));
+            Assert.AreEqual("1,hi", string.Join(",", q));
+        }
+
+        [Test]
+        public void TestCastLinq()
+        {
+            var q = Maybe.From(1).Cast<object>().Concat(Maybe.From("hi"));
+            Assert.AreEqual("1,hi", string.Join(",", q));
+        }
+
         [Test]
         public void TestSingleLinq()
         {

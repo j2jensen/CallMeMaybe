@@ -122,6 +122,8 @@ namespace TestMeMaybe
             Assert.AreNotEqual(emptyName, nameValue);
             Assert.IsFalse(emptyName == nameValue);
             Assert.IsFalse(nameValue == emptyName);
+            Assert.IsTrue(emptyName != nameValue);
+            Assert.IsTrue(nameValue != emptyName);
         }
 
         [Test]
@@ -130,6 +132,20 @@ namespace TestMeMaybe
             var emptyName = Maybe.Empty<string>();
             Assert.AreNotEqual(emptyName, "hi");
             Assert.AreNotEqual("hi", emptyName);
+
+            var hiName = Maybe.From("hi");
+            Assert.AreEqual(hiName, "hi");
+            Assert.AreEqual("hi", hiName);
+            Assert.IsTrue(hiName == "hi");
+            Assert.IsTrue(hiName != "hi");
+            Assert.IsTrue("hi" == hiName);
+            Assert.IsTrue("hi" != hiName);
+        }
+
+        [Test]
+        public void TestCovariantEquality()
+        {
+            Assert.IsTrue(Maybe.From<object>(1) == Maybe.From(1));
         }
 
         [Test]

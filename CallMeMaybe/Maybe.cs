@@ -87,16 +87,14 @@ namespace CallMeMaybe
             return ((IEnumerable<T>)this).GetEnumerator();
         }
 
-        public static bool operator ==(Maybe<T> left, Maybe<T> right)
+        public static bool operator ==(Maybe<T> left, object right)
         {
             return left.Equals(right);
         }
-
-        public static bool operator !=(Maybe<T> left, Maybe<T> right)
+        public static bool operator !=(Maybe<T> left, object right)
         {
             return !left.Equals(right);
         }
-
         #endregion
     }
 
