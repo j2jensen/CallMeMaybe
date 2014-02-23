@@ -45,19 +45,29 @@ namespace CallMeMaybe
             return _hasValue ? _value.ToString() : "";
         }
 
-        #region Equality
-
-        public bool Equals(Maybe<T> other)
-        {
-            return _hasValue == other._hasValue &&
-                   (!_hasValue || EqualityComparer<T>.Default.Equals(_value, other._value));
-        }
+        #region IEnumerable
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            var collection = _hasValue ? new[] {_value} : new T[0];
+            var collection = _hasValue ? new[] { _value } : new T[0];
             return collection.AsEnumerable().GetEnumerator();
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<T>)this).GetEnumerator();
+        }
+
+
+        #endregion
+
+        #region Equality
+
+        bool IEquatable<Maybe<T>>.Equals(Maybe<T> other)
+        {
+            return Equals(other);
+        }
+
 
         public override bool Equals(object obj)
         {
@@ -90,11 +100,6 @@ namespace CallMeMaybe
             {
                 return (_hasValue.GetHashCode()*397) ^ EqualityComparer<T>.Default.GetHashCode(_value);
             }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<T>) this).GetEnumerator();
         }
 
         public static bool operator ==(Maybe<T> left, Maybe<T> right)
