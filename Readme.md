@@ -18,9 +18,31 @@ Well, that's where `Maybe<>` comes in.
 ##Examples##
 
 
+## Limitations ##
+
+### Covariance ###
+
+Even though conceptually a `Maybe<string>` and a `Maybe<object>` should be equivalent if they both have the same backing value, I can't figure out a way to make that work for either Type Conversion or for equality operators. That leads to this unintuitive behavior:
+
+    [Test]
+    public void TestCovariantEquality()
+    {
+        Assert.IsTrue(Maybe.From<object>(1).Equals(Maybe.From(1)));
+        Assert.IsTrue(Maybe.From(1).Equals(Maybe.From<object>(1)));
+        // This is the one major limitation that I've found so far:
+        // Equality Operators can't be defined in a way that makes these equal.
+        Assert.IsFalse(Maybe.From<object>(1) == Maybe.From(1));
+        Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(1));
+    }
+ 
+
 ## Acknowledgements ##
 
 ## To Do:##
 
 1. Finish Readme
 2. Add Resharper annotations to assert that Maybe's value is NotNull.
+
+## Authors ##
+
+- [James Jensen](https://plus.google.com/+JamesJensenCoder)

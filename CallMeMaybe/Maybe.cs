@@ -76,14 +76,13 @@ namespace CallMeMaybe
             {
                 return false;
             }
-            // Maybe.From(1) == 1
-            if (obj is T)
-            {
-                return _value.Equals((T) obj);
-            }
-            // Otherwise, Maybe values can only be compared with other Maybe values.
+            // Maybe values can be compared with other Maybe values.
             var maybe = obj as IMaybe;
-            if (maybe == null) return false;
+            if (maybe == null)
+            {
+                // Maybe.From(1) == 1
+                return obj is T && _value.Equals((T) obj);
+            }
             object value;
             if (!maybe.TryGetValue(out value))
             {

@@ -92,7 +92,8 @@ namespace TestMeMaybe
             var nameC = Maybe.From("hello");
 
             Assert.AreEqual(nameA, nameA);
-            Assert.IsTrue(nameA.Equals((object) nameA));
+// ReSharper disable once EqualExpressionComparison
+            Assert.IsTrue(nameA.Equals(nameA));
             Assert.AreEqual(nameA, nameB);
             Assert.AreEqual(nameB, nameA);
             Assert.AreNotEqual(nameA, nameC);
@@ -135,6 +136,7 @@ namespace TestMeMaybe
             Assert.AreNotEqual("hi", emptyName);
 
             var hiName = Maybe.From("hi");
+// ReSharper disable once SuspiciousTypeConversion.Global
             Assert.IsTrue(hiName.Equals("hi"));
 // ReSharper disable once SuspiciousTypeConversion.Global
             Assert.IsTrue(((object)hiName).Equals("hi"));
@@ -151,7 +153,12 @@ namespace TestMeMaybe
         [Test]
         public void TestCovariantEquality()
         {
-            Assert.IsTrue(Maybe.From<object>(1) == Maybe.From(1));
+            Assert.IsTrue(Maybe.From<object>(1).Equals(Maybe.From(1)));
+            Assert.IsTrue(Maybe.From(1).Equals(Maybe.From<object>(1)));
+            // This is the one major limitation that I've found so far:
+            // Equality Operators can't be defined in a way that makes these equal.
+            Assert.IsFalse(Maybe.From<object>(1) == Maybe.From(1));
+            Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(1));
         }
 
         [Test]
