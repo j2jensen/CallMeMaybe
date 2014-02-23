@@ -49,8 +49,8 @@ namespace CallMeMaybe
 
         public bool Equals(Maybe<T> other)
         {
-            return _hasValue == other._hasValue && 
-                (!_hasValue || EqualityComparer<T>.Default.Equals(_value, other._value));
+            return _hasValue == other._hasValue &&
+                   (!_hasValue || EqualityComparer<T>.Default.Equals(_value, other._value));
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
@@ -61,7 +61,17 @@ namespace CallMeMaybe
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            // Maybe values never equal `null`--that's sort of the point.
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            // Maybe.From(1) == 1
+            if (obj is T)
+            {
+                return _value.Equals((T) obj);
+            }
+            // Otherwise, Maybe values can only be compared with other Maybe values.
             var maybe = obj as IMaybe;
             if (maybe == null) return false;
             object value;
@@ -84,21 +94,23 @@ namespace CallMeMaybe
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<T>)this).GetEnumerator();
+            return ((IEnumerable<T>) this).GetEnumerator();
         }
 
-        public static bool operator ==(Maybe<T> left, object right)
+        public static bool operator ==(Maybe<T> left, Maybe<T> right)
         {
             return left.Equals(right);
         }
-        public static bool operator !=(Maybe<T> left, object right)
+
+        public static bool operator !=(Maybe<T> left, Maybe<T> right)
         {
             return !left.Equals(right);
         }
+
         #endregion
     }
 
-    public interface IMaybe
+    internal interface IMaybe
     {
         bool HasValue { get; }
         bool TryGetValue(out object value);

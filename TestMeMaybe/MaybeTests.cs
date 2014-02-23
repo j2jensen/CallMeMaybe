@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CallMeMaybe;
@@ -134,12 +135,17 @@ namespace TestMeMaybe
             Assert.AreNotEqual("hi", emptyName);
 
             var hiName = Maybe.From("hi");
-            Assert.AreEqual(hiName, "hi");
-            Assert.AreEqual("hi", hiName);
+            Assert.IsTrue(hiName.Equals("hi"));
+// ReSharper disable once SuspiciousTypeConversion.Global
+            Assert.IsTrue(((object)hiName).Equals("hi"));
             Assert.IsTrue(hiName == "hi");
-            Assert.IsTrue(hiName != "hi");
+            Assert.IsFalse(hiName != "hi");
             Assert.IsTrue("hi" == hiName);
-            Assert.IsTrue("hi" != hiName);
+            Assert.IsFalse("hi" != hiName);
+
+            var hs = new HashSet<Maybe<int>> {1, 2, Maybe.Empty<int>(), Maybe.From(1), Maybe.From(2)};
+            Assert.AreEqual(3, hs.Count);
+            Assert.IsTrue(hs.SequenceEqual(new[]{Maybe.From(1), Maybe.From(2), Maybe.Empty<int>()}));
         }
 
         [Test]
