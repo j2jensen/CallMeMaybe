@@ -164,7 +164,7 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestCovariantEquality()
+        public void TestCovariantMaybeObjectEquality()
         {
             // ReSharper disable SuspiciousTypeConversion.Global
             Assert.IsTrue(Maybe.From<object>(1).Equals(Maybe.From(1)));
@@ -173,7 +173,11 @@ namespace TestMeMaybe
             Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(2));
             Assert.IsFalse(Maybe.From(1) != Maybe.From<object>(1));
             Assert.IsTrue(Maybe.From(1) != Maybe.From<object>(2));
+        }
 
+        [Test]
+        public void TestCovariantInheritedClassEquality()
+        {
             var child = new Child();
             Assert.IsTrue(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
             Assert.IsTrue(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
@@ -199,9 +203,9 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestWeirdness(){
-        // This is the one major limitation that I've found so far:
-            // The second Maybe get implicitly cast into a Maybe<object>,
+        public void TestWeirdness()
+        {
+            // The second Maybe gets implicitly cast into a Maybe<object>,
             // whose value is a Maybe<int>
             // TODO: See if we can change this behavior by making Maybes unwrap inner Maybes.
             Assert.IsFalse(Maybe.From<object>(1) == Maybe.From(1));
@@ -270,6 +274,7 @@ namespace TestMeMaybe
             Assert.IsNotNull(parentId);
             return string.Format("{2} => {0}: {1}", id, name, parentId);
         }
+
         private string FooDo(Maybe<int> number, Maybe<string> name)
         {
             return number + ": " + name;
