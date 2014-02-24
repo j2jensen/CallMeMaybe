@@ -36,6 +36,19 @@ namespace TestMeMaybe
         }
 
         [Test]
+        public void TestDefault()
+        {
+            Assert.IsNotNull(default(Maybe<int>));
+            Assert.IsFalse(default(Maybe<int>).HasValue);
+            Assert.AreEqual(Maybe.Empty<int>(), default(Maybe<int>));
+            Assert.AreEqual(new Maybe<int>(), default(Maybe<int>));
+            Assert.IsNotNull(default(Maybe<string>));
+            Assert.IsFalse(default(Maybe<string>).HasValue);
+            Assert.AreEqual(Maybe.Empty<string>(), default(Maybe<string>));
+            Assert.AreEqual(new Maybe<string>(), default(Maybe<string>));
+        }
+
+        [Test]
         public void TestEmpty()
         {
             var emptyNumber = Maybe.Empty<int>();
@@ -139,7 +152,7 @@ namespace TestMeMaybe
 // ReSharper disable once SuspiciousTypeConversion.Global
             Assert.IsTrue(hiName.Equals("hi"));
 // ReSharper disable once SuspiciousTypeConversion.Global
-            Assert.IsTrue(((object)hiName).Equals("hi"));
+            Assert.IsTrue(((object) hiName).Equals("hi"));
             Assert.IsTrue(hiName == "hi");
             Assert.IsFalse(hiName != "hi");
             Assert.IsTrue("hi" == hiName);
@@ -147,18 +160,52 @@ namespace TestMeMaybe
 
             var hs = new HashSet<Maybe<int>> {1, 2, Maybe.Empty<int>(), Maybe.From(1), Maybe.From(2)};
             Assert.AreEqual(3, hs.Count);
-            Assert.IsTrue(hs.SequenceEqual(new[]{Maybe.From(1), Maybe.From(2), Maybe.Empty<int>()}));
+            Assert.IsTrue(hs.SequenceEqual(new[] {Maybe.From(1), Maybe.From(2), Maybe.Empty<int>()}));
         }
 
         [Test]
         public void TestCovariantEquality()
         {
+            // ReSharper disable SuspiciousTypeConversion.Global
             Assert.IsTrue(Maybe.From<object>(1).Equals(Maybe.From(1)));
             Assert.IsTrue(Maybe.From(1).Equals(Maybe.From<object>(1)));
-            // This is the one major limitation that I've found so far:
-            // Equality Operators can't be defined in a way that makes these equal.
+            Assert.IsTrue(Maybe.From(1) == Maybe.From<object>(1));
+            Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(2));
+            Assert.IsFalse(Maybe.From(1) != Maybe.From<object>(1));
+            Assert.IsTrue(Maybe.From(1) != Maybe.From<object>(2));
+
+            var child = new Child();
+            Assert.IsTrue(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
+            Assert.IsTrue(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
+            // Limitation: any attempt to do a covariant equality check results in a compiler error.
+            /*
+            Assert.IsTrue(Maybe.From<Child>(child) == Maybe.From<Parent>(child));
+            Assert.IsFalse(Maybe.From<Child>(child) == Maybe.From<Parent>(new Child()));
+            Assert.IsFalse(Maybe.From<Child>(child) != Maybe.From<Parent>(child));
+            Assert.IsTrue(Maybe.From<Child>(child) != Maybe.From<Parent>(new Child()));
+            */
+            // ReSharper restore SuspiciousTypeConversion.Global
+
+            // TODO: See if we can create a stronger version of the Cast and OfType LINQ methods
+            // so we can say `parentMaybe.OfType<Child>() == childMaybe`
+        }
+
+        private class Parent
+        {
+        }
+
+        private class Child : Parent
+        {
+        }
+
+        [Test]
+        public void TestWeirdness(){
+        // This is the one major limitation that I've found so far:
+            // The second Maybe get implicitly cast into a Maybe<object>,
+            // whose value is a Maybe<int>
+            // TODO: See if we can change this behavior by making Maybes unwrap inner Maybes.
             Assert.IsFalse(Maybe.From<object>(1) == Maybe.From(1));
-            Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(1));
+            Assert.True(Maybe.From<object>(1) != Maybe.From(1));
         }
 
         [Test]
@@ -208,6 +255,21 @@ namespace TestMeMaybe
             Assert.AreEqual("hi", Maybe.From("hi").ToString());
         }
 
+        [Test]
+        public void TestOptionalParameters()
+        {
+            Assert.AreEqual(" => 1: ", FormatInfo(1));
+            Assert.AreEqual("1 => 2: A", FormatInfo(2, "A", 1));
+        }
+
+        private string FormatInfo(int id,
+            Maybe<string> name = default(Maybe<string>),
+            Maybe<int> parentId = default(Maybe<int>))
+        {
+            Assert.IsNotNull(name);
+            Assert.IsNotNull(parentId);
+            return string.Format("{2} => {0}: {1}", id, name, parentId);
+        }
         private string FooDo(Maybe<int> number, Maybe<string> name)
         {
             return number + ": " + name;
