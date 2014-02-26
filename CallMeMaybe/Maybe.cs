@@ -47,7 +47,7 @@ namespace CallMeMaybe
 
         public T Or(T valueIfEmpty)
         {
-            return valueIfEmpty;
+            return _hasValue ? _value : valueIfEmpty;
         }
 
         public override string ToString()

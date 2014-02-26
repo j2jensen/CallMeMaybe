@@ -241,6 +241,16 @@ namespace TestMeMaybe
             Assert.AreEqual("hi", Maybe.Empty<string>().Or("hi"));
         }
 
+        [Test]
+        public void TestOrOnValue()
+        {
+            Assert.AreEqual(42, Maybe.From(42).Or(0));
+            Assert.AreEqual(42, Maybe.From(42).Or(1));
+            Assert.AreEqual("hi", Maybe.From("hi").Or(null));
+            Assert.AreEqual("hi", Maybe.From("hi").Or(""));
+            Assert.AreEqual("hi", Maybe.From("hi").Or("hi"));
+        }
+
         private class Parent
         {
         }
