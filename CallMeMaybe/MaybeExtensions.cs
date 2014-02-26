@@ -1,7 +1,31 @@
-﻿namespace CallMeMaybe
+﻿using System.Collections.Generic;
+
+namespace CallMeMaybe
 {
     public static class MaybeExtensions
     {
-        // TODO: Dictionary GetMaybe() method
+        /// <summary>
+        /// Produces a <see cref="Maybe{T}"/> value that will contain the value corresponding 
+        /// to the given <see cref="key"/> in the dictionary if one exists, or which will be
+        /// empty otherwise.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static Maybe<TValue> GetMaybe<TKey, TValue>(
+            this IDictionary<TKey, TValue> dictionary,
+            TKey key)
+        {
+            TValue value;
+            if (dictionary.TryGetValue(key, out value))
+            {
+                return Maybe.From(value);
+            }
+            return Maybe.Empty<TValue>();
+        }
+
+        // TODO: TryParse methods
     }
 }
