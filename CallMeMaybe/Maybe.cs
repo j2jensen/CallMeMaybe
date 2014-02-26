@@ -42,7 +42,7 @@ namespace CallMeMaybe
 
         public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
         {
-            throw new NotImplementedException();
+            return _hasValue ? selector(_value) : Maybe.Empty<TValue>();
         }
 
         public TValue Or<TValue>(TValue valueIfEmpty)

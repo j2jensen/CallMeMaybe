@@ -194,6 +194,18 @@ namespace TestMeMaybe
             // so we can say `parentMaybe.OfType<Child>() == childMaybe`
         }
 
+        [Test]
+        public void TestGet()
+        {
+            var htmlAttr = new Dictionary<string, object>();
+            htmlAttr["class"] = "radio-button" +
+                                htmlAttr.GetMaybe("class").Get(a => " " + a);
+            Assert.AreEqual("radio-button", htmlAttr["class"]);
+            htmlAttr["class"] = "input-field" +
+                                htmlAttr.GetMaybe("class").Get(a => " " + a);
+            Assert.AreEqual("input-field radio-button", htmlAttr["class"]);
+        }
+
         private class Parent
         {
         }
