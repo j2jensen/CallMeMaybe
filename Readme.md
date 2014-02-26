@@ -17,6 +17,16 @@ Well, that's where `Maybe<>` comes in.
 
 ##Examples##
 
+### Dictionaries ###
+
+When working with dictionaries, try using the `.GetMaybe(key)` extension method instead of the dictionary's indexer or `.TryGetValue()`:
+
+    var carsByOwner = GetCars().ToDictionary(c => c.OwnerPersonId);
+    var activePeopleWithCars =
+        from p in GetPeople()
+        where p.IsActive
+        from car in carsByOwner.GetMaybe(p.PersonId)
+        select new {owner = p, car};
 
 ## Limitations ##
 
