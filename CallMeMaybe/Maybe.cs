@@ -45,9 +45,9 @@ namespace CallMeMaybe
             return _hasValue ? selector(_value) : Maybe.Empty<TValue>();
         }
 
-        public TValue Or<TValue>(TValue valueIfEmpty)
+        public T Or(T valueIfEmpty)
         {
-            throw new NotImplementedException();
+            return valueIfEmpty;
         }
 
         public override string ToString()

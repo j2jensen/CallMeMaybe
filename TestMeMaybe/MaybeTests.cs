@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using CallMeMaybe;
@@ -195,7 +196,7 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestGet()
+        public void TestGetWhenStringBuilding()
         {
             var htmlAttr = new Dictionary<string, object>();
             htmlAttr["class"] = "radio-button" +
@@ -204,6 +205,40 @@ namespace TestMeMaybe
             htmlAttr["class"] = "input-field" +
                                 htmlAttr.GetMaybe("class").Get(a => " " + a);
             Assert.AreEqual("input-field radio-button", htmlAttr["class"]);
+        }
+
+        [Test]
+        public void TestGetFromEmpty()
+        {
+            Maybe<string> fromInt = Maybe.Empty<int>()
+                .Get(i => i.ToString(CultureInfo.InvariantCulture));
+            Assert.IsFalse(fromInt.HasValue);
+            Maybe<int> fromString = Maybe.Empty<string>()
+                .Get(int.Parse);
+            Assert.IsFalse(fromString.HasValue);
+        }
+
+        [Test]
+        public void TestGetFromValue()
+        {
+            Maybe<string> fromInt = Maybe.From(1)
+                .Get(i => i.ToString(CultureInfo.InvariantCulture));
+            Assert.IsTrue(fromInt.HasValue);
+            Assert.AreEqual(Maybe.From("1"), fromInt);
+            Maybe<int> fromString = Maybe.From("1")
+                .Get(int.Parse);
+            Assert.IsTrue(fromString.HasValue);
+            Assert.AreEqual(Maybe.From(1), fromString);
+        }
+
+        [Test]
+        public void TestOrOnEmpty()
+        {
+            Assert.AreEqual(0, Maybe.Empty<int>().Or(0));
+            Assert.AreEqual(1, Maybe.Empty<int>().Or(1));
+            Assert.IsNull(Maybe.Empty<string>().Or(null));
+            Assert.AreEqual("", Maybe.Empty<string>().Or(""));
+            Assert.AreEqual("hi", Maybe.Empty<string>().Or("hi"));
         }
 
         private class Parent
