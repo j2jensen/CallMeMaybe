@@ -332,6 +332,34 @@ namespace TestMeMaybe
             return string.Format("{2} => {0}: {1}", id, name, parentId);
         }
 
+        [Test]
+        public void TestOptionalInterfaceParameters()
+        {
+            IOptionalInterface i = new OptionalImplementation();
+            Assert.AreEqual(" => 1: ", i.FormatInfo(1));
+            Assert.AreEqual("1 => 2: A", i.FormatInfo(2, "A", 1));
+        }
+
+        private interface IOptionalInterface
+        {
+            string FormatInfo(int id,
+                Maybe<string> name = default(Maybe<string>),
+                Maybe<int> parentId = default(Maybe<int>));
+        }
+
+        private class OptionalImplementation : IOptionalInterface
+        {
+            public string FormatInfo(int id,
+                Maybe<string> name, // These are marked optional in the interface, but not here
+                Maybe<int> parentId)
+            {
+                Assert.IsNotNull(name);
+                Assert.IsNotNull(parentId);
+                return string.Format("{2} => {0}: {1}", id, name, parentId);
+            }
+            
+        }
+
         private string FooDo(Maybe<int> number, Maybe<string> name)
         {
             return number + ": " + name;
