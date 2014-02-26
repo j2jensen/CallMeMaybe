@@ -40,6 +40,16 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TValue Or<TValue>(TValue valueIfEmpty)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToString()
         {
             return _hasValue ? _value.ToString() : "";
