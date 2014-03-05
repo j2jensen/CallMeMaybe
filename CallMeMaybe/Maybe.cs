@@ -17,12 +17,12 @@ namespace CallMeMaybe
 
         public Maybe(T value)
         {
-            _value = value;
-
             // Since the whole purpose of this class is to avoid null values,
             // we're going to treat them as if they are "Not".
             _hasValue = !ReferenceEquals(null, value);
+            _value = value;
         }
+
 
         bool IMaybe.TryGetValue(out object value)
         {
@@ -32,6 +32,22 @@ namespace CallMeMaybe
 
         public static implicit operator Maybe<T>(T value)
         {
+            // Slight corner case: since Maybes are objects themselves,
+            // C# will try to do an implicit conversion from a Maybe into
+            // a Maybe<object>.
+            // We need to unwrap the inner value of the other Maybe, and
+            // use that as the value that this Maybe intends to be.
+            if (typeof(T) == typeof(object) && value is IMaybe)
+            {
+                var otherMaybe = (IMaybe)value;
+                object otherValue;
+
+                if (otherMaybe.TryGetValue(out otherValue))
+                {
+                    value = (T)otherValue;
+                }
+            }
+
             return new Maybe<T>(value);
         }
 
