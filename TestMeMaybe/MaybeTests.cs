@@ -301,10 +301,9 @@ namespace TestMeMaybe
         [Test]
         public void TestNullImplicitCasting()
         {
-#pragma warning disable 168
-            Assert.Throws<ArgumentNullException>(() => { Maybe<string> number = null; });
-#pragma warning restore 168
-            Assert.Throws<ArgumentNullException>(() => FooDo(0, null));
+            Maybe<string> name = null;
+            Assert.AreEqual(name, Maybe.Not<string>());
+            Assert.AreEqual("0: ", FooDo(0, null));
         }
 
         [Test]
@@ -357,7 +356,6 @@ namespace TestMeMaybe
                 Assert.IsNotNull(parentId);
                 return string.Format("{2} => {0}: {1}", id, name, parentId);
             }
-            
         }
 
         private string FooDo(Maybe<int> number, Maybe<string> name)
