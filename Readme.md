@@ -59,18 +59,6 @@ Even though conceptually a `Maybe<Parent>` and a `Maybe<Child>` should be equiva
     }
 
 
-
-### `Maybe<object>` behavior ###
-
-    [Test]
-    public void TestWeirdness(){
-        // The second Maybe gets implicitly cast into a Maybe<object>,
-        // whose value is a Maybe<int>
-        // TODO: See if we can change this behavior by making Maybes unwrap inner Maybes.
-        Assert.IsFalse(Maybe.From<object>(1) == Maybe.From(1));
-        Assert.True(Maybe.From<object>(1) != Maybe.From(1));
-    } 
-
 ## Acknowledgements ##
 
 ## To Do:##
