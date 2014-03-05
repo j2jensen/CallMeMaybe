@@ -17,6 +17,60 @@ Well, that's where `Maybe<>` comes in.
 
 ##Examples##
 
+### Basic Usage ###
+
+Try using `Maybe<>` when your method may or may not return a value.
+
+    public Maybe<string> HowLuckyIs(int number)
+    {
+        if (number == 13)
+        {
+            return Maybe.From("So lucky.");
+        }
+        return Maybe.Not<string>();
+    }
+
+Then consumers of your code cannot use the result without recognizing that it may not be there:
+
+    // Next line won't compile
+    // Assert.AreEqual(3, HowLuckyIs(13).IndexOf("lucky"));
+
+So how do we use the result? Well, what do you want to have happen if there is no result? You could go with a traditional, imperative approach. 
+
+    var luckyOne = HowLuckyIs(1);
+    if (luckyOne.HasValue)
+    {
+        // Since Maybe<> implements IEnumerable<>, LINQ methods like .Single()
+        // work exactly how you'd expect them to.
+        Console.WriteLine("One is " + luckyOne.Single());
+    }
+    else
+    {
+        Console.WriteLine("One is not lucky.");
+    }
+
+But that looks awful! Let's try something a little more functional:
+
+    // `Else()` will return the given value if the Maybe has no value.
+    Console.WriteLine("One is " + HowLuckyIs(1).Else("not lucky."));
+
+So with a few built-in utility methods, you can very easily handle the "not there" case. Now let's look at the `HowLuckyIs` method again, and see if we can't simplify it further.
+
+For one thing, values get implicitly cast to their `Maybe<>` equivalents, and `null` is automatically treated the same as `Maybe.Not<>()`, so you *could* do this:
+
+    public Maybe<string> HowLuckyIs2(int number)
+    {
+        return number == 13 ? "So lucky." : null;
+    }
+
+But we don't like `null`s, remember?
+
+... to be continued.
+
+
+### If/Else Selectors ###
+
+
 ### Dictionaries ###
 
 When working with dictionaries, try using the `.GetMaybe(key)` extension method instead of the dictionary's indexer or `.TryGetValue()`:
