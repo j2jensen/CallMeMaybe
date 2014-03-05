@@ -253,6 +253,13 @@ namespace TestMeMaybe
             Assert.AreEqual("hi", Maybe.From("hi").Else("hi"));
         }
 
+        [Test]
+        public void TestMaybeIf()
+        {
+            Assert.AreEqual(Maybe.From(1), Maybe.If(true, 1));
+            Assert.AreEqual(Maybe.Not<int>(), Maybe.If(false, 1));
+        }
+
         private class Parent
         {
         }

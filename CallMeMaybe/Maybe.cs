@@ -37,14 +37,14 @@ namespace CallMeMaybe
             // a Maybe<object>.
             // We need to unwrap the inner value of the other Maybe, and
             // use that as the value that this Maybe intends to be.
-            if (typeof(T) == typeof(object) && value is IMaybe)
+            if (typeof (T) == typeof (object) && value is IMaybe)
             {
-                var otherMaybe = (IMaybe)value;
+                var otherMaybe = (IMaybe) value;
                 object otherValue;
 
                 if (otherMaybe.TryGetValue(out otherValue))
                 {
-                    value = (T)otherValue;
+                    value = (T) otherValue;
                 }
             }
 
@@ -70,15 +70,14 @@ namespace CallMeMaybe
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            var collection = _hasValue ? new[] { _value } : new T[0];
+            var collection = _hasValue ? new[] {_value} : new T[0];
             return collection.AsEnumerable().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<T>)this).GetEnumerator();
+            return ((IEnumerable<T>) this).GetEnumerator();
         }
-
 
         #endregion
 
@@ -151,6 +150,11 @@ namespace CallMeMaybe
         public static Maybe<T> Not<T>()
         {
             return new Maybe<T>();
+        }
+
+        public static Maybe<T> If<T>(bool condition, T valueIfTrue)
+        {
+            return condition ? valueIfTrue : new Maybe<T>();
         }
     }
 }
