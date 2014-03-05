@@ -143,6 +143,21 @@ namespace TestMeMaybe
         }
 
         [Test]
+        public void TestNullEquality()
+        {
+            var nameValue = Maybe.From("hi");
+            var nullName = Maybe.From((string)null);
+            Assert.IsFalse(null == nameValue);
+            Assert.IsTrue(null ==  nullName);
+            Assert.IsFalse(nameValue ==  null);
+            Assert.IsTrue(nullName == null);
+            Assert.IsTrue(null != nameValue);
+            Assert.IsFalse(null !=  nullName);
+            Assert.IsTrue(nameValue != null);
+            Assert.IsFalse(nullName != null);
+        }
+
+        [Test]
         public void TestEqualityAgainstOtherTypes()
         {
             var notName = Maybe.Not<string>();
