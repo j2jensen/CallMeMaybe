@@ -41,41 +41,41 @@ namespace TestMeMaybe
         {
             Assert.IsNotNull(default(Maybe<int>));
             Assert.IsFalse(default(Maybe<int>).HasValue);
-            Assert.AreEqual(Maybe.Empty<int>(), default(Maybe<int>));
+            Assert.AreEqual(Maybe.Not<int>(), default(Maybe<int>));
             Assert.AreEqual(new Maybe<int>(), default(Maybe<int>));
             Assert.IsNotNull(default(Maybe<string>));
             Assert.IsFalse(default(Maybe<string>).HasValue);
-            Assert.AreEqual(Maybe.Empty<string>(), default(Maybe<string>));
+            Assert.AreEqual(Maybe.Not<string>(), default(Maybe<string>));
             Assert.AreEqual(new Maybe<string>(), default(Maybe<string>));
         }
 
         [Test]
-        public void TestEmpty()
+        public void TestNot()
         {
-            var emptyNumber = Maybe.Empty<int>();
-            var emptyName = Maybe.Empty<string>();
+            var notNumber = Maybe.Not<int>();
+            var notName = Maybe.Not<string>();
 
-            Assert.IsNotNull(emptyNumber);
-            Assert.IsNotNull(emptyName);
+            Assert.IsNotNull(notNumber);
+            Assert.IsNotNull(notName);
 
-            Assert.IsFalse(emptyNumber.HasValue);
-            Assert.IsFalse(emptyName.HasValue);
+            Assert.IsFalse(notNumber.HasValue);
+            Assert.IsFalse(notName.HasValue);
         }
 
         [Test]
-        public void TestEmptyEquality()
+        public void TestNotEquality()
         {
-            var emptyNumber1 = Maybe.Empty<int>();
-            var emptyNumber2 = Maybe.Empty<int>();
-            var emptyName = Maybe.Empty<string>();
+            var notNumber1 = Maybe.Not<int>();
+            var notNumber2 = Maybe.Not<int>();
+            var notName = Maybe.Not<string>();
 
-            Assert.AreEqual(emptyNumber1, emptyNumber2, "All empty maybes should be object-equal, just as null == null");
-            Assert.AreEqual(emptyNumber1, emptyName, "All empty maybes should be object-equal, just as null == null");
-            Assert.IsTrue(emptyNumber1 == emptyNumber2, "All empty maybes should be equal, just as null == null");
-            Assert.IsFalse(emptyNumber1 != emptyNumber2, "All empty maybes should be equal, just as null == null");
-            Assert.IsFalse(emptyNumber1 == null, "maybes should never equal null");
-            Assert.IsTrue(emptyNumber1 != null, "maybes should never equal null");
-            Assert.IsFalse(emptyNumber1.Equals(null), "maybes should never equal null");
+            Assert.AreEqual(notNumber1, notNumber2, "All not maybes should be object-equal, just as null == null");
+            Assert.AreEqual(notNumber1, notName, "All not maybes should be object-equal, just as null == null");
+            Assert.IsTrue(notNumber1 == notNumber2, "All not maybes should be equal, just as null == null");
+            Assert.IsFalse(notNumber1 != notNumber2, "All not maybes should be equal, just as null == null");
+            Assert.IsFalse(notNumber1 == null, "maybes should never equal null");
+            Assert.IsTrue(notNumber1 != null, "maybes should never equal null");
+            Assert.IsFalse(notNumber1.Equals(null), "maybes should never equal null");
         }
 
         [Test]
@@ -130,24 +130,24 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestEmptyAndNonEmptyEquality()
+        public void TestNotAndNonNotEquality()
         {
             var nameValue = Maybe.From("hi");
-            var emptyName = Maybe.Empty<string>();
-            Assert.AreNotEqual(nameValue, emptyName);
-            Assert.AreNotEqual(emptyName, nameValue);
-            Assert.IsFalse(emptyName == nameValue);
-            Assert.IsFalse(nameValue == emptyName);
-            Assert.IsTrue(emptyName != nameValue);
-            Assert.IsTrue(nameValue != emptyName);
+            var notName = Maybe.Not<string>();
+            Assert.AreNotEqual(nameValue, notName);
+            Assert.AreNotEqual(notName, nameValue);
+            Assert.IsFalse(notName == nameValue);
+            Assert.IsFalse(nameValue == notName);
+            Assert.IsTrue(notName != nameValue);
+            Assert.IsTrue(nameValue != notName);
         }
 
         [Test]
         public void TestEqualityAgainstOtherTypes()
         {
-            var emptyName = Maybe.Empty<string>();
-            Assert.AreNotEqual(emptyName, "hi");
-            Assert.AreNotEqual("hi", emptyName);
+            var notName = Maybe.Not<string>();
+            Assert.AreNotEqual(notName, "hi");
+            Assert.AreNotEqual("hi", notName);
 
             var hiName = Maybe.From("hi");
 // ReSharper disable once SuspiciousTypeConversion.Global
@@ -159,9 +159,9 @@ namespace TestMeMaybe
             Assert.IsTrue("hi" == hiName);
             Assert.IsFalse("hi" != hiName);
 
-            var hs = new HashSet<Maybe<int>> {1, 2, Maybe.Empty<int>(), Maybe.From(1), Maybe.From(2)};
+            var hs = new HashSet<Maybe<int>> {1, 2, Maybe.Not<int>(), Maybe.From(1), Maybe.From(2)};
             Assert.AreEqual(3, hs.Count);
-            Assert.IsTrue(hs.SequenceEqual(new[] {Maybe.From(1), Maybe.From(2), Maybe.Empty<int>()}));
+            Assert.IsTrue(hs.SequenceEqual(new[] {Maybe.From(1), Maybe.From(2), Maybe.Not<int>()}));
         }
 
         [Test]
@@ -208,12 +208,12 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestGetFromEmpty()
+        public void TestGetFromNot()
         {
-            Maybe<string> fromInt = Maybe.Empty<int>()
+            Maybe<string> fromInt = Maybe.Not<int>()
                 .Get(i => i.ToString(CultureInfo.InvariantCulture));
             Assert.IsFalse(fromInt.HasValue);
-            Maybe<int> fromString = Maybe.Empty<string>()
+            Maybe<int> fromString = Maybe.Not<string>()
                 .Get(int.Parse);
             Assert.IsFalse(fromString.HasValue);
         }
@@ -232,13 +232,13 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestOrOnEmpty()
+        public void TestOrOnNot()
         {
-            Assert.AreEqual(0, Maybe.Empty<int>().Or(0));
-            Assert.AreEqual(1, Maybe.Empty<int>().Or(1));
-            Assert.IsNull(Maybe.Empty<string>().Or(null));
-            Assert.AreEqual("", Maybe.Empty<string>().Or(""));
-            Assert.AreEqual("hi", Maybe.Empty<string>().Or("hi"));
+            Assert.AreEqual(0, Maybe.Not<int>().Or(0));
+            Assert.AreEqual(1, Maybe.Not<int>().Or(1));
+            Assert.IsNull(Maybe.Not<string>().Or(null));
+            Assert.AreEqual("", Maybe.Not<string>().Or(""));
+            Assert.AreEqual("hi", Maybe.Not<string>().Or("hi"));
         }
 
         [Test]
@@ -310,8 +310,8 @@ namespace TestMeMaybe
         [Test]
         public void TestToString()
         {
-            Assert.AreEqual("", Maybe.Empty<int>().ToString());
-            Assert.AreEqual("", Maybe.Empty<string>().ToString());
+            Assert.AreEqual("", Maybe.Not<int>().ToString());
+            Assert.AreEqual("", Maybe.Not<string>().ToString());
             Assert.AreEqual("1", Maybe.From(1).ToString());
             Assert.AreEqual("hi", Maybe.From("hi").ToString());
         }

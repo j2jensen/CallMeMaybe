@@ -7,7 +7,7 @@ namespace CallMeMaybe
         /// <summary>
         /// Produces a <see cref="Maybe{T}"/> value that will contain the value corresponding 
         /// to the given <see cref="key"/> in the dictionary if one exists, or which will be
-        /// empty otherwise.
+        /// <see cref="Maybe.Not{T}"/> otherwise.
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -23,7 +23,7 @@ namespace CallMeMaybe
             {
                 return Maybe.From(value);
             }
-            return Maybe.Empty<TValue>();
+            return Maybe.Not<TValue>();
         }
 
         // TODO: TryParse methods

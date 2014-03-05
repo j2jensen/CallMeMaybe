@@ -22,7 +22,7 @@ namespace CallMeMaybe
             if (ReferenceEquals(null, value))
             {
                 throw new ArgumentNullException(
-                    "value", "Cannot create a Maybe from a null value. Try Maybe.Empty<T>() instead.");
+                    "value", "Cannot create a Maybe from a null value. Try Maybe.Not<T>() instead.");
             }
 
             _hasValue = true;
@@ -42,12 +42,12 @@ namespace CallMeMaybe
 
         public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
         {
-            return _hasValue ? selector(_value) : Maybe.Empty<TValue>();
+            return _hasValue ? selector(_value) : Maybe.Not<TValue>();
         }
 
-        public T Or(T valueIfEmpty)
+        public T Or(T valueIfNot)
         {
-            return _hasValue ? _value : valueIfEmpty;
+            return _hasValue ? _value : valueIfNot;
         }
 
         public override string ToString()
@@ -137,7 +137,7 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
-        public static Maybe<T> Empty<T>()
+        public static Maybe<T> Not<T>()
         {
             return new Maybe<T>();
         }

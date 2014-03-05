@@ -9,9 +9,9 @@ namespace TestMeMaybe
     public class MaybeLinqTests
     {
         [Test]
-        public void TestEmptyStringJoin()
+        public void TestNotStringJoin()
         {
-            var q = Maybe.Empty<int>();
+            var q = Maybe.Not<int>();
             Assert.AreEqual("", string.Join(",", q));
         }
 
