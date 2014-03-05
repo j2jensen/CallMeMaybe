@@ -55,5 +55,9 @@ namespace TestMeMaybe
         {
             return number == 13 ? "So lucky." : null;
         }
+        public Maybe<string> HowLuckyIs3(int number)
+        {
+            return Maybe.If(number == 13, "So lucky.");
+        }
     }
 }

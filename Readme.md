@@ -63,10 +63,12 @@ For one thing, values get implicitly cast to their `Maybe<>` equivalents, and `n
         return number == 13 ? "So lucky." : null;
     }
 
-But we don't like `null`s, remember?
+But we don't like `null`s, remember? Let's try this instead:
 
-... to be continued.
-
+    public Maybe<string> HowLuckyIs3(int number)
+    {
+        return Maybe.If(number == 13, "So lucky.");
+    }
 
 ### If/Else Selectors ###
 
