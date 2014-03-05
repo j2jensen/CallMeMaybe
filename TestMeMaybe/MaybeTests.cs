@@ -232,23 +232,23 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestOrOnNot()
+        public void TestElseOnNot()
         {
-            Assert.AreEqual(0, Maybe.Not<int>().Or(0));
-            Assert.AreEqual(1, Maybe.Not<int>().Or(1));
-            Assert.IsNull(Maybe.Not<string>().Or(null));
-            Assert.AreEqual("", Maybe.Not<string>().Or(""));
-            Assert.AreEqual("hi", Maybe.Not<string>().Or("hi"));
+            Assert.AreEqual(0, Maybe.Not<int>().Else(0));
+            Assert.AreEqual(1, Maybe.Not<int>().Else(1));
+            Assert.IsNull(Maybe.Not<string>().Else(null));
+            Assert.AreEqual("", Maybe.Not<string>().Else(""));
+            Assert.AreEqual("hi", Maybe.Not<string>().Else("hi"));
         }
 
         [Test]
-        public void TestOrOnValue()
+        public void TestElseOnValue()
         {
-            Assert.AreEqual(42, Maybe.From(42).Or(0));
-            Assert.AreEqual(42, Maybe.From(42).Or(1));
-            Assert.AreEqual("hi", Maybe.From("hi").Or(null));
-            Assert.AreEqual("hi", Maybe.From("hi").Or(""));
-            Assert.AreEqual("hi", Maybe.From("hi").Or("hi"));
+            Assert.AreEqual(42, Maybe.From(42).Else(0));
+            Assert.AreEqual(42, Maybe.From(42).Else(1));
+            Assert.AreEqual("hi", Maybe.From("hi").Else(null));
+            Assert.AreEqual("hi", Maybe.From("hi").Else(""));
+            Assert.AreEqual("hi", Maybe.From("hi").Else("hi"));
         }
 
         private class Parent

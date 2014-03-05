@@ -45,7 +45,7 @@ namespace CallMeMaybe
             return _hasValue ? selector(_value) : Maybe.Not<TValue>();
         }
 
-        public T Or(T valueIfNot)
+        public T Else(T valueIfNot)
         {
             return _hasValue ? _value : valueIfNot;
         }
