@@ -114,6 +114,9 @@ Even though conceptually a `Maybe<Parent>` and a `Maybe<Child>` should be equiva
     {
     }
 
+## License ##
+
+Call Me Maybe is open-sourced under [the MIT License](License), which basically says you can do what you want with it as long as you leave the copyright notice intact.
 
 ## Acknowledgements ##
 
