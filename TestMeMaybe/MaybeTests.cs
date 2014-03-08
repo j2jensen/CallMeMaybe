@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -217,10 +216,10 @@ namespace TestMeMaybe
         {
             var htmlAttr = new Dictionary<string, object>();
             htmlAttr["class"] = "radio-button" +
-                                htmlAttr.GetMaybe("class").Get(a => " " + a);
+                                htmlAttr.GetMaybe("class").Select(a => " " + a);
             Assert.AreEqual("radio-button", htmlAttr["class"]);
             htmlAttr["class"] = "input-field" +
-                                htmlAttr.GetMaybe("class").Get(a => " " + a);
+                                htmlAttr.GetMaybe("class").Select(a => " " + a);
             Assert.AreEqual("input-field radio-button", htmlAttr["class"]);
         }
 
@@ -228,10 +227,10 @@ namespace TestMeMaybe
         public void TestGetFromNot()
         {
             Maybe<string> fromInt = Maybe.Not<int>()
-                .Get(i => i.ToString(CultureInfo.InvariantCulture));
+                .Select(i => i.ToString(CultureInfo.InvariantCulture));
             Assert.IsFalse(fromInt.HasValue);
             Maybe<int> fromString = Maybe.Not<string>()
-                .Get(int.Parse);
+                .Select(int.Parse);
             Assert.IsFalse(fromString.HasValue);
         }
 
@@ -239,11 +238,11 @@ namespace TestMeMaybe
         public void TestGetFromValue()
         {
             Maybe<string> fromInt = Maybe.From(1)
-                .Get(i => i.ToString(CultureInfo.InvariantCulture));
+                .Select(i => i.ToString(CultureInfo.InvariantCulture));
             Assert.IsTrue(fromInt.HasValue);
             Assert.AreEqual(Maybe.From("1"), fromInt);
             Maybe<int> fromString = Maybe.From("1")
-                .Get(int.Parse);
+                .Select(int.Parse);
             Assert.IsTrue(fromString.HasValue);
             Assert.AreEqual(Maybe.From(1), fromString);
         }
