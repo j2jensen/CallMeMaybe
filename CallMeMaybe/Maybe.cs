@@ -51,13 +51,8 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
         
-        public static implicit operator Maybe<T>(Maybe<object> otherMaybe)
+        public static implicit operator Maybe<T>(MaybeNot otherMaybe)
         {
-            if (otherMaybe._hasValue && otherMaybe._value is T)
-            {
-                return new Maybe<T>((T)otherMaybe._value);
-            }
-
             return default(Maybe<T>);
         }
 
@@ -146,6 +141,11 @@ namespace CallMeMaybe
         #endregion
     }
 
+    public class MaybeNot
+    {
+        internal MaybeNot() { }
+    }
+
     internal interface IMaybe
     {
         bool HasValue { get; }
@@ -159,7 +159,7 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
-        public static readonly Maybe<object> Not = new Maybe<object>();
+        public static readonly MaybeNot Not = new MaybeNot();
 
         public static Maybe<T> If<T>(bool condition, T valueIfTrue)
         {
