@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CallMeMaybe
 {
-    public struct Maybe<T> : IEquatable<Maybe<T>>, IEnumerable<T>, IMaybe
+    public struct Maybe<T> : IEquatable<Maybe<T>>, IMaybe
     {
         private readonly T _value;
         private readonly bool _hasValue;
@@ -51,10 +50,44 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        #region LINQ Methods
+
         public Maybe<TValue> Select<TValue>(Func<T, TValue> selector)
         {
             return _hasValue ? selector(_value) : Maybe.Not<TValue>();
         }
+
+        public Maybe<T> Where(Func<T, bool> criteria)
+        {
+            return _hasValue && criteria(_value) ? this : default(Maybe<T>);
+        }
+
+        public Maybe<TResult> SelectMany<TResult>(
+            Func<T, Maybe<TResult>> resultSelector)
+        {
+            return _hasValue ? resultSelector(_value) : default(Maybe<TResult>);
+        }
+
+        public Maybe<TResult> SelectMany<TOther, TResult>(Func<T, Maybe<TOther>> otherSelector,
+            Func<T, TOther, TResult> resultSelector)
+        {
+            if (_hasValue)
+            {
+                var otherMaybe = otherSelector(_value);
+                if (otherMaybe._hasValue)
+                {
+                    return resultSelector(_value, otherMaybe._value);
+                }
+            }
+            return default(Maybe<TResult>);
+        }
+
+        public T Single()
+        {
+            return AsEnumerable().Single();
+        }
+
+        #endregion
 
         public T Else(T valueIfNot)
         {
@@ -66,20 +99,10 @@ namespace CallMeMaybe
             return _hasValue ? _value.ToString() : "";
         }
 
-        #region IEnumerable
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        public IEnumerable<T> AsEnumerable()
         {
-            var collection = _hasValue ? new[] {_value} : new T[0];
-            return collection.AsEnumerable().GetEnumerator();
+            return _hasValue ? new[] {_value} : Enumerable.Empty<T>();
         }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<T>) this).GetEnumerator();
-        }
-
-        #endregion
 
         #region Equality
 
