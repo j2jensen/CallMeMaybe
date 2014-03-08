@@ -62,20 +62,6 @@ namespace TestMeMaybe
             Assert.IsFalse(notName.HasValue);
         }
 
-
-        [Test]
-        public void TestGenericNot()
-        {
-            var notNumber = Maybe<int>.Not;
-            var notName = Maybe<string>.Not;
-
-            Assert.IsNotNull(notNumber);
-            Assert.IsNotNull(notName);
-
-            Assert.IsFalse(notNumber.HasValue);
-            Assert.IsFalse(notName.HasValue);
-        }
-
         [Test]
         public void TestNotEquality()
         {

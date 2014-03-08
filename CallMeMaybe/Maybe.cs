@@ -51,8 +51,6 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
-        public static readonly Maybe<T> Not = default (Maybe<T>);
-
         public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
         {
             return _hasValue ? selector(_value) : Maybe.Not<TValue>();
