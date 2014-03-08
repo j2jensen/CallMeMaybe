@@ -50,12 +50,22 @@ namespace CallMeMaybe
 
             return new Maybe<T>(value);
         }
+        
+        public static implicit operator Maybe<T>(Maybe<object> otherMaybe)
+        {
+            if (otherMaybe._hasValue && otherMaybe._value is T)
+            {
+                return new Maybe<T>((T)otherMaybe._value);
+            }
+
+            return default(Maybe<T>);
+        }
 
         public static readonly Maybe<T> Not = default (Maybe<T>);
 
         public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
         {
-            return _hasValue ? selector(_value) : Maybe.Not<TValue>();
+            return _hasValue ? selector(_value) : Maybe.Not;
         }
 
         public T Else(T valueIfNot)
@@ -149,10 +159,7 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
-        public static Maybe<T> Not<T>()
-        {
-            return new Maybe<T>();
-        }
+        public static readonly Maybe<object> Not = new Maybe<object>();
 
         public static Maybe<T> If<T>(bool condition, T valueIfTrue)
         {
