@@ -51,7 +51,7 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
-        public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
+        public Maybe<TValue> Select<TValue>(Func<T, TValue> selector)
         {
             return _hasValue ? selector(_value) : Maybe.Not<TValue>();
         }

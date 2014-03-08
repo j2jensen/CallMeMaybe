@@ -1,4 +1,3 @@
-using System.Globalization;
 using CallMeMaybe;
 using NUnit.Framework;
 using System.Linq;
