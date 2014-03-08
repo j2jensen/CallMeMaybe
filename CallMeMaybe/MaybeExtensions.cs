@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CallMeMaybe
 {
@@ -25,6 +27,21 @@ namespace CallMeMaybe
             }
             return Maybe.Not<TValue>();
         }
+
+        public static IEnumerable<TResult> SelectMany<TSource, TResult>(
+            this IEnumerable<TSource> source,
+            Func<TSource, Maybe<TResult>> resultSelector)
+        {
+            return source.SelectMany(t => resultSelector(t).AsEnumerable());
+        }
+
+        public static IEnumerable<TResult> SelectMany<TSource, TResult>(
+            this Maybe<TSource> source,
+            Func<TSource, IEnumerable<TResult>> resultSelector)
+        {
+            return source.AsEnumerable().SelectMany(resultSelector);
+        }
+
 
         // TODO: TryParse methods
     }
