@@ -121,19 +121,24 @@ namespace CallMeMaybe
             }
             // Maybe values can be compared with other Maybe values.
             var maybe = obj as IMaybe;
-            if (maybe == null)
+            if (maybe != null)
             {
-                // Maybe.From(1) == 1
-                return obj is T && _value.Equals((T) obj);
+                object value;
+                if (!maybe.TryGetValue(out value))
+                {
+                    // If the other one doesn't have a value, then we're
+                    // only "equal" if this one doesn't either.
+                    return !HasValue;
+                }
+                return Equals(_value, value);
             }
-            object value;
-            if (!maybe.TryGetValue(out value))
+            // If it's not a Maybe, then maybe it's a T
+            // Maybe.From(1) == 1
+            if (obj is T)
             {
-                // If the other one doesn't have a value, then we're
-                // only "equal" if this one doesn't either.
-                return !HasValue;
+                return _hasValue && _value.Equals((T)obj);
             }
-            return Equals(_value, value);
+            return false;
         }
 
         public override int GetHashCode()
