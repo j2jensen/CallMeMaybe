@@ -28,11 +28,12 @@ namespace CallMeMaybe
             return Maybe.Not<TValue>();
         }
 
-        public static IEnumerable<TResult> SelectMany<TSource, TResult>(
+        public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(
             this IEnumerable<TSource> source,
-            Func<TSource, Maybe<TResult>> resultSelector)
+            Func<TSource, Maybe<TCollection>> collectionSelector,
+            Func<TSource, TCollection, TResult> resultSelector)
         {
-            return source.SelectMany(t => resultSelector(t).AsEnumerable());
+            return source.SelectMany(t => collectionSelector(t).AsEnumerable(), resultSelector);
         }
 
         public static IEnumerable<TResult> SelectMany<TSource, TResult>(
