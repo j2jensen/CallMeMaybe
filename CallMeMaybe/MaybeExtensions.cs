@@ -43,7 +43,27 @@ namespace CallMeMaybe
             return source.ToList().SelectMany(resultSelector);
         }
 
+        // TODO: MaybeFirst/MaybeLast/MaybeSingle methods
+        // TODO: MaybeSum/MaybeMax/MaybeMin methods
+        // TODO: MaybeAggregate method
+
+        // TODO: Consider WhereHasValue method on IEnumerable<Maybe<T>>, returns IEnumerable<T>
+        // (Would this just be the same as SelectMany(i => i)?)
+
+        // TODO: Consider extension method to convert any object into a Maybe
+        // On one hand, that's a huge scope to open up an extension method on, and in many cases
+        // an implicit conversion is sufficient. But it could be handy in some use cases:
+        // var maybeAnon = new {a = "foo"}.Maybe();
+        // var str = val.Maybe().Select(v => v.ToString()).Else("None");
+        // Does the first case make sense? How often will programmers be _optionally_ producing
+        // an anonymous type?
+        // Do we even want to encourage this last case, since it's basically guaranteed to be
+        // used on a null value, rather than explicitly declaring `val` to be a Maybe?
+        // Are these cases common enough to merit an extension, or should people just use
+        // Maybe.From()?
 
         // TODO: TryParse methods
+
+        // TODO: ElseDefault, only where T : struct
     }
 }

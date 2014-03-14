@@ -4,6 +4,11 @@ using System.Linq;
 
 namespace CallMeMaybe
 {
+
+    // TODO: Fail-fast checks on all methods (specifically watch for lambdas)
+    // TODO: Comment all methods and types
+    // TODO: Investigate [EditorBrowsable] and [DebuggerDisplay] attributes
+    // TODO: Investigate Resharper annotations: Pure, InstantHandle, and NotNull
     public struct Maybe<T> : IEquatable<Maybe<T>>, IMaybe
     {
         private readonly T _value;
@@ -50,6 +55,8 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        // TODO: Consider implicit conversion from Maybe<Maybe<T>>
+
         #region LINQ Methods
 
         public Maybe<TValue> Select<TValue>(Func<T, TValue> selector)
@@ -92,8 +99,19 @@ namespace CallMeMaybe
             return _hasValue ? new List<T>(1) { _value } : new List<T>(0);
         }
 
+        // TODO: Any() method
+
         #endregion
 
+        // TODO: Do() Method
+
+        // TODO: Consider an ElseDo() method: would this really add anything?
+
+        // TODO: Consider an Or() method (switch to another Maybe<> value if no value). Are there any real use cases for this?
+
+        // TODO: Consider an ElseIf() method, so we can chain Maybe.If(...).ElseIf(...).Else(...);
+
+        // TODO: Else() method with Lambda argument
         public T Else(T valueIfNot)
         {
             return _hasValue ? _value : valueIfNot;
@@ -175,6 +193,9 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        // TODO: Figure out how to do the equivalent of Not, with anonymous types?
+
+        // TODO: Decide if we want Maybe.Not<T>() or Maybe<T>.Not, or both?
         public static Maybe<T> Not<T>()
         {
             return new Maybe<T>();
