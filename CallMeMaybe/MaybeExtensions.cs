@@ -33,14 +33,14 @@ namespace CallMeMaybe
             Func<TSource, Maybe<TCollection>> collectionSelector,
             Func<TSource, TCollection, TResult> resultSelector)
         {
-            return source.SelectMany(t => collectionSelector(t).AsEnumerable(), resultSelector);
+            return source.SelectMany(t => collectionSelector(t).ToList(), resultSelector);
         }
 
         public static IEnumerable<TResult> SelectMany<TSource, TResult>(
             this Maybe<TSource> source,
             Func<TSource, IEnumerable<TResult>> resultSelector)
         {
-            return source.AsEnumerable().SelectMany(resultSelector);
+            return source.ToList().SelectMany(resultSelector);
         }
 
 
