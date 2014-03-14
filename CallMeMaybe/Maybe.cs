@@ -101,7 +101,7 @@ namespace CallMeMaybe
 
         public IEnumerable<T> AsEnumerable()
         {
-            return _hasValue ? new[] {_value} : Enumerable.Empty<T>();
+            return _hasValue ? new List<T>(1) {_value} : new List<T>(0);
         }
 
         #region Equality
