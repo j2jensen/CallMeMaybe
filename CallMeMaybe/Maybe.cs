@@ -87,6 +87,11 @@ namespace CallMeMaybe
             return ToList().Single();
         }
 
+        public List<T> ToList()
+        {
+            return _hasValue ? new List<T>(1) { _value } : new List<T>(0);
+        }
+
         #endregion
 
         public T Else(T valueIfNot)
@@ -97,11 +102,6 @@ namespace CallMeMaybe
         public override string ToString()
         {
             return _hasValue ? _value.ToString() : "";
-        }
-
-        public List<T> ToList()
-        {
-            return _hasValue ? new List<T>(1) {_value} : new List<T>(0);
         }
 
         #region Equality
