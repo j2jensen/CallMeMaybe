@@ -304,6 +304,9 @@ namespace TestMeMaybe
                 "GetHashCode should avoid producing likely collisions: " + maxModThirteenCollisions);
         }
 
+        // TODO: Test hash code distribution with multiple different types of "empty" maybes.
+        // (Hint: GetHashCode() needs to be the same any time Equals() would return true.)
+
         [Test]
         public void TestImplicitCasting()
         {
