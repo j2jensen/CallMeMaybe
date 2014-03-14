@@ -84,7 +84,7 @@ namespace CallMeMaybe
 
         public T Single()
         {
-            return AsEnumerable().Single();
+            return ToList().Single();
         }
 
         #endregion
@@ -99,7 +99,7 @@ namespace CallMeMaybe
             return _hasValue ? _value.ToString() : "";
         }
 
-        public IEnumerable<T> AsEnumerable()
+        public List<T> ToList()
         {
             return _hasValue ? new List<T>(1) {_value} : new List<T>(0);
         }
