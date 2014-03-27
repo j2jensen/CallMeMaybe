@@ -222,10 +222,10 @@ namespace TestMeMaybe
         [Test]
         public void TestGetFromNot()
         {
-            Maybe<string> fromInt = Maybe.Not<int>()
+            Maybe<string> fromInt = Maybe<int>.Not
                 .Select(i => i.ToString(CultureInfo.InvariantCulture));
             Assert.IsFalse(fromInt.HasValue);
-            Maybe<int> fromString = Maybe.Not<string>()
+            Maybe<int> fromString = Maybe<string>.Not
                 .Select(int.Parse);
             Assert.IsFalse(fromString.HasValue);
         }
