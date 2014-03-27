@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace CallMeMaybe
 {
-    public struct Maybe<T> : IEquatable<Maybe<T>>, IEnumerable<T>, IMaybe
+
+    // TODO: Fail-fast checks on all methods (specifically watch for lambdas)
+    // TODO: Comment all methods and types
+    // TODO: Investigate [EditorBrowsable] and [DebuggerDisplay] attributes
+    // TODO: Investigate Resharper annotations: Pure, InstantHandle, and NotNull
+    public struct Maybe<T> : IEquatable<Maybe<T>>, IMaybe
     {
         private readonly T _value;
         private readonly bool _hasValue;
@@ -56,15 +60,65 @@ namespace CallMeMaybe
         {
             return default(Maybe<T>);
         }
+        // TODO: Consider implicit conversion from Maybe<Maybe<T>>
 
         public static readonly Maybe<T> Not = default (Maybe<T>);
+        #region LINQ Methods
 
         [Pure]
-        public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
+        public Maybe<TValue> Select<TValue>(Func<T, TValue> selector)
         {
             return _hasValue ? selector(_value) : Maybe<TValue>.Not;
         }
 
+        public Maybe<T> Where(Func<T, bool> criteria)
+        {
+            return _hasValue && criteria(_value) ? this : default(Maybe<T>);
+        }
+
+        public Maybe<TResult> SelectMany<TResult>(
+            Func<T, Maybe<TResult>> resultSelector)
+        {
+            return _hasValue ? resultSelector(_value) : default(Maybe<TResult>);
+        }
+
+        public Maybe<TResult> SelectMany<TOther, TResult>(Func<T, Maybe<TOther>> otherSelector,
+            Func<T, TOther, TResult> resultSelector)
+        {
+            if (_hasValue)
+            {
+                var otherMaybe = otherSelector(_value);
+                if (otherMaybe._hasValue)
+                {
+                    return resultSelector(_value, otherMaybe._value);
+                }
+            }
+            return default(Maybe<TResult>);
+        }
+
+        public T Single()
+        {
+            return ToList().Single();
+        }
+
+        public List<T> ToList()
+        {
+            return _hasValue ? new List<T>(1) { _value } : new List<T>(0);
+        }
+
+        // TODO: Any() method
+
+        #endregion
+
+        // TODO: Do() Method
+
+        // TODO: Consider an ElseDo() method: would this really add anything?
+
+        // TODO: Consider an Or() method (switch to another Maybe<> value if no value). Are there any real use cases for this?
+
+        // TODO: Consider an ElseIf() method, so we can chain Maybe.If(...).ElseIf(...).Else(...);
+
+        // TODO: Else() method with Lambda argument
         public T Else(T valueIfNot)
         {
             return _hasValue ? _value : valueIfNot;
@@ -74,21 +128,6 @@ namespace CallMeMaybe
         {
             return _hasValue ? _value.ToString() : "";
         }
-
-        #region IEnumerable
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            var collection = _hasValue ? new[] {_value} : new T[0];
-            return collection.AsEnumerable().GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<T>) this).GetEnumerator();
-        }
-
-        #endregion
 
         #region Equality
 
@@ -107,19 +146,24 @@ namespace CallMeMaybe
             }
             // Maybe values can be compared with other Maybe values.
             var maybe = obj as IMaybe;
-            if (maybe == null)
+            if (maybe != null)
             {
-                // Maybe.From(1) == 1
-                return obj is T && _value.Equals((T) obj);
+                object value;
+                if (!maybe.TryGetValue(out value))
+                {
+                    // If the other one doesn't have a value, then we're
+                    // only "equal" if this one doesn't either.
+                    return !HasValue;
+                }
+                return Equals(_value, value);
             }
-            object value;
-            if (!maybe.TryGetValue(out value))
+            // If it's not a Maybe, then maybe it's a T
+            // Maybe.From(1) == 1
+            if (obj is T)
             {
-                // If the other one doesn't have a value, then we're
-                // only "equal" if this one doesn't either.
-                return !HasValue;
+                return _hasValue && _value.Equals((T)obj);
             }
-            return Equals(_value, value);
+            return false;
         }
 
         public override int GetHashCode()
@@ -169,6 +213,9 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        // TODO: Figure out how to do the equivalent of Not, with anonymous types?
+
+        // TODO: Decide if we want Maybe.Not<T>() or Maybe<T>.Not, or both?
         public static readonly MaybeNot Not = new MaybeNot();
 
         public static Maybe<T> If<T>(bool condition, T valueIfTrue)
