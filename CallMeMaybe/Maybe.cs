@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace CallMeMaybe
@@ -50,7 +51,7 @@ namespace CallMeMaybe
 
             return new Maybe<T>(value);
         }
-        
+
         public static implicit operator Maybe<T>(MaybeNot otherMaybe)
         {
             return default(Maybe<T>);
@@ -58,9 +59,10 @@ namespace CallMeMaybe
 
         public static readonly Maybe<T> Not = default (Maybe<T>);
 
+        [Pure]
         public Maybe<TValue> Get<TValue>(Func<T, TValue> selector)
         {
-            return _hasValue ? selector(_value) : Maybe.Not;
+            return _hasValue ? selector(_value) : Maybe<TValue>.Not;
         }
 
         public T Else(T valueIfNot)
@@ -141,9 +143,17 @@ namespace CallMeMaybe
         #endregion
     }
 
-    public class MaybeNot
+    public struct MaybeNot
     {
-        internal MaybeNot() { }
+        public bool HasValue
+        {
+            get { return false; }
+        }
+
+        public override string ToString()
+        {
+            return "";
+        }
     }
 
     internal interface IMaybe
@@ -163,7 +173,12 @@ namespace CallMeMaybe
 
         public static Maybe<T> If<T>(bool condition, T valueIfTrue)
         {
-            return condition ? valueIfTrue : new Maybe<T>();
+            return condition ? valueIfTrue : Maybe<T>.Not;
+        }
+
+        public static Maybe<T> If<T>(bool condition, Func<T> valueIfTrue)
+        {
+            return condition ? valueIfTrue() : Maybe<T>.Not;
         }
     }
 }

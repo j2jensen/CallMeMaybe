@@ -48,7 +48,7 @@ namespace TestMeMaybe
             {
                 return Maybe.From("So lucky.");
             }
-            return Maybe.Not<string>();
+            return Maybe.Not;
         }
 
         public Maybe<string> HowLuckyIs2(int number)

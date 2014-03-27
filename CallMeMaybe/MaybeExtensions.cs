@@ -23,7 +23,7 @@ namespace CallMeMaybe
             {
                 return Maybe.From(value);
             }
-            return Maybe.Not<TValue>();
+            return Maybe.Not;
         }
 
         // TODO: TryParse methods
