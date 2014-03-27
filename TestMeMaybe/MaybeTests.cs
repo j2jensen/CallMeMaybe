@@ -57,20 +57,6 @@ namespace TestMeMaybe
             Assert.IsFalse(not.HasValue);
         }
 
-
-        [Test]
-        public void TestGenericNot()
-        {
-            var notNumber = Maybe<int>.Not;
-            var notName = Maybe<string>.Not;
-
-            Assert.IsNotNull(notNumber);
-            Assert.IsNotNull(notName);
-
-            Assert.IsFalse(notNumber.HasValue);
-            Assert.IsFalse(notName.HasValue);
-        }
-
         [Test]
         public void TestNotEquality()
         {
@@ -226,21 +212,21 @@ namespace TestMeMaybe
         {
             var htmlAttr = new Dictionary<string, object>();
             htmlAttr["class"] = "radio-button" +
-                                htmlAttr.GetMaybe("class").Get(a => " " + a);
+                                htmlAttr.GetMaybe("class").Select(a => " " + a);
             Assert.AreEqual("radio-button", htmlAttr["class"]);
             htmlAttr["class"] = "input-field" +
-                                htmlAttr.GetMaybe("class").Get(a => " " + a);
+                                htmlAttr.GetMaybe("class").Select(a => " " + a);
             Assert.AreEqual("input-field radio-button", htmlAttr["class"]);
         }
 
         [Test]
         public void TestGetFromNot()
         {
-            Maybe<string> fromInt = Maybe<int>.Not
-                .Get(i => i.ToString(CultureInfo.InvariantCulture));
+            Maybe<string> fromInt = Maybe.Not<int>()
+                .Select(i => i.ToString(CultureInfo.InvariantCulture));
             Assert.IsFalse(fromInt.HasValue);
-            Maybe<int> fromString = Maybe<string>.Not
-                .Get(int.Parse);
+            Maybe<int> fromString = Maybe.Not<string>()
+                .Select(int.Parse);
             Assert.IsFalse(fromString.HasValue);
         }
 
@@ -248,11 +234,11 @@ namespace TestMeMaybe
         public void TestGetFromValue()
         {
             Maybe<string> fromInt = Maybe.From(1)
-                .Get(i => i.ToString(CultureInfo.InvariantCulture));
+                .Select(i => i.ToString(CultureInfo.InvariantCulture));
             Assert.IsTrue(fromInt.HasValue);
             Assert.AreEqual(Maybe.From("1"), fromInt);
             Maybe<int> fromString = Maybe.From("1")
-                .Get(int.Parse);
+                .Select(int.Parse);
             Assert.IsTrue(fromString.HasValue);
             Assert.AreEqual(Maybe.From(1), fromString);
         }
@@ -313,6 +299,9 @@ namespace TestMeMaybe
             Assert.IsTrue(maxModThirteenCollisions < (max/13)*2,
                 "GetHashCode should avoid producing likely collisions: " + maxModThirteenCollisions);
         }
+
+        // TODO: Test hash code distribution with multiple different types of "empty" maybes.
+        // (Hint: GetHashCode() needs to be the same any time Equals() would return true.)
 
         [Test]
         public void TestImplicitCasting()
