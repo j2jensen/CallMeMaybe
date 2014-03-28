@@ -53,6 +53,20 @@ namespace TestMeMaybe
             Assert.AreEqual(new {number = 13, howLucky = "So lucky."}, luckyNumbers.Single());
         }
 
+        [Test]
+        public void FizzBuzz()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var fizz = Maybe.If(i%3 == 0, "Fizz");
+                var buzz = Maybe.If(i%5 == 0, "Buzz");
+                var line = Maybe.If(fizz.HasValue || buzz.HasValue, "" + fizz + buzz)
+                    .Else(i.ToString());
+                Console.WriteLine(line);
+            }
+        }
+
+
         public Maybe<string> HowLuckyIs(int number)
         {
             if (number == 13)
