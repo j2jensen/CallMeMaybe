@@ -1,5 +1,5 @@
 # Call Me Maybe #
-A C# library to help you deal with optional values.
+A C# library to help you deal with optional values. It is open-sourced here on [BitBucket](https://bitbucket.org/j2jensen/callmemaybe), and is available from [NuGet](https://www.nuget.org/packages/CallMeMaybe/).
 
 ##Purpose##
 
@@ -153,10 +153,11 @@ Unfortunately, `Maybe<>` is not a part of the BCL (though it probably should be)
 
 ## Acknowledgements ##
 
-## To Do:##
-
-1. Finish Readme
-2. Add Resharper annotations to assert that Maybe's value is NotNull.
+- I drew on some of the best ideas I found in other similar frameworks:
+    - [Functional.Maybe](https://github.com/AndreyTsvetkov/Functional.Maybe)
+    - [Strilanc.May](https://github.com/Strilanc/May) - [Blog post](http://twistedoakstudios.com/blog/Post1130_when-null-is-not-enough-an-option-type-for-c)
+- Special thanks to friends, and anyone else, who has given me feedback and suggestions on this project.
+- Thanks to *you* for reading this and (hopefully) using the framework. Issues, ideas, and pull requests are welcome.
 
 ## Authors ##
 
