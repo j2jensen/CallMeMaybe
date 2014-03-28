@@ -52,52 +52,23 @@ Notice how the internal code of this method is exactly the same as before? It's 
     // `HasValue` will simply tell you whether there is a value in the `Maybe`.
     bool isLucky4 = HowLuckyIs(number).HasValue;
 
-Notice that `Select` and `Single` behave just they way any LINQ user would expect them to.
+Notice that `Select` and `Single` behave just they way any LINQ user would expect them to. The same is true of several other LINQ operators, which makes `Maybe` work very smoothly in LINQ syntax:
 
+    var luckyNumbers =
+        from n in Enumerable.Range(1, 20)
+        from s in HowLuckyIs(n)
+        where s.Contains("lucky")
+        select new {number = n, howLucky = s};
+
+Now let's look at the `HowLuckyIs` method again. It was easy enough to rely on implicit casting, but what if we want to be more explicit, and avoid using a `null`?
 
     public Maybe<string> HowLuckyIs(int number)
     {
-        if (number == 13)
-        {
-            return Maybe.From("So lucky.");
-        }
-        return Maybe.Not;
+        return number == 13 ? Maybe.From("So lucky.") : Maybe<string>.Not;
     }
 
-Then consumers of your code cannot use the result without recognizing that it may not be there:
 
-
-This makes it impossible
-
-So how do we use the result? Well, what do you want to have happen if there is no result? You could go with a traditional, imperative approach. 
-
-    var luckyOne = HowLuckyIs(1);
-    if (luckyOne.HasValue)
-    {
-        // Since Maybe<> implements IEnumerable<>, LINQ methods like .Single()
-        // work exactly how you'd expect them to.
-        Console.WriteLine("One is " + luckyOne.Single());
-    }
-    else
-    {
-        Console.WriteLine("One is not lucky.");
-    }
-
-But that looks awful! Let's try something a little more functional:
-
-    // `Else()` will return the given value if the Maybe has no value.
-    Console.WriteLine("One is " + HowLuckyIs(1).Else("not lucky."));
-
-So with a few built-in utility methods, you can very easily handle the "not there" case. Now let's look at the `HowLuckyIs` method again, and see if we can't simplify it further.
-
-For one thing, values get implicitly cast to their `Maybe<>` equivalents, and `null` is automatically treated the same as `Maybe.Not<>()`, so you *could* do this:
-
-    public Maybe<string> HowLuckyIs2(int number)
-    {
-        return number == 13 ? "So lucky." : null;
-    }
-
-But we don't like `null`s, remember? Let's try this instead:
+But that's way too verbose. Let's try this instead:
 
     public Maybe<string> HowLuckyIs3(int number)
     {
@@ -105,6 +76,11 @@ But we don't like `null`s, remember? Let's try this instead:
     }
 
 ### If/Else Selectors ###
+
+
+### Maybe.Not ###
+
+`Maybe.Not` is a special value that implicitly casts to an empty `Maybe<>` object. However, because it requires an implicit cast, you may sometimes need to use `Maybe<T>.Not`. You can also use `new Maybe<T>()` or `default(Maybe<T>)`. Take your pick, but be consistent.
 
 
 ### Dictionaries ###
@@ -147,6 +123,11 @@ Even though conceptually a `Maybe<Parent>` and a `Maybe<Child>` should be equiva
     private class Child : Parent
     {
     }
+
+### Third-Party Support ###
+
+Unfortunately, `Maybe<>` is not a part of the BCL (though it probably should be). That means that there's not much support for it in third-party frameworks like Entity Framework. My hope is to add some plugin packages for frameworks that are extensible (e.g. ASP.NET MVC model binding). But there will be some places where other frameworks just won't know what to do with it.
+
 
 ## License ##
 

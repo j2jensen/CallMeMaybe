@@ -42,6 +42,17 @@ namespace TestMeMaybe
             Console.WriteLine("One is " + HowLuckyIs(1).Else("not lucky."));
         }
 
+        [Test]
+        public void TestLinqSyntax()
+        {
+            var luckyNumbers =
+                from n in Enumerable.Range(1, 20)
+                from s in HowLuckyIs(n)
+                where s.Contains("lucky")
+                select new {number = n, howLucky = s};
+            Assert.AreEqual(new {number = 13, howLucky = "So lucky."}, luckyNumbers.Single());
+        }
+
         public Maybe<string> HowLuckyIs(int number)
         {
             if (number == 13)
@@ -55,6 +66,7 @@ namespace TestMeMaybe
         {
             return number == 13 ? "So lucky." : null;
         }
+
         public Maybe<string> HowLuckyIs3(int number)
         {
             return Maybe.If(number == 13, "So lucky.");
