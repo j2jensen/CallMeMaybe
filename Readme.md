@@ -52,6 +52,9 @@ Notice how the internal code of this method is exactly the same as before? It's 
     // `HasValue` will simply tell you whether there is a value in the `Maybe`.
     bool isLucky4 = HowLuckyIs(number).HasValue;
 
+    // `Do` will only do something if the `Maybe` has a value.
+    HowLuckyIs(number).Do(n => Console.WriteLine(n.Contains("lucky")));
+
 Notice that `Select` and `Single` behave just they way any LINQ user would expect them to. The same is true of several other LINQ operators, which makes `Maybe` work very smoothly in LINQ syntax:
 
     var luckyNumbers =
@@ -70,13 +73,28 @@ Now let's look at the `HowLuckyIs` method again. It was easy enough to rely on i
 
 But that's way too verbose. Let's try this instead:
 
-    public Maybe<string> HowLuckyIs3(int number)
+    public Maybe<string> HowLuckyIs(int number)
     {
         return Maybe.If(number == 13, "So lucky.");
     }
 
-### If/Else Selectors ###
 
+### Use Cases ###
+
+Don't limit your usage of `Maybe<>` to return types. `Maybe<>` also works great for optional parameters, and any property that doesn't get set by an object's constructor. Because `Maybe<>` is a value type, if it never gets initialized, it will always be *empty* rather than `null`.
+
+    // Can be called like this: CallMe("123-456-7890")
+    public void CallMe(Maybe<string> phoneNumber = default(Maybe<string>))
+    {
+        ...
+    }
+
+    public class Callee
+    {
+        Maybe<string> PhoneNumber {get; set;}
+    }
+
+    
 
 ### Maybe.Not ###
 
