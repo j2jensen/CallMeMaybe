@@ -62,7 +62,11 @@ namespace CallMeMaybe
         }
         // TODO: Consider implicit conversion from Maybe<Maybe<T>>
 
-        public static readonly Maybe<T> Not = default (Maybe<T>);
+        public static Maybe<T> Not
+        {
+            get { return default (Maybe<T>); }
+        }
+
         #region LINQ Methods
 
         [Pure]
