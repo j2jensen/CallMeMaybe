@@ -42,19 +42,45 @@ namespace TestMeMaybe
             Console.WriteLine("One is " + HowLuckyIs(1).Else("not lucky."));
         }
 
+        [Test]
+        public void TestLinqSyntax()
+        {
+            var luckyNumbers =
+                from n in Enumerable.Range(1, 20)
+                from s in HowLuckyIs(n)
+                where s.Contains("lucky")
+                select new {number = n, howLucky = s};
+            Assert.AreEqual(new {number = 13, howLucky = "So lucky."}, luckyNumbers.Single());
+        }
+
+        [Test]
+        public void FizzBuzz()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var fizz = Maybe.If(i%3 == 0, "Fizz");
+                var buzz = Maybe.If(i%5 == 0, "Buzz");
+                var line = Maybe.If(fizz.HasValue || buzz.HasValue, "" + fizz + buzz)
+                    .Else(i.ToString());
+                Console.WriteLine(line);
+            }
+        }
+
+
         public Maybe<string> HowLuckyIs(int number)
         {
             if (number == 13)
             {
                 return Maybe.From("So lucky.");
             }
-            return Maybe.Not<string>();
+            return Maybe.Not;
         }
 
         public Maybe<string> HowLuckyIs2(int number)
         {
             return number == 13 ? "So lucky." : null;
         }
+
         public Maybe<string> HowLuckyIs3(int number)
         {
             return Maybe.If(number == 13, "So lucky.");

@@ -25,7 +25,7 @@ namespace CallMeMaybe
             {
                 return Maybe.From(value);
             }
-            return Maybe.Not<TValue>();
+            return Maybe.Not;
         }
 
         public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(

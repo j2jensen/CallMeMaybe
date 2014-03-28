@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace CallMeMaybe
@@ -55,13 +56,23 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        public static implicit operator Maybe<T>(MaybeNot otherMaybe)
+        {
+            return default(Maybe<T>);
+        }
         // TODO: Consider implicit conversion from Maybe<Maybe<T>>
+
+        public static Maybe<T> Not
+        {
+            get { return default (Maybe<T>); }
+        }
 
         #region LINQ Methods
 
+        [Pure]
         public Maybe<TValue> Select<TValue>(Func<T, TValue> selector)
         {
-            return _hasValue ? selector(_value) : Maybe.Not<TValue>();
+            return _hasValue ? selector(_value) : Maybe<TValue>.Not;
         }
 
         public Maybe<T> Where(Func<T, bool> criteria)
@@ -180,6 +191,19 @@ namespace CallMeMaybe
         #endregion
     }
 
+    public struct MaybeNot
+    {
+        public bool HasValue
+        {
+            get { return false; }
+        }
+
+        public override string ToString()
+        {
+            return "";
+        }
+    }
+
     internal interface IMaybe
     {
         bool HasValue { get; }
@@ -196,14 +220,16 @@ namespace CallMeMaybe
         // TODO: Figure out how to do the equivalent of Not, with anonymous types?
 
         // TODO: Decide if we want Maybe.Not<T>() or Maybe<T>.Not, or both?
-        public static Maybe<T> Not<T>()
-        {
-            return new Maybe<T>();
-        }
+        public static readonly MaybeNot Not = new MaybeNot();
 
         public static Maybe<T> If<T>(bool condition, T valueIfTrue)
         {
-            return condition ? valueIfTrue : new Maybe<T>();
+            return condition ? valueIfTrue : Maybe<T>.Not;
+        }
+
+        public static Maybe<T> If<T>(bool condition, Func<T> valueIfTrue)
+        {
+            return condition ? valueIfTrue() : Maybe<T>.Not;
         }
     }
 }
