@@ -13,13 +13,47 @@ Traditionally, programmers often use `null` references to represent values that 
 
 All this leaves us in a position where our best hope of avoiding `NullReferenceException`s lies in trying to make sure that our reference variables are *never* null. But in that case, how do we indicate when a value is *optional*?
 
-Well, that's where `Maybe<>` comes in.
+Well, that's where `Maybe` comes in.
 
 ##Examples##
 
 ### Basic Usage ###
 
-Try using `Maybe<>` when your method may or may not return a value.
+Imagine you have this method:
+
+    public string HowLuckyIs(int number)
+    {
+        return number == 13 ? "So lucky." : null;
+    }
+
+*This is error prone!* The person writing code to consume this method won't know that it might return a null value. They're likely to write something like this:
+
+    bool isLucky = HowLuckyIs(number).Contains("lucky");
+
+Instead, try using `Maybe<>` as your return value.
+
+
+    public Maybe<string> HowLuckyIs(int number)
+    {
+        return number == 13 ? "So lucky." : null;
+    }
+
+Notice how the internal code of this method is exactly the same as before? It's *super easy* to switch to using `Maybe`. And now, consumers of your code are forced to acknowledge the possibility that you gave them *nothing*. They can do this in a few different ways:
+
+    // `Else` will return the given value if the `Maybe` has no value.
+    bool isLucky1 = HowLuckyIs(number).Else("").Contains("lucky");
+
+    // `Select` will return a `Maybe<>`, running the lambda only if there's a value. 
+    bool isLucky2 = HowLuckyIs(number).Select(n => n.Contains("lucky")).Else(false);
+
+    // `Single` will throw an exception if there is no value.
+    bool isLucky3 = HowLuckyIs(number).Single().Contains("lucky");
+
+    // `HasValue` will simply tell you whether there is a value in the `Maybe`.
+    bool isLucky4 = HowLuckyIs(number).HasValue;
+
+Notice that `Select` and `Single` behave just they way any LINQ user would expect them to.
+
 
     public Maybe<string> HowLuckyIs(int number)
     {
@@ -27,13 +61,13 @@ Try using `Maybe<>` when your method may or may not return a value.
         {
             return Maybe.From("So lucky.");
         }
-        return Maybe.Not<string>();
+        return Maybe.Not;
     }
 
 Then consumers of your code cannot use the result without recognizing that it may not be there:
 
-    // Next line won't compile
-    // Assert.AreEqual(3, HowLuckyIs(13).IndexOf("lucky"));
+
+This makes it impossible
 
 So how do we use the result? Well, what do you want to have happen if there is no result? You could go with a traditional, imperative approach. 
 
