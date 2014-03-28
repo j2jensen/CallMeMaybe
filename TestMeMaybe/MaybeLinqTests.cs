@@ -9,7 +9,7 @@ namespace TestMeMaybe
         [Test]
         public void TestNotStringJoin()
         {
-            var q = Maybe.Not<int>();
+            var q = Maybe.Not;
             Assert.AreEqual("", string.Join(",", q));
         }
 
