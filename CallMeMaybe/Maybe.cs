@@ -60,7 +60,11 @@ namespace CallMeMaybe
         {
             return default(Maybe<T>);
         }
-        // TODO: Consider implicit conversion from Maybe<Maybe<T>>
+
+        public static implicit operator Maybe<T>(Maybe<Maybe<T>> wrappedMaybe)
+        {
+            return wrappedMaybe.Else(Maybe<T>.Not);
+        }
 
         public static Maybe<T> Not
         {
