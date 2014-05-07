@@ -56,7 +56,11 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
-        public static implicit operator Maybe<T>(MaybeNot otherMaybe)
+        public static implicit operator Maybe<T>(MaybeNot maybeNot)
+        {
+            return default(Maybe<T>);
+        }
+        public static implicit operator Maybe<T>(Maybe<Maybe<T>> nestedMaybe)
         {
             return default(Maybe<T>);
         }
