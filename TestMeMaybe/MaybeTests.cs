@@ -141,13 +141,13 @@ namespace TestMeMaybe
         public void TestNullEquality()
         {
             var nameValue = Maybe.From("hi");
-            var nullName = Maybe.From((string) null);
+            var nullName = Maybe.From((string)null);
             Assert.IsFalse(null == nameValue);
-            Assert.IsTrue(null == nullName);
-            Assert.IsFalse(nameValue == null);
+            Assert.IsTrue(null ==  nullName);
+            Assert.IsFalse(nameValue ==  null);
             Assert.IsTrue(nullName == null);
             Assert.IsTrue(null != nameValue);
-            Assert.IsFalse(null != nullName);
+            Assert.IsFalse(null !=  nullName);
             Assert.IsTrue(nameValue != null);
             Assert.IsFalse(nullName != null);
         }
@@ -342,14 +342,6 @@ namespace TestMeMaybe
             Assert.IsNotNull(name);
             Assert.IsNotNull(parentId);
             return string.Format("{2} => {0}: {1}", id, name, parentId);
-        }
-
-        [Test]
-        public void TestImplicitConversionFromNested()
-        {
-//            var sevenTimes =
-//                new Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<string>>>>>>>();
-//            Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<string>>>>>> sixTimes = sevenTimes;
         }
 
         [Test]
