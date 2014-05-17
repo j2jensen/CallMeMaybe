@@ -248,7 +248,8 @@ namespace TestMeMaybe
         {
             Assert.AreEqual(0, Maybe<int>.Not.Else(0));
             Assert.AreEqual(1, Maybe<int>.Not.Else(1));
-            Assert.IsNull(Maybe<string>.Not.Else(null));
+            // TODO: Create ElseNull method?
+            //Assert.IsNull(Maybe<string>.Not.Else(null));
             Assert.AreEqual("", Maybe<string>.Not.Else(""));
             Assert.AreEqual("hi", Maybe<string>.Not.Else("hi"));
         }
@@ -258,9 +259,42 @@ namespace TestMeMaybe
         {
             Assert.AreEqual(42, Maybe.From(42).Else(0));
             Assert.AreEqual(42, Maybe.From(42).Else(1));
-            Assert.AreEqual("hi", Maybe.From("hi").Else(null));
+            // TODO: Create ElseNull Method?
+            //Assert.AreEqual("hi", Maybe.From("hi").Else(null));
             Assert.AreEqual("hi", Maybe.From("hi").Else(""));
             Assert.AreEqual("hi", Maybe.From("hi").Else("hi"));
+        }
+
+        [Test]
+        public void TestElseFuncOnNot()
+        {
+            Assert.AreEqual(0, Maybe<int>.Not.Else(() => 0));
+            Assert.AreEqual(1, Maybe<int>.Not.Else(() => 1));
+            // TODO: Create ElseNull method?
+            //Assert.IsNull(Maybe<string>.Not.Else(() => null));
+            Assert.AreEqual("", Maybe<string>.Not.Else(() => ""));
+            Assert.AreEqual("hi", Maybe<string>.Not.Else(() => "hi"));
+        }
+
+        [Test]
+        public void TestElseFuncOnValue()
+        {
+            Assert.AreEqual(42, Maybe.From(42).Else(FailWithReturn<int>));
+            Assert.AreEqual(42, Maybe.From(42).Else(FailWithReturn<int>));
+            // TODO: Create ElseNull Method?
+            //Assert.AreEqual("hi", Maybe.From("hi").Else(null));
+            Assert.AreEqual("hi", Maybe.From("hi").Else(FailWithReturn<string>));
+            Assert.AreEqual("hi", Maybe.From("hi").Else(FailWithReturn<string>));
+        }
+
+        /// <summary>
+        /// At compile-time, this pretends to return a value, but it'll actually throw an
+        /// exception, helping our unit tests to ensure that it isn't called.
+        /// </summary>
+        public T FailWithReturn<T>()
+        {
+            Assert.Fail();
+            return default(T);
         }
 
         [Test]

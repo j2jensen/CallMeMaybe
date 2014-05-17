@@ -122,7 +122,11 @@ namespace CallMeMaybe
 
         // TODO: Consider an ElseIf() method, so we can chain Maybe.If(...).ElseIf(...).Else(...);
 
-        // TODO: Else() method with Lambda argument
+        public T Else(Func<T> getValueIfNot)
+        {
+            return _hasValue ? _value : getValueIfNot();
+        }
+
         public T Else(T valueIfNot)
         {
             return _hasValue ? _value : valueIfNot;
