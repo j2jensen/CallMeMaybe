@@ -270,8 +270,7 @@ namespace TestMeMaybe
         {
             Assert.AreEqual(0, Maybe<int>.Not.Else(() => 0));
             Assert.AreEqual(1, Maybe<int>.Not.Else(() => 1));
-            // TODO: Create ElseNull method?
-            //Assert.IsNull(Maybe<string>.Not.Else(() => null));
+            Assert.IsNull(Maybe<string>.Not.Else(() => null));
             Assert.AreEqual("", Maybe<string>.Not.Else(() => ""));
             Assert.AreEqual("hi", Maybe<string>.Not.Else(() => "hi"));
         }
@@ -280,10 +279,6 @@ namespace TestMeMaybe
         public void TestElseFuncOnValue()
         {
             Assert.AreEqual(42, Maybe.From(42).Else(FailWithReturn<int>));
-            Assert.AreEqual(42, Maybe.From(42).Else(FailWithReturn<int>));
-            // TODO: Create ElseNull Method?
-            //Assert.AreEqual("hi", Maybe.From("hi").Else(null));
-            Assert.AreEqual("hi", Maybe.From("hi").Else(FailWithReturn<string>));
             Assert.AreEqual("hi", Maybe.From("hi").Else(FailWithReturn<string>));
         }
 
