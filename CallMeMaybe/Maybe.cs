@@ -114,7 +114,13 @@ namespace CallMeMaybe
 
         #endregion
 
-        // TODO: Do() Method
+        public void Do(Action<T> action)
+        {
+            if (_hasValue)
+            {
+                action(_value);
+            }
+        }
 
         // TODO: Consider an ElseDo() method: would this really add anything?
 
