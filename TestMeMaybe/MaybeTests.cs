@@ -244,6 +244,49 @@ namespace TestMeMaybe
         }
 
         [Test]
+        public void TestDoOnNot()
+        {
+// ReSharper disable RedundantTypeArgumentsOfMethod
+            Maybe<int>.Not.Do(FailWithInput<int>);
+            Maybe<string>.Not.Do(FailWithInput<string>);
+// ReSharper restore RedundantTypeArgumentsOfMethod
+            Maybe<int>.Not.Do(i => Assert.Fail());
+            Maybe<string>.Not.Do(s => Assert.Fail());
+        }
+
+        /// <summary>
+        /// This fails, but it also helps us to validate that the appropriate
+        /// generic type is being used.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="val"></param>
+        private void FailWithInput<T>(T val)
+        {
+            Assert.Fail();
+        }
+
+
+        [Test]
+        public void TestDoOnValue()
+        {
+            CheckDoIsCalledWithValue(0);
+            CheckDoIsCalledWithValue(1);
+            CheckDoIsCalledWithValue("");
+            CheckDoIsCalledWithValue("hello");
+        }
+
+        private static void CheckDoIsCalledWithValue<T>(T value)
+        {
+            bool called = false;
+            Maybe.From(value).Do(v =>
+            {
+                called = true;
+                Assert.AreEqual(value, v);
+            });
+            Assert.IsTrue(called);
+        }
+
+        [Test]
         public void TestElseOnNot()
         {
             Assert.AreEqual(0, Maybe<int>.Not.Else(0));
