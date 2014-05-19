@@ -143,13 +143,13 @@ namespace TestMeMaybe
         public void TestNullEquality()
         {
             var nameValue = Maybe.From("hi");
-            var nullName = Maybe.From((string)null);
+            var nullName = Maybe.From((string) null);
             Assert.IsFalse(null == nameValue);
-            Assert.IsTrue(null ==  nullName);
-            Assert.IsFalse(nameValue ==  null);
+            Assert.IsTrue(null == nullName);
+            Assert.IsFalse(nameValue == null);
             Assert.IsTrue(nullName == null);
             Assert.IsTrue(null != nameValue);
-            Assert.IsFalse(null !=  nullName);
+            Assert.IsFalse(null != nullName);
             Assert.IsTrue(nameValue != null);
             Assert.IsFalse(nullName != null);
         }
@@ -344,6 +344,8 @@ namespace TestMeMaybe
             Assert.AreEqual(Maybe<int>.Not, Maybe.If(false, 1));
         }
 
+        #region Null Argument Checks
+
         [Test]
         public void TestDoThrowsExceptionForNullLambda()
         {
@@ -353,24 +355,29 @@ namespace TestMeMaybe
             CheckArgumentNullException(() => Maybe.From("hi").Do(null));
         }
 
+        [Test]
+        public void TestElseThrowsExceptionForNullLambda()
+        {
+            CheckArgumentNullException(() => Maybe<int>.Not.Else(null));
+            CheckArgumentNullException(() => Maybe.From(0).Else(null));
+            CheckArgumentNullException(() => Maybe<string>.Not.Else((Func<string>) null));
+            CheckArgumentNullException(() => Maybe.From("hi").Else((Func<string>) null));
+        }
+
         private void CheckArgumentNullException(Expression<Action> methodCall)
         {
             var methodCallExpr = (MethodCallExpression) methodCall.Body;
             var methodInfo = methodCallExpr.Method;
             var nullArg = methodCallExpr.Arguments
-                .Zip(methodInfo.GetParameters(), (a, p) => new{argument = a as ConstantExpression, name = p.Name})
+                .Zip(methodInfo.GetParameters(), (a, p) => new {argument = a as ConstantExpression, name = p.Name})
                 .Single(c => c.argument != null && c.argument.Value == null);
-            try
-            {
-                methodCall.Compile().Invoke();
-            }
-            catch (ArgumentNullException e)
-            {
-                Assert.AreEqual(e.ParamName, nullArg.name);
-                return;
-            }
-            Assert.Fail("{0} did not throw an ArgumentNullException for {1}", methodCall, nullArg.name);
+            var action = methodCall.Compile();
+            var e = Assert.Throws<ArgumentNullException>(action.Invoke,
+                "{0} did not throw an ArgumentNullException for {1}", methodCall, nullArg.name);
+            Assert.AreEqual(e.ParamName, nullArg.name);
         }
+
+        #endregion
 
         private class Parent
         {

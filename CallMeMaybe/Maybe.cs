@@ -134,6 +134,10 @@ namespace CallMeMaybe
 
         public T Else(Func<T> getValueIfNot)
         {
+            if (getValueIfNot == null)
+            {
+                throw new ArgumentNullException("getValueIfNot");
+            }
             return _hasValue ? _value : getValueIfNot();
         }
 
