@@ -55,8 +55,6 @@ namespace TestMeMaybe
         {
             var not = Maybe.Not;
             Assert.IsNotNull(not);
-
-            Assert.IsFalse(not.HasValue);
         }
 
         [Test]

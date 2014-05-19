@@ -174,6 +174,9 @@ namespace CallMeMaybe
         /// The action to perform if this <see cref="Maybe{T}"/> has a value.
         /// (The value will be given as the action's parameter).
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if the <see cref="action"/> parameter is null.
+        /// </exception>
         public void Do(Action<T> action)
         {
             if (action == null)
@@ -192,6 +195,21 @@ namespace CallMeMaybe
 
         // TODO: Consider an ElseIf() method, so we can chain Maybe.If(...).ElseIf(...).Else(...);
 
+        /// <summary>
+        /// Gets the value of this <see cref="Maybe{T}"/>, or 
+        /// produces a fallback value if this <see cref="Maybe{T}"/> has no value,
+        /// by invoking the given function.
+        /// </summary>
+        /// <param name="getValueIfNot">
+        /// A function which will be invoked to produce a fallback value if this
+        /// <see cref="Maybe{T}"/> has no value.</param>
+        /// <returns>
+        /// Either the value contained by this <see cref="Maybe{T}"/> (if it has one), 
+        /// or the value produced by invoking <see cref="getValueIfNot"/> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if the <see cref="getValueIfNot"/> parameter is null.
+        /// </exception>
         public T Else(Func<T> getValueIfNot)
         {
             if (getValueIfNot == null)
@@ -201,11 +219,29 @@ namespace CallMeMaybe
             return _hasValue ? _value : getValueIfNot();
         }
 
+        /// <summary>
+        /// Gets the value of this <see cref="Maybe{T}"/>, or 
+        /// returns a given fallback value if this <see cref="Maybe{T}"/> has no value.
+        /// </summary>
+        /// <param name="valueIfNot">
+        /// The fallback value to return if this <see cref="Maybe{T}"/> has no value.</param>
+        /// <returns>
+        /// Either the value contained by this <see cref="Maybe{T}"/> (if it has one), 
+        /// or <see cref="valueIfNot"/> otherwise.
+        /// </returns>
         public T Else(T valueIfNot)
         {
             return _hasValue ? _value : valueIfNot;
         }
 
+        /// <summary>
+        /// Gets a string representation of this <see cref="Maybe{T}"/>.
+        /// </summary>
+        /// <returns>
+        /// An empty string ("") if this <see cref="Maybe{T}"/> has no value, or
+        /// the result of calling <see cref="object.ToString"/> on the contained
+        /// value if there is one.
+        /// </returns>
         public override string ToString()
         {
             return _hasValue ? _value.ToString() : "";
@@ -269,27 +305,60 @@ namespace CallMeMaybe
         #endregion
     }
 
+    /// <summary>
+    /// An object that can be implicitly cast to a <see cref="Maybe{T}"/> with no value.
+    /// </summary>
     public struct MaybeNot
     {
-        public bool HasValue
-        {
-            get { return false; }
-        }
-
+        /// <summary>
+        /// Gets a string representation of this <see cref="Maybe{T}"/>.
+        /// </summary>
+        /// <returns>An empty string.</returns>
         public override string ToString()
         {
             return "";
         }
+
+        // TODO: Test and figure out what to do about GetHashCode and Equals for  `MaybeNot`s
+        // that aren't cast to Maybe{T}s
     }
 
+    /// <summary>
+    /// A non-generic interface implemented by <see cref="Maybe{T}"/> values, to allow basic
+    /// operations against a non-generically-typed <see cref="Maybe{T}"/>.
+    /// </summary>
+    /// <remarks>
+    /// This is internal because we expect it to only be used by the <see cref="Maybe{T}"/>
+    /// class itself when working with other <see cref="Maybe{T}"/> objects. If you're trying
+    /// to work with a non-generic <see cref="Maybe{T}"/> value, try using a Maybe&lt;object&gt;
+    /// instead.
+    /// </remarks>
     internal interface IMaybe
     {
         bool HasValue { get; }
         bool TryGetValue(out object value);
     }
 
+    /// <summary>
+    /// A non-generic helper class for producing <see cref="Maybe{T}"/> values declaratively.
+    /// </summary>
     public static class Maybe
     {
+        /// <summary>
+        /// Creates a <see cref="Maybe{T}"/> based on the given value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of value that this <see cref="Maybe{T}"/> may contain.
+        /// </typeparam>
+        /// <param name="value">
+        /// The value the <see cref="Maybe{T}"/> should contain. If null, the
+        /// <see cref="Maybe{T}"/> will not contain a value.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Maybe{T}"/> that contains the given value, or
+        /// an empty <see cref="Maybe{T}"/> if the value is null
+        /// </returns>
+        /// <remarks>This is the same as calling the Maybe constructor, but `Maybe.From(val)` often reads better in code.</remarks>
         public static Maybe<T> From<T>(T value)
         {
             return new Maybe<T>(value);
@@ -297,14 +366,60 @@ namespace CallMeMaybe
 
         // TODO: Figure out how to do the equivalent of Not, with anonymous types?
 
-        // TODO: Decide if we want Maybe.Not<T>() or Maybe<T>.Not, or both?
+        /// <summary>
+        /// A value that can be implicitly cast to a <see cref="Maybe{T}"/> with no value.
+        /// </summary>
+        /// <remarks>
+        /// If you're in a context where implicit casting doesn't make sense, try 
+        /// <see cref="Maybe{T}.Not"/> instead.
+        /// </remarks>
         public static readonly MaybeNot Not = new MaybeNot();
 
+        /// <summary>
+        /// Produces a <see cref="Maybe{T}"/> which contains the given value if the given
+        /// condition is met, or a <see cref="Maybe{T}"/> with no value otherwise.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of value that the returned <see cref="Maybe{T}"/> may contain.
+        /// </typeparam>
+        /// <param name="condition">
+        /// A boolean representing whether the given value should be
+        /// put into the returned <see cref="Maybe{T}"/>.
+        /// </param>
+        /// <param name="valueIfTrue">
+        /// The value the <see cref="Maybe{T}"/> should contain if the given condition is true. 
+        /// If null, the <see cref="Maybe{T}"/> will not contain a value.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Maybe{T}"/> with no value if the given condition is false, or if the
+        /// given value is null. Otherwise, a <see cref="Maybe{T}"/> containing the given value.
+        /// </returns>
         public static Maybe<T> If<T>(bool condition, T valueIfTrue)
         {
             return condition ? valueIfTrue : Maybe<T>.Not;
         }
 
+        /// <summary>
+        /// Produces a <see cref="Maybe{T}"/> which contains the value produced by invoking
+        /// the given function if the given condition is met, or a <see cref="Maybe{T}"/> with
+        /// no value otherwise.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of value that the returned <see cref="Maybe{T}"/> may contain.
+        /// </typeparam>
+        /// <param name="condition">
+        /// A boolean representing whether the given function should be invoked to produce a 
+        /// value.
+        /// </param>
+        /// <param name="valueIfTrue">
+        /// A function that will be invoked to produce the value that the <see cref="Maybe{T}"/> 
+        /// should contain if the given condition is true. 
+        /// </param>
+        /// <returns>
+        /// A <see cref="Maybe{T}"/> with no value if the given condition is false, or if the
+        /// given function returns null. Otherwise, a <see cref="Maybe{T}"/> containing the given value.
+        /// </returns>
+        // TODO: Throw ArgumentNullException if function is null, then update these comments.
         public static Maybe<T> If<T>(bool condition, Func<T> valueIfTrue)
         {
             return condition ? valueIfTrue() : Maybe<T>.Not;
