@@ -116,6 +116,10 @@ namespace CallMeMaybe
 
         public void Do(Action<T> action)
         {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
             if (_hasValue)
             {
                 action(_value);
