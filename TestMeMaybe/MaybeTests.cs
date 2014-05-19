@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using CallMeMaybe;
 using NUnit.Framework;
@@ -340,6 +342,34 @@ namespace TestMeMaybe
         {
             Assert.AreEqual(Maybe.From(1), Maybe.If(true, 1));
             Assert.AreEqual(Maybe<int>.Not, Maybe.If(false, 1));
+        }
+
+        [Test]
+        public void TestDoThrowsExceptionForNullLambda()
+        {
+            CheckArgumentNullException(() => Maybe<int>.Not.Do(null));
+            CheckArgumentNullException(() => Maybe.From(0).Do(null));
+            CheckArgumentNullException(() => Maybe<string>.Not.Do(null));
+            CheckArgumentNullException(() => Maybe.From("hi").Do(null));
+        }
+
+        private void CheckArgumentNullException(Expression<Action> methodCall)
+        {
+            var methodCallExpr = (MethodCallExpression) methodCall.Body;
+            var methodInfo = methodCallExpr.Method;
+            var nullArg = methodCallExpr.Arguments
+                .Zip(methodInfo.GetParameters(), (a, p) => new{argument = a as ConstantExpression, name = p.Name})
+                .Single(c => c.argument != null && c.argument.Value == null);
+            try
+            {
+                methodCall.Compile().Invoke();
+            }
+            catch (ArgumentNullException e)
+            {
+                Assert.AreEqual(e.ParamName, nullArg.name);
+                return;
+            }
+            Assert.Fail("{0} did not throw an ArgumentNullException for {1}", methodCall, nullArg.name);
         }
 
         private class Parent
