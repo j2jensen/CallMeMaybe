@@ -10,16 +10,36 @@ namespace CallMeMaybe
     // TODO: Comment all methods and types
     // TODO: Investigate [EditorBrowsable] and [DebuggerDisplay] attributes
     // TODO: Investigate Resharper annotations: Pure, InstantHandle, and NotNull
+    /// <summary>
+    /// Container for an optional value that may or may not exist.
+    /// </summary>
+    /// <remarks>
+    /// Using a <see cref="Maybe{T}"/> for optional values will help you to catch
+    /// problems at compile-time that may otherwise have created
+    /// <see cref="NullReferenceException"/>s at runtime.
+    /// </remarks>
+    /// <typeparam name="T">The type of value that this may or may not contain.</typeparam>
     public struct Maybe<T> : IEquatable<Maybe<T>>, IMaybe
     {
         private readonly T _value;
         private readonly bool _hasValue;
 
+        /// <summary>
+        /// Gets whether or not this <see cref="Maybe{T}"/> contains a value.
+        /// </summary>
         public bool HasValue
         {
             get { return _hasValue; }
         }
 
+        /// <summary>
+        /// Constructs a <see cref="Maybe{T}"/> that contains the given value, or
+        /// an empty <see cref="Maybe{T}"/> if the value is null.
+        /// </summary>
+        /// <param name="value">
+        /// The value the <see cref="Maybe{T}"/> should contain. If null, the
+        /// <see cref="Maybe{T}"/> will not contain a value.
+        /// </param>
         public Maybe(T value)
         {
             // Since the whole purpose of this class is to avoid null values,
@@ -28,13 +48,31 @@ namespace CallMeMaybe
             _value = value;
         }
 
-
+        /// <summary>
+        /// Attempts to get the value.
+        /// </summary>
+        /// <param name="value">
+        /// An out parameter that will be set to the value inside this <see cref="Maybe{T}"/>
+        /// if it has one, or the default value for type <see cref="T"/> if not.
+        /// </param>
+        /// <returns>True if this <see cref="Maybe{T}"/> has a value, false otherwise.</returns>
         bool IMaybe.TryGetValue(out object value)
         {
             value = _value;
             return _hasValue;
         }
 
+        /// <summary>
+        /// Implicitly casts a value of type <see cref="T"/> to a <see cref="Maybe{T}"/>
+        /// </summary>
+        /// <param name="value">
+        /// The value the <see cref="Maybe{T}"/> should contain. If null, the
+        /// <see cref="Maybe{T}"/> will not contain a value.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Maybe{T}"/> that contains the given value, or
+        /// an empty <see cref="Maybe{T}"/> if the value is null.
+        /// </returns>
         public static implicit operator Maybe<T>(T value)
         {
             // Slight corner case: since Maybes are objects themselves,
@@ -56,12 +94,25 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
-        public static implicit operator Maybe<T>(MaybeNot otherMaybe)
+        /// <summary>
+        /// Implicitly casts a <see cref="MaybeNot"/> to a <see cref="Maybe{T}"/>
+        /// </summary>
+        /// <remarks>The existence of this operator allows consumers to use <see cref="Maybe.Not"/>
+        /// in many cases where they would otherwise have needed to explicitly (and needlessly) 
+        /// specify the type via <see cref="Maybe{T}.Not"/></remarks>
+        /// <param name="maybeNot">A <see cref="MaybeNot"/> value.</param>
+        /// <returns>A <see cref="Maybe{T}"/> without a value.</returns>
+        public static implicit operator Maybe<T>(MaybeNot maybeNot)
         {
             return default(Maybe<T>);
         }
         // TODO: Consider implicit conversion from Maybe<Maybe<T>>
+        // Note: I tried the conversion mentioned above, but it broke Resharper. Let's wait until that
+        // bug gets fixed before working on it again.
 
+        /// <summary>
+        /// Gets a <see cref="Maybe{T}"/> without a value.
+        /// </summary>
         public static Maybe<T> Not
         {
             get { return default (Maybe<T>); }
@@ -114,6 +165,15 @@ namespace CallMeMaybe
 
         #endregion
 
+        // TODO: Consider making this method return `this` so that we can chain calls.
+        /// <summary>
+        /// Performs the given action if this <see cref="Maybe{T}"/> has a value.
+        /// Otherwise, this will do nothing at all.
+        /// </summary>
+        /// <param name="action">
+        /// The action to perform if this <see cref="Maybe{T}"/> has a value.
+        /// (The value will be given as the action's parameter).
+        /// </param>
         public void Do(Action<T> action)
         {
             if (action == null)
