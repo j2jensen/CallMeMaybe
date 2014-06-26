@@ -327,13 +327,7 @@ namespace CallMeMaybe
     /// A non-generic interface implemented by <see cref="Maybe{T}"/> values, to allow basic
     /// operations against a non-generically-typed <see cref="Maybe{T}"/>.
     /// </summary>
-    /// <remarks>
-    /// This is internal because we expect it to only be used by the <see cref="Maybe{T}"/>
-    /// class itself when working with other <see cref="Maybe{T}"/> objects. If you're trying
-    /// to work with a non-generic <see cref="Maybe{T}"/> value, try using a Maybe&lt;object&gt;
-    /// instead.
-    /// </remarks>
-    internal interface IMaybe
+    public interface IMaybe
     {
         bool HasValue { get; }
         bool TryGetValue(out object value);
