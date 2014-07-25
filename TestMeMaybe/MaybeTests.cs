@@ -12,6 +12,7 @@ namespace TestMeMaybe
     [TestFixture]
     public class MaybeTests
     {
+
         [Test]
         public void TestUninitializedValues()
         {
@@ -49,6 +50,20 @@ namespace TestMeMaybe
             Assert.AreEqual(Maybe<string>.Not, default(Maybe<string>));
             Assert.AreEqual(new Maybe<string>(), default(Maybe<string>));
         }
+
+        [Test]
+        public void TestNullables()
+        {
+            int? isNull = null;
+            int? notNull = 1;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.IsFalse(Maybe.From(isNull).HasValue);
+            Assert.IsTrue(Maybe.From(notNull).HasValue);
+            Assert.IsAssignableFrom<Maybe<int>>(Maybe.From(isNull));
+            Assert.IsAssignableFrom<Maybe<int>>(Maybe.From(notNull));
+            // ReSharper restore ExpressionIsAlwaysNull
+        }
+
 
         [Test]
         public void TestNot()
