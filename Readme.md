@@ -114,7 +114,21 @@ When working with dictionaries, try using the `.GetMaybe(key)` extension method 
 
 ## Limitations ##
 
-### Covariance ###
+### No Implicit Casting of `Nullable<>`s ###
+
+It's not possible to create an implicit casting operator from `T?` (i.e. `Nullable<T>`) to `Maybe<T>` without restricting `Maybe<>`s to value types.
+
+    public string PrintDate(Maybe<DateTime> dateTime) { ... }
+
+    DateTime? d = GetDate();
+    // This won't work
+    PrintDate(d);
+    // Instead, try this:
+    PrintDate(d.Maybe());
+
+The `Maybe()` extension method is available on all `Nullable<>` types, and there is a corresponding `Nullable()` method on any `Maybe<T>` where T is a value type.
+
+### Covariant equality checking ###
 
 Even though conceptually a `Maybe<Parent>` and a `Maybe<Child>` should be equivalent if they both have the same backing `Child` value, I can't figure out a way to make that work using either implicit type conversion or equality operators. That means that while `.Equals()` works just fine, the `==` and `!=` operators cannot be applied to `Maybe` objects of different types:
 
