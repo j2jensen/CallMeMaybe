@@ -24,5 +24,24 @@ namespace TestMeMaybe
             Assert.AreEqual(2, values2[1].v);
             Assert.AreEqual("2", values2[1].k);
         }
+
+        [Test]
+        public void TestNullableConversions()
+        {
+            Assert.AreEqual("1", UseNullable(Maybe.From(1).Nullable()));
+            Assert.AreEqual("", UseNullable(Maybe<int>.Not.Nullable()));
+            Assert.AreEqual("1", UseMaybe(((int?)1).Maybe()));
+            Assert.AreEqual("", UseMaybe(((int?)null).Maybe()));
+        }
+
+        private string UseNullable(int? x)
+        {
+            return x.ToString();
+        }
+
+        private string UseMaybe(Maybe<int> x)
+        {
+            return x.ToString();
+        }
     }
 }
