@@ -358,6 +358,26 @@ namespace CallMeMaybe
             return new Maybe<T>(value);
         }
 
+        /// <summary>
+        /// Creates a <see cref="Maybe{T}"/> based on the given value.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of value that this <see cref="Maybe{T}"/> may contain.
+        /// </typeparam>
+        /// <param name="value">
+        /// The value the <see cref="Maybe{T}"/> should contain. If null, the
+        /// <see cref="Maybe{T}"/> will not contain a value.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Maybe{T}"/> that contains the given value, or
+        /// an empty <see cref="Maybe{T}"/> if the value is null
+        /// </returns>
+        /// <remarks>This overload automatically converts nullables to <see cref="Maybe{T}"/>s.</remarks>
+        public static Maybe<T> From<T>(T? value) where T : struct 
+        {
+            return value.HasValue ? new Maybe<T>(value.Value) : new Maybe<T>();
+        }
+
         // TODO: Figure out how to do the equivalent of Not, with anonymous types?
 
         /// <summary>
