@@ -48,9 +48,6 @@ namespace CallMeMaybe
         // TODO: MaybeSum/MaybeMax/MaybeMin methods
         // TODO: MaybeAggregate method
 
-        // TODO: Consider WhereHasValue method on IEnumerable<Maybe<T>>, returns IEnumerable<T>
-        // (Would this just be the same as SelectMany(i => i)?)
-
         /// <summary>
         /// Converts the given nullable value into a <see cref="Maybe{T}"/>
         /// </summary>
