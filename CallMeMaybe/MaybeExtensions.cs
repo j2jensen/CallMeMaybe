@@ -43,22 +43,6 @@ namespace CallMeMaybe
             return source.ToList().SelectMany(resultSelector);
         }
 
-        #region Concat
-
-        /// <summary>
-        /// Concatenates a <see cref="Maybe{T}"/> and a sequence.
-        /// </summary>
-        /// <typeparam name="T">The type of value in the sequence.</typeparam>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> Concat<T>(this Maybe<T> first, IEnumerable<T> second)
-        {
-            return first.ToList().Concat(second);
-        } 
-
-
-        #endregion
 
         // TODO: MaybeFirst/MaybeLast/MaybeSingle methods
         // TODO: MaybeSum/MaybeMax/MaybeMin methods
