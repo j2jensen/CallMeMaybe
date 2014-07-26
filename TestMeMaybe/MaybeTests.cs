@@ -288,12 +288,12 @@ namespace TestMeMaybe
         {
             Assert.IsFalse(Maybe.From(1).Is(2));
             Assert.IsTrue(Maybe.From(1).Is(1));
-            Assert.IsFalse(Maybe.From((int?)null).Is(1));
+            Assert.IsFalse(Maybe.From((int?) null).Is(1));
             Assert.IsFalse(Maybe.From("hi").Is("bye"));
             Assert.IsTrue(Maybe.From("hi").Is("hi"));
-            Assert.IsFalse(Maybe.From((string)null).Is("hi"));
-            Assert.IsFalse(Maybe.From("hi").Is((string)null));
-            Assert.IsFalse(Maybe.From((string)null).Is((string)null));
+            Assert.IsFalse(Maybe.From((string) null).Is("hi"));
+            Assert.IsFalse(Maybe.From("hi").Is((string) null));
+            Assert.IsFalse(Maybe.From((string) null).Is((string) null));
             Assert.IsFalse(ReferenceEquals("hi", new StringBuilder("hi").ToString()),
                 "Assumption: StringBuilder allows us to avoid using an interned string reference.");
             Assert.IsTrue(Maybe.From("hi").Is(new StringBuilder("hi").ToString()),
