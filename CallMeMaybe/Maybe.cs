@@ -137,8 +137,15 @@ namespace CallMeMaybe
         /// <see cref="Maybe{T}"/> has a value that matches the given criteria.
         /// Otherwise, an empty <see cref="Maybe{T}"/>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if the criteria function is null.
+        /// </exception>
         public Maybe<T> Where(Func<T, bool> criteria)
         {
+            if (criteria == null)
+            {
+                throw new ArgumentNullException("criteria");
+            } 
             return _hasValue && criteria(_value) ? this : default(Maybe<T>);
         }
 
@@ -327,8 +334,15 @@ namespace CallMeMaybe
         /// True if this <see cref="Maybe{T}"/> has a value that matches the given criteria.
         /// False otherwise.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if the criteria function is null.
+        /// </exception>
         public bool Is(Func<T, bool> criteria)
         {
+            if (criteria == null)
+            {
+                throw new ArgumentNullException("criteria");
+            }
             return Where(criteria).HasValue;
         }
     }
