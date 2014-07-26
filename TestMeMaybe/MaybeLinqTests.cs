@@ -1,4 +1,3 @@
-using System.Linq;
 using CallMeMaybe;
 using NUnit.Framework;
 
@@ -45,15 +44,5 @@ namespace TestMeMaybe
             Assert.AreEqual("hi", q.name);
         }
 
-        [Test]
-        public void TestConcat()
-        {
-            Assert.IsTrue(Maybe.From(1).Concat(new[] {2, 3}).SequenceEqual(new[]{1,2,3}));
-            Assert.IsTrue(Maybe.From((int?)null).Concat(new[] {2, 3}).SequenceEqual(new[]{2,3}));
-            Assert.IsTrue(Maybe.From("hi").Concat(new[] {"big", "world" })
-                .SequenceEqual(new[] { "hi", "big", "world" }));
-            Assert.IsTrue(Maybe.From((string)null).Concat(new[] { "big", "world" })
-                .SequenceEqual(new[] { "big", "world" }));
-        }
     }
 }
