@@ -265,6 +265,9 @@ namespace TestMeMaybe
             Assert.IsFalse(Maybe.From("hi").Is(s => s.Length == 0));
             Assert.IsTrue(Maybe.From("hi").Is(s => s.Length == 2));
 
+            Assert.IsFalse(Maybe.From("hi").Is(string.IsNullOrEmpty));
+            Assert.IsTrue(Maybe.From("").Is(string.IsNullOrEmpty));
+
             Assert.IsFalse(Maybe.From((string) null).Is(s =>
             {
                 Assert.Fail();
