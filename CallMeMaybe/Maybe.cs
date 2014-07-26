@@ -345,6 +345,26 @@ namespace CallMeMaybe
             }
             return Where(criteria).HasValue;
         }
+
+        /// <summary>
+        /// Determines whether this <see cref="Maybe{T}"/>'s value is equal to the
+        /// given value.
+        /// </summary>
+        /// <param name="value">
+        /// A value to compare this <see cref="Maybe{T}"/>'s value against.
+        /// </param>
+        /// <returns>
+        /// True if this <see cref="Maybe{T}"/> has a value that matches the given criteria.
+        /// False otherwise.
+        /// </returns>
+        /// <remarks>
+        /// This method uses the <see cref="object.Equals(object)"/> method to determine
+        /// equality.
+        /// </remarks>
+        public bool Is(T value)
+        {
+            return _hasValue && _value.Equals(value);
+        }
     }
 
     /// <summary>
