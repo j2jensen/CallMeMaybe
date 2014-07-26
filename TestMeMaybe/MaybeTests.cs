@@ -275,6 +275,9 @@ namespace TestMeMaybe
                 Assert.Fail();
                 return true;
             }));
+
+            Assert.Throws<ArgumentNullException>(
+                () => Maybe.From("hi").Is((Func<string, bool>) null));
         }
 
         [Test]
