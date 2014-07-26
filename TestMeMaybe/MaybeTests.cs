@@ -12,7 +12,6 @@ namespace TestMeMaybe
     [TestFixture]
     public class MaybeTests
     {
-
         [Test]
         public void TestUninitializedValues()
         {
@@ -223,7 +222,7 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestGetWhenStringBuilding()
+        public void TestSelectWhenStringBuilding()
         {
             var htmlAttr = new Dictionary<string, object>();
             htmlAttr["class"] = "radio-button" +
@@ -235,7 +234,7 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestGetFromNot()
+        public void TestSelectFromNot()
         {
             Maybe<string> fromInt = Maybe<int>.Not
                 .Select(i => i.ToString(CultureInfo.InvariantCulture));
@@ -246,7 +245,7 @@ namespace TestMeMaybe
         }
 
         [Test]
-        public void TestGetFromValue()
+        public void TestSelectFromValue()
         {
             Maybe<string> fromInt = Maybe.From(1)
                 .Select(i => i.ToString(CultureInfo.InvariantCulture));
@@ -256,6 +255,26 @@ namespace TestMeMaybe
                 .Select(int.Parse);
             Assert.IsTrue(fromString.HasValue);
             Assert.AreEqual(Maybe.From(1), fromString);
+        }
+
+        [Test]
+        public void TestIsLambda()
+        {
+            Assert.IsFalse(Maybe.From(1).Is(i => i%2 == 0));
+            Assert.IsTrue(Maybe.From(1).Is(i => i%2 == 1));
+            Assert.IsFalse(Maybe.From("hi").Is(s => s.Length == 0));
+            Assert.IsTrue(Maybe.From("hi").Is(s => s.Length == 2));
+
+            Assert.IsFalse(Maybe.From((string) null).Is(s =>
+            {
+                Assert.Fail();
+                return true;
+            }));
+            Assert.IsFalse(Maybe.From((int?) null).Is(i =>
+            {
+                Assert.Fail();
+                return true;
+            }));
         }
 
         [Test]

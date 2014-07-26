@@ -314,6 +314,23 @@ namespace CallMeMaybe
         }
 
         #endregion
+
+        /// <summary>
+        /// Determines whether this <see cref="Maybe{T}"/>'s value meets the given
+        /// criteria.
+        /// </summary>
+        /// <param name="criteria">
+        /// The criteria to check this <see cref="Maybe{T}"/>'s value against.
+        /// This will only be invoked if this <see cref="Maybe{T}"/> has a value.
+        /// </param>
+        /// <returns>
+        /// True if this <see cref="Maybe{T}"/> has a value that matches the given criteria.
+        /// False otherwise.
+        /// </returns>
+        public bool Is(Func<T, bool> criteria)
+        {
+            return Where(criteria).HasValue;
+        }
     }
 
     /// <summary>
