@@ -126,6 +126,17 @@ namespace CallMeMaybe
             return _hasValue ? selector(_value) : Maybe<TValue>.Not;
         }
 
+        /// <summary>
+        /// Filters this <see cref="Maybe{T}"/> by the given criteria.
+        /// </summary>
+        /// <param name="criteria">A filtering function.
+        /// This will only be invoked if this <see cref="Maybe{T}"/> has a value.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Maybe{T}"/> with the same value as this one if this
+        /// <see cref="Maybe{T}"/> has a value that matches the given criteria.
+        /// Otherwise, an empty <see cref="Maybe{T}"/>.
+        /// </returns>
         public Maybe<T> Where(Func<T, bool> criteria)
         {
             return _hasValue && criteria(_value) ? this : default(Maybe<T>);
