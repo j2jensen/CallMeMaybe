@@ -179,11 +179,11 @@ namespace CallMeMaybe
             return _hasValue ? new List<T>(1) { _value } : new List<T>(0);
         }
 
-        // TODO: Any() method
-
         #endregion
 
-        // TODO: Consider making this method return `this` so that we can chain calls.
+        // TODO: Consider making this method return `this` so that we can chain calls,
+        // especially if we implement the ElseDo idea below. 
+
         /// <summary>
         /// Performs the given action if this <see cref="Maybe{T}"/> has a value.
         /// Otherwise, this will do nothing at all.
