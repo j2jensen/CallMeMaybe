@@ -1,3 +1,4 @@
+using System;
 using CallMeMaybe;
 using NUnit.Framework;
 
@@ -30,6 +31,21 @@ namespace TestMeMaybe
                     .Single();
             Assert.AreEqual(1, q.number);
             Assert.AreEqual("hi", q.name);
+        }
+
+        [Test]
+        public void TestSelectManyLambda()
+        {
+            Assert.AreEqual("hi", Maybe.From(1).SelectMany(i => Maybe.From("hi")).Single());
+            Assert.AreEqual("hi", Maybe.From(Maybe.From("hi")).SelectMany(i => i).Single());
+            Assert.IsFalse(Maybe.From(1).SelectMany(i => Maybe.From((string)null)).HasValue);
+            Assert.IsFalse(Maybe.From((string)null).SelectMany(s => Maybe.From(1)).HasValue);
+            Assert.IsFalse(Maybe.From(Maybe.From((string)null)).SelectMany(s => s).HasValue);
+            // Make sure selector is not called
+            Assert.IsFalse(Maybe.From((string)null).SelectMany(new Func<string, Maybe<int>>(s =>
+            {
+                throw new Exception();
+            })).HasValue);
         }
 
         [Test]
