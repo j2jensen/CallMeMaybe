@@ -149,15 +149,66 @@ namespace CallMeMaybe
             return _hasValue && criteria(_value) ? this : default(Maybe<T>);
         }
 
+        /// <summary>
+        /// Selects another <see cref="Maybe{T}"/> based on this one. 
+        /// <remarks>This can be used to "unwrap" nested <see cref="Maybe{T}"/>s via
+        /// <code>m.SelectMany(i => i)</code></remarks>
+        /// </summary>
+        /// <param name="resultSelector">
+        /// A function to select a resulting <see cref="Maybe{T}"/>
+        /// based on the value in this one.
+        /// This will only be invoked if this <see cref="Maybe{T}"/> has a value.
+        /// </param>
+        /// <returns>
+        /// The result of the <see cref="resultSelector"/> if this has a value.
+        /// Otherwise returns an empty <see cref="Maybe{T}"/>.
+        /// </returns>
         public Maybe<TResult> SelectMany<TResult>(
             Func<T, Maybe<TResult>> resultSelector)
         {
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException("resultSelector");
+            } 
+
             return _hasValue ? resultSelector(_value) : default(Maybe<TResult>);
         }
 
+        /// <summary>
+        /// Selects a projection from two <see cref="Maybe{T}"/>s.
+        /// <remarks>
+        /// This is typically invoked with LINQ's Query Expression Syntax, and can be
+        /// useful for safely producing a <see cref="Maybe{T}"/> from a chain of possible
+        /// values.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// var q = from i in maybe1
+        ///         from s in i.GetSomeMaybe()
+        ///         select new {i, s};
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <typeparam name="TOther">The generic type for the second <see cref="Maybe{T}"/></typeparam>
+        /// <typeparam name="TResult">The type of the desired result. <see cref="Maybe{T}"/></typeparam>
+        /// <param name="otherSelector">A function to produce another <see cref="Maybe{T}"/>, given the
+        /// value in this one. This will only be invoked if this <see cref="Maybe{T}"/> has a value.</param>
+        /// <param name="resultSelector">A function to produce the desired result. This will only be
+        /// invoked if both <see cref="Maybe{T}"/>s have a value.</param>
+        /// <returns>A <see cref="Maybe{T}"/> containing the result if both this and the result of
+        /// <see cref="otherSelector"/> have values. Otherwise, and empty <see cref="Maybe{T}"/>.</returns>
         public Maybe<TResult> SelectMany<TOther, TResult>(Func<T, Maybe<TOther>> otherSelector,
             Func<T, TOther, TResult> resultSelector)
         {
+            if (otherSelector == null)
+            {
+                throw new ArgumentNullException("otherSelector");
+            }
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException("resultSelector");
+            } 
+
             if (_hasValue)
             {
                 var otherMaybe = otherSelector(_value);
@@ -169,11 +220,27 @@ namespace CallMeMaybe
             return default(Maybe<TResult>);
         }
 
+        /// <summary>
+        /// Produces the value in this <see cref="Maybe{T}"/> if it has one.
+        /// Otherwise, an <see cref="InvalidOperationException"/> is thrown.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if called on an empty <see cref="Maybe{T}"/>.
+        /// </exception>
         public T Single()
         {
             return ToList().Single();
         }
 
+        /// <summary>
+        /// Produces a <see cref="List{T}"/> containing the value in this <see cref="Maybe{T}"/>
+        /// if it has one, or an empty <see cref="List{T}"/> otherwise.
+        /// <remarks>
+        /// This is especially useful for making LINQ operations available.
+        /// <code>var values = maybe1.ToList().Concat(maybe2.ToList());</code>
+        /// </remarks>
+        /// </summary>
+        /// <returns></returns>
         public List<T> ToList()
         {
             return _hasValue ? new List<T>(1) { _value } : new List<T>(0);
