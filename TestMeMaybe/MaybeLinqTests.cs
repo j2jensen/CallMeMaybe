@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using CallMeMaybe;
 using NUnit.Framework;
 
@@ -58,6 +59,15 @@ namespace TestMeMaybe
                     .Single();
             Assert.AreEqual(1, q.number);
             Assert.AreEqual("hi", q.name);
+        }
+
+
+        [Test]
+        public void TestValuesLinq()
+        {
+            var q = new[] {Maybe.From("hi"), Maybe.From((string) null), Maybe.From("world")}
+                .Values();
+            Assert.IsTrue(q.SequenceEqual(new[]{"hi", "world"}));
         }
 
     }

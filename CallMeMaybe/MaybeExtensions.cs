@@ -43,6 +43,19 @@ namespace CallMeMaybe
             return source.ToList().SelectMany(resultSelector);
         }
 
+        /// <summary>
+        /// Finds the given <see cref="Maybe{T}"/>s that have values, and selects those values.
+        /// </summary>
+        /// <typeparam name="T">The type of object held by the given <see cref="Maybe{T}"/>s.</typeparam>
+        /// <param name="source">A series of <see cref="Maybe{T}"/> values.</param>
+        /// <returns>
+        /// Returns the underlying values of any of the given <see cref="Maybe{T}"/>s
+        /// that have values.
+        /// </returns>
+        public static IEnumerable<T> Values<T>(this IEnumerable<Maybe<T>> source)
+        {
+            return source.Where(m => m.HasValue).Select(m => m.Single());
+        }
 
         // TODO: MaybeFirst/MaybeLast/MaybeSingle methods
         // TODO: MaybeSum/MaybeMax/MaybeMin methods
