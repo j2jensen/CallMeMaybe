@@ -160,7 +160,7 @@ namespace CallMeMaybe
         /// This will only be invoked if this <see cref="Maybe{T}"/> has a value.
         /// </param>
         /// <returns>
-        /// The result of the <see cref="resultSelector"/> if this has a value.
+        /// The result of the <paramref name="resultSelector"/> if this has a value.
         /// Otherwise returns an empty <see cref="Maybe{T}"/>.
         /// </returns>
         public Maybe<TResult> SelectMany<TResult>(
@@ -196,7 +196,7 @@ namespace CallMeMaybe
         /// <param name="resultSelector">A function to produce the desired result. This will only be
         /// invoked if both <see cref="Maybe{T}"/>s have a value.</param>
         /// <returns>A <see cref="Maybe{T}"/> containing the result if both this and the result of
-        /// <see cref="otherSelector"/> have values. Otherwise, and empty <see cref="Maybe{T}"/>.</returns>
+        /// <paramref name="otherSelector"/> have values. Otherwise, and empty <see cref="Maybe{T}"/>.</returns>
         public Maybe<TResult> SelectMany<TOther, TResult>(Func<T, Maybe<TOther>> otherSelector,
             Func<T, TOther, TResult> resultSelector)
         {
@@ -260,7 +260,7 @@ namespace CallMeMaybe
         /// (The value will be given as the action's parameter).
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// Thrown if the <see cref="action"/> parameter is null.
+        /// Thrown if the <paramref name="action"/> parameter is null.
         /// </exception>
         public void Do(Action<T> action)
         {
@@ -290,10 +290,10 @@ namespace CallMeMaybe
         /// <see cref="Maybe{T}"/> has no value.</param>
         /// <returns>
         /// Either the value contained by this <see cref="Maybe{T}"/> (if it has one), 
-        /// or the value produced by invoking <see cref="getValueIfNot"/> otherwise.
+        /// or the value produced by invoking <paramref name="getValueIfNot"/> otherwise.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// Thrown if the <see cref="getValueIfNot"/> parameter is null.
+        /// Thrown if the <paramref name="getValueIfNot"/> parameter is null.
         /// </exception>
         public T Else(Func<T> getValueIfNot)
         {
@@ -312,7 +312,7 @@ namespace CallMeMaybe
         /// The fallback value to return if this <see cref="Maybe{T}"/> has no value.</param>
         /// <returns>
         /// Either the value contained by this <see cref="Maybe{T}"/> (if it has one), 
-        /// or <see cref="valueIfNot"/> otherwise.
+        /// or <paramref name="valueIfNot"/> otherwise.
         /// </returns>
         public T Else(T valueIfNot)
         {
