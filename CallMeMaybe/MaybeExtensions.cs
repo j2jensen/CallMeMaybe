@@ -65,10 +65,10 @@ namespace CallMeMaybe
 
 
         /// <summary>
-        /// Converts the given nullable value into a <see cref="Maybe{T}"/>
+        /// Converts the given <see cref="Maybe{T}"/> value into a <see cref="Nullable{T}"/>.
         /// </summary>
-        /// <typeparam name="T">The type of object the <see cref="Maybe{T}"/> will hold.</typeparam>
-        /// <param name="maybe">A nullable object to convert to a <see cref="Maybe{T}"/></param>
+        /// <typeparam name="T">The type of object the <see cref="Nullable{T}"/> will hold.</typeparam>
+        /// <param name="maybe">A nullable object to convert to a <see cref="Nullable{T}"/></param>
         /// <returns>A <see cref="Nullable{T}"/> that is "null" if <see cref="maybe"/> does not have a value,
         /// or which contains the value if it does.</returns>
         public static T? Nullable<T>(this Maybe<T> maybe) where T : struct
@@ -78,6 +78,5 @@ namespace CallMeMaybe
 
         // TODO: TryParse methods
 
-        // TODO: ElseDefault, only where T : struct
     }
 }
