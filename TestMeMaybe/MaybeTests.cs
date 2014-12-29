@@ -494,6 +494,27 @@ namespace TestMeMaybe
         }
 
         [Test]
+        public void TestIf()
+        {
+            Assert.AreEqual(Maybe.From("hi"), Maybe.If(true, () => "hi"));
+            Assert.AreEqual(Maybe.From("hi"), Maybe.If(true, "hi"));
+            Assert.IsFalse(Maybe.If(false, "hi").HasValue);
+            Assert.IsFalse(Maybe.If(true, () => (string) null).HasValue);
+            Maybe.If<string>(false, () => { throw new Exception("This should not get invoked"); });
+            Assert.AreEqual(Maybe.From(1), Maybe.If(true, () => 1));
+            Assert.AreEqual(Maybe.From(1), Maybe.If(true, 1));
+            Assert.IsFalse(Maybe.If(false, () => 1).HasValue);
+            Assert.IsFalse(Maybe.If(false, () => (int?) 1).HasValue);
+            Assert.IsFalse(Maybe.If(true, () => (int?) null).HasValue);
+            Assert.IsFalse(Maybe.If(true, (int?) null).HasValue);
+            Maybe.If<int>(false, () => { throw new Exception("This should not get invoked"); });
+            CheckArgumentNullException(() => Maybe.If(true, (Func<string>)null));
+            CheckArgumentNullException(() => Maybe.If(true, (Func<int?>)null));
+            CheckArgumentNullException(() => Maybe.If(false, (Func<string>)null));
+            CheckArgumentNullException(() => Maybe.If(false, (Func<int?>)null));
+        }
+
+        [Test]
         public void TestOptionalParameters()
         {
             Assert.AreEqual(" => 1: ", FormatInfo(1));
