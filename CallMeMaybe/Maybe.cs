@@ -562,10 +562,16 @@ namespace CallMeMaybe
         /// A <see cref="Maybe{T}"/> with no value if the given condition is false, or if the
         /// given function returns null. Otherwise, a <see cref="Maybe{T}"/> containing the given value.
         /// </returns>
-        // TODO: Throw ArgumentNullException if function is null, then update these comments.
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="valueIfTrue"/> is null.
+        /// </exception>
         public static Maybe<T> If<T>(bool condition, Func<T> valueIfTrue)
         {
-            return condition ? valueIfTrue() : Maybe<T>.Not;
+            if (valueIfTrue == null)
+            {
+                throw new ArgumentNullException("valueIfTrue");
+            }
+            return condition ? From(valueIfTrue()) : Maybe<T>.Not;
         }
     }
 }
