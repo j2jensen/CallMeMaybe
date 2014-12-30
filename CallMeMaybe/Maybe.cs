@@ -334,12 +334,27 @@ namespace CallMeMaybe
 
         #region Equality
 
+        /// <summary>
+        /// Explicit implementation of the <see cref="IEquatable{T}.Equals(T)"/> method,
+        /// to compare this with other <see cref="Maybe{T}"/>s of the same type.
+        /// </summary>
         bool IEquatable<Maybe<T>>.Equals(Maybe<T> other)
         {
             return Equals(other);
         }
 
-
+        /// <summary>
+        /// Checks whether another object represents the same <see cref="Maybe{T}"/>
+        /// value as this one.
+        /// <remarks>`.Equals(null)` will always return false, since <see cref="Maybe{T}"/>s
+        /// are not null. It's incorrect to check them against a null value. Use <see cref="HasValue"/>
+        /// instead.</remarks>
+        /// </summary>
+        /// <param name="obj">An object to compare with this.</param>
+        /// <returns>
+        /// True if the other object is a <see cref="Maybe{T}"/>, and has the
+        /// same value (or non-value status) as this one. False otherwise.
+        /// </returns>
         public override bool Equals(object obj)
         {
             // Maybe values never equal `null`--that's sort of the point.
@@ -369,6 +384,10 @@ namespace CallMeMaybe
             return false;
         }
 
+        /// <summary>
+        /// Implementation of <see cref="Object.GetHashCode"/>
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             unchecked
@@ -377,11 +396,25 @@ namespace CallMeMaybe
             }
         }
 
+        /// <summary>
+        /// Implementation of the equality operator when comparing two <see cref="Maybe{T}"/> objects
+        /// of the same type.
+        /// </summary>
+        /// <returns>
+        /// True if the objects have the same value or non-value status. False otherwise.
+        /// </returns>
         public static bool operator ==(Maybe<T> left, Maybe<T> right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Implementation of the equality operator when comparing two <see cref="Maybe{T}"/> objects
+        /// of the same type.
+        /// </summary>
+        /// <returns>
+        /// False if the objects have the same value or non-value status. True otherwise.
+        /// </returns>
         public static bool operator !=(Maybe<T> left, Maybe<T> right)
         {
             return !left.Equals(right);
