@@ -465,8 +465,35 @@ namespace TestMeMaybe
                 "GetHashCode should avoid producing likely collisions: " + maxModThirteenCollisions);
         }
 
-        // TODO: Test hash code distribution with multiple different types of "empty" maybes.
-        // (Hint: GetHashCode() needs to be the same any time Equals() would return true.)
+        [Test]
+        public void TestEmptyEqualsBehavior()
+        {
+            // We want Maybe.Not to follow similar rules to `null` when it comes to equality:
+            // every empty Maybe is equal to every other, regardless of type.
+            var maybeNot = Maybe.Not;
+            Assert.IsTrue(maybeNot.Equals(Maybe.Not));
+// ReSharper disable SuspiciousTypeConversion.Global
+            Assert.IsTrue(maybeNot.Equals(Maybe<int>.Not));
+            Assert.IsTrue(Maybe<int>.Not.Equals(maybeNot));
+// ReSharper restore SuspiciousTypeConversion.Global
+            Assert.IsTrue(Maybe<int>.Not == Maybe.Not);
+            Assert.IsTrue(Maybe.Not == Maybe<int>.Not);
+        }
+
+        [Test]
+        public void TestEmptyGetHashCode()
+        {
+            // TODO: Test hash code distribution with multiple different types of "empty" maybes.
+            // (Hint: GetHashCode() needs to be the same any time Equals() would return true.)
+            var baseHash = Maybe.Not.GetHashCode();
+            Assert.AreEqual(baseHash, Maybe<int>.Not.GetHashCode());
+        }
+
+        // TODO: Test hash code and equality behavior for non-empty Maybe values.
+        /* If you put a nullable int into a hashset, it becomes an int. How do we want
+         * Maybe<int>s to behave?
+         */
+
 
         [Test]
         public void TestImplicitCasting()
@@ -508,10 +535,10 @@ namespace TestMeMaybe
             Assert.IsFalse(Maybe.If(true, () => (int?) null).HasValue);
             Assert.IsFalse(Maybe.If(true, (int?) null).HasValue);
             Maybe.If<int>(false, () => { throw new Exception("This should not get invoked"); });
-            CheckArgumentNullException(() => Maybe.If(true, (Func<string>)null));
-            CheckArgumentNullException(() => Maybe.If(true, (Func<int?>)null));
-            CheckArgumentNullException(() => Maybe.If(false, (Func<string>)null));
-            CheckArgumentNullException(() => Maybe.If(false, (Func<int?>)null));
+            CheckArgumentNullException(() => Maybe.If(true, (Func<string>) null));
+            CheckArgumentNullException(() => Maybe.If(true, (Func<int?>) null));
+            CheckArgumentNullException(() => Maybe.If(false, (Func<string>) null));
+            CheckArgumentNullException(() => Maybe.If(false, (Func<int?>) null));
         }
 
         [Test]
