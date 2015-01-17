@@ -1,0 +1,8 @@
+syntax: glob
+*.suo
+bin
+obj
+packages
+TestResults
+*.sln.DotSettings.user
+*.nupkg
