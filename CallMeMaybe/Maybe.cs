@@ -420,6 +420,16 @@ namespace CallMeMaybe
             return !left.Equals(right);
         }
 
+        public static bool operator true(Maybe<T> statement)
+        {
+            return statement.HasValue;
+        }
+
+        public static bool operator false(Maybe<T> statement)
+        {
+            return !statement.HasValue;
+        }
+
         #endregion
 
         /// <summary>
