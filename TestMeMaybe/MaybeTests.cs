@@ -565,22 +565,6 @@ namespace TestMeMaybe
             Assert.AreEqual("1 => 2: A", i.FormatInfo(2, "A", 1));
         }
 
-        [Test]
-        public void TestTrueFalseOverloads()
-        {
-            // We don't intend for Maybe to actually be *converted* into a boolean value
-            Assert.AreNotEqual(Maybe<int>.Not, false);
-            // However, rather than checking .HasValue, we can simply check that the Maybe *is*.
-            if (Maybe<int>.Not)
-            {
-                Assert.Fail();
-            }
-            if (!Maybe.From(1))
-            {
-                Assert.Fail();
-            }
-        }
-
         private interface IOptionalInterface
         {
             string FormatInfo(int id,
