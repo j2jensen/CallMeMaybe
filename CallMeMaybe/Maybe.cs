@@ -120,6 +120,19 @@ namespace CallMeMaybe
 
         #region LINQ Methods
 
+        /// <summary>
+        /// Maps from the value of this <see cref="Maybe{T}"/> (if it has a value)
+        /// to some other value based on this one.
+        /// </summary>
+        /// <typeparam name="TValue">The type produced by the selector.</typeparam>
+        /// <param name="selector">
+        /// A function which, given a value, will produce another value.
+        /// This will only be invoked if this <see cref="Maybe{T}"/> has a value.</param>
+        /// <returns>
+        /// If this <see cref="Maybe{T}"/> has a value, another <see cref="Maybe{T}"/> with the
+        /// value produced by invoking the selector. If this <see cref="Maybe{T}"/> is empty, or
+        /// if the selector produces a null value, an empty <see cref="Maybe{T}"/> will be returned.
+        /// </returns>
         [Pure]
         public Maybe<TValue> Select<TValue>(Func<T, TValue> selector)
         {
@@ -140,6 +153,7 @@ namespace CallMeMaybe
         /// <exception cref="ArgumentNullException">
         /// Thrown if the criteria function is null.
         /// </exception>
+        [Pure]
         public Maybe<T> Where(Func<T, bool> criteria)
         {
             if (criteria == null)
@@ -163,6 +177,7 @@ namespace CallMeMaybe
         /// The result of the <paramref name="resultSelector"/> if this has a value.
         /// Otherwise returns an empty <see cref="Maybe{T}"/>.
         /// </returns>
+        [Pure]
         public Maybe<TResult> SelectMany<TResult>(
             Func<T, Maybe<TResult>> resultSelector)
         {
@@ -197,6 +212,7 @@ namespace CallMeMaybe
         /// invoked if both <see cref="Maybe{T}"/>s have a value.</param>
         /// <returns>A <see cref="Maybe{T}"/> containing the result if both this and the result of
         /// <paramref name="otherSelector"/> have values. Otherwise, and empty <see cref="Maybe{T}"/>.</returns>
+        [Pure]
         public Maybe<TResult> SelectMany<TOther, TResult>(Func<T, Maybe<TOther>> otherSelector,
             Func<T, TOther, TResult> resultSelector)
         {
@@ -227,6 +243,7 @@ namespace CallMeMaybe
         /// <exception cref="InvalidOperationException">
         /// Thrown if called on an empty <see cref="Maybe{T}"/>.
         /// </exception>
+        [Pure]
         public T Single()
         {
             return ToList().Single();
@@ -241,6 +258,7 @@ namespace CallMeMaybe
         /// </remarks>
         /// </summary>
         /// <returns></returns>
+        [Pure]
         public List<T> ToList()
         {
             return _hasValue ? new List<T>(1) { _value } : new List<T>(0);
@@ -295,6 +313,7 @@ namespace CallMeMaybe
         /// <exception cref="ArgumentNullException">
         /// Thrown if the <paramref name="getValueIfNot"/> parameter is null.
         /// </exception>
+        [Pure]
         public T Else(Func<T> getValueIfNot)
         {
             if (getValueIfNot == null)
@@ -314,6 +333,7 @@ namespace CallMeMaybe
         /// Either the value contained by this <see cref="Maybe{T}"/> (if it has one), 
         /// or <paramref name="valueIfNot"/> otherwise.
         /// </returns>
+        [Pure]
         public T Else(T valueIfNot)
         {
             return _hasValue ? _value : valueIfNot;
@@ -327,6 +347,7 @@ namespace CallMeMaybe
         /// the result of calling <see cref="object.ToString"/> on the contained
         /// value if there is one.
         /// </returns>
+        [Pure]
         public override string ToString()
         {
             return _hasValue ? _value.ToString() : "";
