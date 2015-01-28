@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace CallMeMaybe
 {
-
     // TODO: Fail-fast checks on all methods (specifically watch for lambdas)
     // TODO: Comment all methods and types
     // TODO: Investigate [EditorBrowsable] and [DebuggerDisplay] attributes
@@ -106,6 +105,7 @@ namespace CallMeMaybe
         {
             return default(Maybe<T>);
         }
+
         // TODO: Consider implicit conversion from Maybe<Maybe<T>>
         // Note: I tried the conversion mentioned above, but it broke Resharper. Let's wait until that
         // bug gets fixed before working on it again.
@@ -159,7 +159,7 @@ namespace CallMeMaybe
             if (criteria == null)
             {
                 throw new ArgumentNullException("criteria");
-            } 
+            }
             return _hasValue && criteria(_value) ? this : default(Maybe<T>);
         }
 
@@ -184,7 +184,7 @@ namespace CallMeMaybe
             if (resultSelector == null)
             {
                 throw new ArgumentNullException("resultSelector");
-            } 
+            }
 
             return _hasValue ? resultSelector(_value) : default(Maybe<TResult>);
         }
@@ -223,7 +223,7 @@ namespace CallMeMaybe
             if (resultSelector == null)
             {
                 throw new ArgumentNullException("resultSelector");
-            } 
+            }
 
             if (_hasValue)
             {
@@ -261,7 +261,7 @@ namespace CallMeMaybe
         [Pure]
         public List<T> ToList()
         {
-            return _hasValue ? new List<T>(1) { _value } : new List<T>(0);
+            return _hasValue ? new List<T>(1) {_value} : new List<T>(0);
         }
 
         #endregion
@@ -384,10 +384,15 @@ namespace CallMeMaybe
                 return false;
             }
             // Maybe values can be compared with other Maybe values for the same type.
-            if(obj is Maybe<T>)
+            var maybe = obj as IMaybe;
+            if (maybe != null)
             {
-                var maybe = (Maybe<T>)obj;
-                return maybe == this;
+                if (obj is Maybe<T>)
+                {
+                    var maybeT = (Maybe<T>)obj;
+                    return maybeT == this;
+                }
+                return !maybe.HasValue;
             }
             return false;
         }
@@ -413,7 +418,9 @@ namespace CallMeMaybe
         /// </returns>
         public static bool operator ==(Maybe<T> left, Maybe<T> right)
         {
-            return (!left._hasValue && !right._hasValue) || left._value.Equals(right._value);
+            return left._hasValue
+                ? right._hasValue && left._value.Equals(right._value)
+                : !right._hasValue;
         }
 
         /// <summary>
@@ -447,6 +454,7 @@ namespace CallMeMaybe
         //{
         //    return left._hasValue;
         //}
+
         #endregion
 
         /// <summary>
@@ -560,7 +568,7 @@ namespace CallMeMaybe
         /// an empty <see cref="Maybe{T}"/> if the value is null
         /// </returns>
         /// <remarks>This overload automatically converts nullables to <see cref="Maybe{T}"/>s.</remarks>
-        public static Maybe<T> From<T>(T? value) where T : struct 
+        public static Maybe<T> From<T>(T? value) where T : struct
         {
             return value.HasValue ? new Maybe<T>(value.Value) : new Maybe<T>();
         }
