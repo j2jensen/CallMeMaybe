@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>CallMeMaybe</id>
+        <version>0.4</version>
+        <title>Call Me Maybe</title>
+        <authors>James Jensen</authors>
+        <owners>James Jensen</owners>
+        <licenseUrl>https://bitbucket.org/j2jensen/callmemaybe/wiki/License</licenseUrl>
+        <projectUrl>https://bitbucket.org/j2jensen/callmemaybe</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Provides a class and a few extension methods to facilitate common operations with values that may or may not exist.
+
+Traditionally, programmers often use `null` references to represent values that "aren't there", but the problem is that this was never their intended purpose. 
+
+- Languages like C# don't provide a way to differentiate between reference variables that can be null and those that are guaranteed not to be.
+- The inventor of null references has [apologized](http://en.wikipedia.org/wiki/Tony_Hoare#Quotations) for creating them in the first place, calling them his "billion-dollar mistake."
+- This misuse of null references has spread far and wide, leading to the unfortunately-named `Nullable&lt;&gt;` type (which, being a value type, is never actually null), and attributes like `[CanBeNull]` and `[NotNull]` to help programmers know when they can expect a method to treat a null value as legitimate input.
+
+All this leaves us in a position where our best hope of avoiding `NullReferenceException`s lies in trying to make sure that our reference variables are *never* null. But in that case, how do we indicate when a value is *optional*?
+
+Well, that's where `Maybe&lt;&gt;` comes in.</description>
+        <summary>A C# library to help you deal with optional values.</summary>
+        <releaseNotes>v 0.4 Alpha. Added "Is()" method, and "Values()" extension method, plus lots of comments.
+v 0.3.5318 Alpha. Added better conversion to/from Nullables. Maybe IMaybe interface public. Added LINQPad sample.
+v 0.3 Alpha release. Added Do() methods and an Else() overload that takes a function parameter. More correct handling of null arguments. And documentation on most of the types and methods!
+v 0.2 Alpha release. API subject to change (but probably not as much as it did last time).
+v 0.1 Alpha release. API subject to change.</releaseNotes>
+        <copyright>2014 James K. Jensen</copyright>
+        <tags>maybe monad option optional linqpad-samples</tags>
+    </metadata>
+    <files>
+        <file src="bin\Release\CallMeMaybe.dll" target="lib\CallMeMaybe.dll" />
+        <file src="..\linqpad-samples\Basic Usage.linq" target="linqpad-samples\Basic Usage.linq" />
+    </files>
+</package>
