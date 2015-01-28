@@ -49,10 +49,26 @@ namespace CallMeMaybe
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Gets whether or not this <see cref="Maybe{T}"/> contains a value.
+        /// <remarks>For <see cref="MaybeNot"/> this is always false.</remarks>
+        /// </summary>
         // TODO: Test and figure out what to do about GetHashCode and Equals for  `MaybeNot`s
         // that aren't cast to Maybe{T}s
         public bool HasValue { get { return false; } }
-        public bool TryGetValue(out object value)
+
+        /// <summary>
+        /// Attempts to get the value.
+        /// <remarks>
+        /// For <see cref="MaybeNot"/>, this will always return false, 
+        /// and produce a null output value.
+        /// </remarks>
+        /// </summary>
+        /// <param name="value">
+        /// In the case of <see cref="MaybeNot"/>, this will always yield null.
+        /// </param>
+        /// <returns>False, because this is a <see cref="MaybeNot"/></returns>
+        bool IMaybe.TryGetValue(out object value)
         {
             value = null;
             return false;

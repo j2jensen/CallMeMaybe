@@ -491,10 +491,26 @@ namespace CallMeMaybe
     /// <summary>
     /// A non-generic interface implemented by <see cref="Maybe{T}"/> values, to allow basic
     /// operations against a non-generically-typed <see cref="Maybe{T}"/>.
+    /// <remarks>
+    /// This interface should only be implemented by <see cref="Maybe{T}"/> and <see cref="MaybeNot"/>.
+    /// Implementing it with other types may cause <see cref="Maybe{T}"/> to behave unexpectedly in some cases.
+    /// </remarks>
     /// </summary>
     public interface IMaybe
     {
+        /// <summary>
+        /// Gets whether or not this <see cref="Maybe{T}"/> contains a value.
+        /// </summary>
         bool HasValue { get; }
+
+        /// <summary>
+        /// Attempts to get the value.
+        /// </summary>
+        /// <param name="value">
+        /// An out parameter that will be set to the value inside this <see cref="Maybe{T}"/>
+        /// if it has one, or the default value for type <see cref="T"/> if not.
+        /// </param>
+        /// <returns>True if this <see cref="Maybe{T}"/> has a value, false otherwise.</returns>
         bool TryGetValue(out object value);
     }
 
