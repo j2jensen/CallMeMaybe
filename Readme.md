@@ -156,6 +156,14 @@ Even though conceptually a `Maybe<Parent>` and a `Maybe<Child>` should be equiva
     {
     }
 
+### `Maybe<T>` values as `object`s ###
+
+`Maybe<T>` is intended to be a generically-typed compile-time aid, and can yield unexpected behavior when they are cast as `object`s. `Maybe.From(5) == 5` will evaluate to `true`. For consistency, it makes sense that `Maybe.From(5).Equals(5)` is `true` as well. All of this is similar to how `Nullable<T>`s behave. 
+
+But when you put a `Nullable<int>` into a `HashSet<object>`, it will be converted into either an `int` value or a `null` value. Mere mortals don't have access to the kind of run-time magic necessary to make this happen with our own classes. So if you put a `Maybe<>` in a `HashSet<object>`, for example, it may collide with differently-typed `Maybe<>` values, as well as with values of the `Maybe<>`'s generic type.
+
+To avoid issues like this, I recommend only using `Maybe<>` values as compile-time constructs. If you're ever going to use them as `object`s, first convert them to their underlying values.
+
 ### Third-Party Support ###
 
 Unfortunately, `Maybe<>` is not a part of the BCL (though it probably should be). That means that there's not much support for it in third-party frameworks like Entity Framework. My hope is to add some plugin packages for frameworks that are extensible (e.g. ASP.NET MVC model binding). But there will be some places where other frameworks just won't know what to do with it.
