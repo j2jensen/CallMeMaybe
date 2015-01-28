@@ -174,10 +174,11 @@ namespace TestMeMaybe
             Assert.AreNotEqual("hi", notName);
 
             var hiName = Maybe.From("hi");
-// ReSharper disable once SuspiciousTypeConversion.Global
-            Assert.IsTrue(hiName.Equals("hi"));
-// ReSharper disable once SuspiciousTypeConversion.Global
-            Assert.IsTrue(((object) hiName).Equals("hi"));
+            // ReSharper disable SuspiciousTypeConversion.Global
+            Assert.IsFalse(hiName.Equals("hi"));
+            Assert.IsFalse("hi".Equals(hiName));
+            Assert.IsFalse(((object)hiName).Equals("hi"));
+            // ReSharper restore SuspiciousTypeConversion.Global
             Assert.IsTrue(hiName == "hi");
             Assert.IsFalse(hiName != "hi");
             Assert.IsTrue("hi" == hiName);
@@ -192,8 +193,8 @@ namespace TestMeMaybe
         public void TestCovariantMaybeObjectEquality()
         {
             // ReSharper disable SuspiciousTypeConversion.Global
-            Assert.IsTrue(Maybe.From<object>(1).Equals(Maybe.From(1)));
-            Assert.IsTrue(Maybe.From(1).Equals(Maybe.From<object>(1)));
+            Assert.IsFalse(Maybe.From<object>(1).Equals(Maybe.From(1)));
+            Assert.IsFalse(Maybe.From(1).Equals(Maybe.From<object>(1)));
             Assert.IsTrue(Maybe.From(1) == Maybe.From<object>(1));
             Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(2));
             Assert.IsFalse(Maybe.From(1) != Maybe.From<object>(1));
@@ -206,8 +207,8 @@ namespace TestMeMaybe
         public void TestCovariantInheritedClassEquality()
         {
             var child = new Child();
-            Assert.IsTrue(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
-            Assert.IsTrue(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
+            Assert.IsFalse(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
+            Assert.IsFalse(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
             // Limitation: any attempt to do a covariant equality check results in a compiler error.
             /*
             Assert.IsTrue(Maybe.From<Child>(child) == Maybe.From<Parent>(child));

@@ -383,24 +383,11 @@ namespace CallMeMaybe
             {
                 return false;
             }
-            // Maybe values can be compared with other Maybe values.
-            var maybe = obj as IMaybe;
-            if (maybe != null)
+            // Maybe values can be compared with other Maybe values for the same type.
+            if(obj is Maybe<T>)
             {
-                object value;
-                if (!maybe.TryGetValue(out value))
-                {
-                    // If the other one doesn't have a value, then we're
-                    // only "equal" if this one doesn't either.
-                    return !HasValue;
-                }
-                return Equals(_value, value);
-            }
-            // If it's not a Maybe, then maybe it's a T
-            // Maybe.From(1) == 1
-            if (obj is T)
-            {
-                return _hasValue && _value.Equals((T)obj);
+                var maybe = (Maybe<T>)obj;
+                return maybe == this;
             }
             return false;
         }
@@ -426,7 +413,7 @@ namespace CallMeMaybe
         /// </returns>
         public static bool operator ==(Maybe<T> left, Maybe<T> right)
         {
-            return left.Equals(right);
+            return (!left._hasValue && !right._hasValue) || left._value.Equals(right._value);
         }
 
         /// <summary>
@@ -438,9 +425,28 @@ namespace CallMeMaybe
         /// </returns>
         public static bool operator !=(Maybe<T> left, Maybe<T> right)
         {
-            return !left.Equals(right);
+            return !(left == right);
         }
 
+        //public static bool operator ==(MaybeNot left, Maybe<T> right)
+        //{
+        //    return !right._hasValue;
+        //}
+
+        //public static bool operator !=(MaybeNot left, Maybe<T> right)
+        //{
+        //    return right._hasValue;
+        //}
+
+        //public static bool operator ==(Maybe<T> left, MaybeNot right)
+        //{
+        //    return !left._hasValue;
+        //}
+
+        //public static bool operator !=(Maybe<T> left, MaybeNot right)
+        //{
+        //    return left._hasValue;
+        //}
         #endregion
 
         /// <summary>
@@ -508,7 +514,7 @@ namespace CallMeMaybe
         /// </summary>
         /// <param name="value">
         /// An out parameter that will be set to the value inside this <see cref="Maybe{T}"/>
-        /// if it has one, or the default value for type <see cref="T"/> if not.
+        /// if it has one, or the default value for type T if not.
         /// </param>
         /// <returns>True if this <see cref="Maybe{T}"/> has a value, false otherwise.</returns>
         bool TryGetValue(out object value);
