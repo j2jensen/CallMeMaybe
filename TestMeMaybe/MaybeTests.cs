@@ -483,17 +483,43 @@ namespace TestMeMaybe
         [Test]
         public void TestEmptyGetHashCode()
         {
-            // TODO: Test hash code distribution with multiple different types of "empty" maybes.
-            // (Hint: GetHashCode() needs to be the same any time Equals() would return true.)
+            // All empty maybes are considered equal, so they should produce the same hash code.
             var baseHash = Maybe.Not.GetHashCode();
             Assert.AreEqual(baseHash, Maybe<int>.Not.GetHashCode());
+            Assert.AreEqual(baseHash, Maybe<string>.Not.GetHashCode());
+            Assert.AreEqual(baseHash, Maybe<object>.Not.GetHashCode());
         }
 
-        // TODO: Test hash code and equality behavior for non-empty Maybe values.
-        /* If you put a nullable int into a hashset, it becomes an int. How do we want
-         * Maybe<int>s to behave?
-         */
+        [Test]
+        public void TestValuedGetHashCode()
+        {
+            /* For consistency with the .Equals() method, and the == operator, we must produce the
+             same hash code for Maybe values as for their underlying values. People really shouldn't
+             be combining Maybe values with non-maybe values in a hash-based structure, since this
+             means they're treating the Maybes as mere objects, and losing any compile-time benefit
+             that they have to offer. We mention this in the documentation. But if they do, we'll
+             do the best we can with it.*/
+            Assert.AreEqual("5".GetHashCode(), Maybe.From("5").GetHashCode());
+            Assert.AreEqual(5.GetHashCode(), Maybe.From(5).GetHashCode());
+            Assert.AreEqual(5m.GetHashCode(), Maybe.From(5m).GetHashCode());
 
+            // Note that these NotEqual checks are just sanity-checks to make sure we're not
+            // producing the same values for everything. Technically, some not-equal values could totally
+            // end up producing the same hashcode. But we don't want to give HashSets a O(n) lookup time
+            // by producing the same hashcode for every value.
+            Assert.AreNotEqual("5".GetHashCode(), Maybe.From("hi").GetHashCode());
+            Assert.AreNotEqual(1.GetHashCode(), Maybe.From(2).GetHashCode());
+            Assert.AreNotEqual("5".GetHashCode(), Maybe.From(5).GetHashCode());
+            Assert.AreNotEqual(5m.GetHashCode(), Maybe.From(5).GetHashCode());
+        }
+
+        [Test]
+        public void TestHashSetBehavior()
+        {
+            /* If you put a nullable int into a hashset, it becomes an int. How do we want
+             * Maybe<int>s to behave?
+             */
+        }
 
         [Test]
         public void TestImplicitCasting()

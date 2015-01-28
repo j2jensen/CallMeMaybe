@@ -413,7 +413,7 @@ namespace CallMeMaybe
         {
             unchecked
             {
-                return (_hasValue.GetHashCode()*397) ^ EqualityComparer<T>.Default.GetHashCode(_value);
+                return _hasValue ? _value.GetHashCode() : 0;
             }
         }
 
