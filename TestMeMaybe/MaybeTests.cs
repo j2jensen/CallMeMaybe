@@ -515,10 +515,27 @@ namespace TestMeMaybe
 
         [Test]
         public void TestHashSetBehavior()
+
         {
-            /* If you put a nullable int into a hashset, it becomes an int. How do we want
-             * Maybe<int>s to behave?
+            /* If you put a nullable int into a hashset, it becomes an int, or null. 
+             * We don't have access to that run-time magic, so we expect there to be collisions
+             * when various value types are put into a hashset.
              */
+            var set = new HashSet<object> {Maybe.From(1), Maybe.Not, Maybe.From("1"), 1, null, "1"};
+            Assert.IsTrue(set.SequenceEqual(new object[] {1, Maybe.Not, "1", null}));
+            Assert.IsTrue(set.SequenceEqual(new object[] {Maybe.From(1), Maybe.Not, Maybe.From("1"), null}));
+            var types = set.Select(v => v == null ? typeof (void) : v.GetType()).ToList();
+            Assert.IsTrue(types.SequenceEqual(
+                new object[] {typeof (Maybe<int>), typeof (MaybeNot), typeof (Maybe<string>), typeof (void)}),
+                string.Join(", ", types));
+
+            var set2 = new HashSet<object> {1, null, "1", Maybe.From(1), Maybe.Not, Maybe.From("1")};
+//            Assert.IsTrue(set2.SequenceEqual(new object[] {1, null, "1", Maybe.Not}));
+//            Assert.IsTrue(set2.SequenceEqual(new object[] {Maybe.From(1), null, Maybe.From("1"), Maybe.Not}));
+            var types2 = set2.Select(v => v == null ? typeof (void) : v.GetType()).ToList();
+            Assert.IsTrue(types2.SequenceEqual(
+                new object[] {typeof (int), typeof (void), typeof (string), typeof (MaybeNot)}),
+                string.Join(", ", types2));
         }
 
         [Test]
