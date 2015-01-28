@@ -41,14 +41,14 @@ namespace CallMeMaybe
 
         public static bool operator ==(MaybeNot left, MaybeNot right)
         {
-            return left.Equals(right);
+            return true;
         }
 
         public static bool operator !=(MaybeNot left, MaybeNot right)
         {
-            return !left.Equals(right);
+            return false;
         }
-
+        
         /// <summary>
         /// Gets whether or not this <see cref="Maybe{T}"/> contains a value.
         /// <remarks>For <see cref="MaybeNot"/> this is always false.</remarks>
