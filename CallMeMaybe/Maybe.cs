@@ -383,16 +383,15 @@ namespace CallMeMaybe
             {
                 return false;
             }
-            // Maybe values can be compared with other Maybe values for the same type.
-            var maybe = obj as IMaybe;
-            if (maybe != null)
+            // Maybe values can be compared with other Maybe<T> values for the same type.
+            // Each different type of Maybe<T> will be different, even if they have the
+            // same internal value. This is so we can maintain consistent behavior: users
+            // are not expected to be casting Maybes as objects under normal circumstances.
+            if (obj is Maybe<T>)
             {
-                if (obj is Maybe<T>)
-                {
-                    var maybeT = (Maybe<T>)obj;
-                    return maybeT == this;
-                }
-                return !maybe.HasValue;
+                var maybeT = (Maybe<T>)obj;
+                // Leverage the == operator that we've defined explicitly below.
+                return maybeT == this;
             }
             return false;
         }
@@ -405,7 +404,10 @@ namespace CallMeMaybe
         {
             unchecked
             {
-                return (_hasValue.GetHashCode()*397) ^ EqualityComparer<T>.Default.GetHashCode(_value);
+                // We want to return the same value whenever both the generic
+                // type of this Maybe *and* its value are the same, but otherwise
+                // we'd like to return different values as often as possible.
+                return (typeof(T).GetHashCode() * 397) ^ EqualityComparer<T>.Default.GetHashCode(_value);
             }
         }
 
@@ -434,26 +436,6 @@ namespace CallMeMaybe
         {
             return !(left == right);
         }
-
-        //public static bool operator ==(MaybeNot left, Maybe<T> right)
-        //{
-        //    return !right._hasValue;
-        //}
-
-        //public static bool operator !=(MaybeNot left, Maybe<T> right)
-        //{
-        //    return right._hasValue;
-        //}
-
-        //public static bool operator ==(Maybe<T> left, MaybeNot right)
-        //{
-        //    return !left._hasValue;
-        //}
-
-        //public static bool operator !=(Maybe<T> left, MaybeNot right)
-        //{
-        //    return left._hasValue;
-        //}
 
         #endregion
 

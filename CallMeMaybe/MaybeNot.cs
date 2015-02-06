@@ -16,19 +16,13 @@ namespace CallMeMaybe
 
         public override bool Equals(object obj)
         {
-            // Maybe values never equal `null`--that's sort of the point.
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            // Maybe values can be compared with other Maybe values.
-            var maybe = obj as IMaybe;
-            if (maybe != null)
-            {
-                object value;
-                return !maybe.TryGetValue(out value);
-            }
-            return false;
+            // Each separate type of Maybe counts as its own value.
+            // All MaybeNots are the same, but different Maybe<>.Nots
+            // are their own values.
+            // This is just to maintain consistent behavior--users are
+            // not expected to put different types of Maybe objects
+            // in hashsets and such.
+            return obj is MaybeNot;
         }
 
         public override int GetHashCode()
