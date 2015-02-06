@@ -78,8 +78,8 @@ namespace TestMeMaybe
             var notNumber2 = Maybe<int>.Not;
             var notName = Maybe<string>.Not;
 
-            Assert.AreEqual(notNumber1, notNumber2, "All not maybes should be object-equal, just as null == null");
-            Assert.AreEqual(notNumber1, notName, "All not maybes should be object-equal, just as null == null");
+            Assert.AreEqual(notNumber1, notNumber2, "Not maybes should be .Equals() with others of the same generic type.");
+            Assert.AreNotEqual(notNumber1, notName, "Maybes should never be .Equals() with Maybes of other generic types");
             Assert.IsTrue(notNumber1 == notNumber2, "All not maybes should be equal, just as null == null");
             Assert.IsFalse(notNumber1 != notNumber2, "All not maybes should be equal, just as null == null");
             Assert.IsFalse(notNumber1 == null, "maybes should never equal null");
@@ -174,10 +174,11 @@ namespace TestMeMaybe
             Assert.AreNotEqual("hi", notName);
 
             var hiName = Maybe.From("hi");
-// ReSharper disable once SuspiciousTypeConversion.Global
-            Assert.IsTrue(hiName.Equals("hi"));
-// ReSharper disable once SuspiciousTypeConversion.Global
-            Assert.IsTrue(((object) hiName).Equals("hi"));
+            // ReSharper disable SuspiciousTypeConversion.Global
+            Assert.IsFalse(hiName.Equals("hi"));
+            Assert.IsFalse("hi".Equals(hiName));
+            Assert.IsFalse(((object)hiName).Equals("hi"));
+            // ReSharper restore SuspiciousTypeConversion.Global
             Assert.IsTrue(hiName == "hi");
             Assert.IsFalse(hiName != "hi");
             Assert.IsTrue("hi" == hiName);
@@ -192,8 +193,9 @@ namespace TestMeMaybe
         public void TestCovariantMaybeObjectEquality()
         {
             // ReSharper disable SuspiciousTypeConversion.Global
-            Assert.IsTrue(Maybe.From<object>(1).Equals(Maybe.From(1)));
-            Assert.IsTrue(Maybe.From(1).Equals(Maybe.From<object>(1)));
+            Assert.IsFalse(Maybe.From<object>(1).Equals(Maybe.From(1)));
+            Assert.IsFalse(Maybe.From(1).Equals(Maybe.From<object>(1)));
+            // ReSharper restore SuspiciousTypeConversion.Global
             Assert.IsTrue(Maybe.From(1) == Maybe.From<object>(1));
             Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(2));
             Assert.IsFalse(Maybe.From(1) != Maybe.From<object>(1));
@@ -206,8 +208,8 @@ namespace TestMeMaybe
         public void TestCovariantInheritedClassEquality()
         {
             var child = new Child();
-            Assert.IsTrue(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
-            Assert.IsTrue(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
+            Assert.IsFalse(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
+            Assert.IsFalse(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
             // Limitation: any attempt to do a covariant equality check results in a compiler error.
             /*
             Assert.IsTrue(Maybe.From<Child>(child) == Maybe.From<Parent>(child));
@@ -215,7 +217,6 @@ namespace TestMeMaybe
             Assert.IsFalse(Maybe.From<Child>(child) != Maybe.From<Parent>(child));
             Assert.IsTrue(Maybe.From<Child>(child) != Maybe.From<Parent>(new Child()));
             */
-            // ReSharper restore SuspiciousTypeConversion.Global
 
             // TODO: See if we can create a stronger version of the Cast and OfType LINQ methods
             // so we can say `parentMaybe.OfType<Child>() == childMaybe`
@@ -468,14 +469,42 @@ namespace TestMeMaybe
         [Test]
         public void TestEmptyEqualsBehavior()
         {
-            // We want Maybe.Not to follow similar rules to `null` when it comes to equality:
-            // every empty Maybe is equal to every other, regardless of type.
-            var maybeNot = Maybe.Not;
-            Assert.IsTrue(maybeNot.Equals(Maybe.Not));
+            // Empty values of any type should be equal to other empty values of 
+            // the same type.
+// ReSharper disable EqualExpressionComparison
+            Assert.IsTrue(Maybe.Not.Equals(Maybe.Not));
+            Assert.IsTrue(Maybe<int>.Not.Equals(Maybe<int>.Not));
+            Assert.IsTrue(Maybe<string>.Not.Equals(Maybe<string>.Not));
+// ReSharper restore EqualExpressionComparison
+            // Users are discouraged from casting Maybe<> values as objects, or
+            // otherwise using them in collections with other Maybe<> types.
+            // However, if they do, the best thing we can do is be consistent.
+            // We cannot create parity to make object.Equals(null, m) return true,
+            // so it doesn't make sense to make object.Equals(m, null) return true.
+            // Each type of Maybe<> can only be considered equal with another Maybe<>
+            // of the same type and value.
 // ReSharper disable SuspiciousTypeConversion.Global
-            Assert.IsTrue(maybeNot.Equals(Maybe<int>.Not));
-            Assert.IsTrue(Maybe<int>.Not.Equals(maybeNot));
-// ReSharper restore SuspiciousTypeConversion.Global
+            Assert.IsFalse(Maybe.Not.Equals(Maybe<int>.Not));
+            Assert.IsFalse(Maybe<int>.Not.Equals(Maybe.Not));
+            Assert.IsFalse(Maybe<string>.Not.Equals(Maybe.Not));
+            Assert.IsFalse(Maybe.Not.Equals(Maybe<string>.Not));
+            Assert.IsFalse(Maybe<string>.Not.Equals(Maybe<int>.Not));
+            Assert.IsFalse(Maybe<int>.Not.Equals(Maybe<string>.Not));
+            // Value types cannot be equal to null, so Maybe<T> for value types can't 
+            // either.
+            Assert.IsFalse(null == Maybe.Not);
+            Assert.IsFalse(null == Maybe<int>.Not);
+            Assert.IsFalse(Maybe.Not == null);
+            Assert.IsFalse(Maybe<int>.Not == null);
+            // null can be implicitly cast to a reference type, and then implicitly
+            // cast into a Maybe<T> of a reference type. This actually works out well
+            // because if someone was using `return null;` in their method, an then
+            // checked `if (value != null)` in a calling method, converting that method
+            // to return a Maybe<> will "just work".
+            Assert.IsTrue(null == Maybe<string>.Not);
+            Assert.IsTrue(Maybe<string>.Not == null);
+            // ReSharper restore SuspiciousTypeConversion.Global
+            // This works because Maybe.Not gets implicitly cast to a Maybe<int>.
             Assert.IsTrue(Maybe<int>.Not == Maybe.Not);
             Assert.IsTrue(Maybe.Not == Maybe<int>.Not);
         }
@@ -483,59 +512,26 @@ namespace TestMeMaybe
         [Test]
         public void TestEmptyGetHashCode()
         {
-            // All empty maybes are considered equal, so they should produce the same hash code.
             var baseHash = Maybe.Not.GetHashCode();
-            Assert.AreEqual(baseHash, Maybe<int>.Not.GetHashCode());
-            Assert.AreEqual(baseHash, Maybe<string>.Not.GetHashCode());
-            Assert.AreEqual(baseHash, Maybe<object>.Not.GetHashCode());
-        }
-
-        [Test]
-        public void TestValuedGetHashCode()
-        {
-            /* For consistency with the .Equals() method, and the == operator, we must produce the
-             same hash code for Maybe values as for their underlying values. People really shouldn't
-             be combining Maybe values with non-maybe values in a hash-based structure, since this
-             means they're treating the Maybes as mere objects, and losing any compile-time benefit
-             that they have to offer. We mention this in the documentation. But if they do, we'll
-             do the best we can with it.*/
-            Assert.AreEqual("5".GetHashCode(), Maybe.From("5").GetHashCode());
-            Assert.AreEqual(5.GetHashCode(), Maybe.From(5).GetHashCode());
-            Assert.AreEqual(5m.GetHashCode(), Maybe.From(5m).GetHashCode());
-
-            // Note that these NotEqual checks are just sanity-checks to make sure we're not
-            // producing the same values for everything. Technically, some not-equal values could totally
-            // end up producing the same hashcode. But we don't want to give HashSets a O(n) lookup time
-            // by producing the same hashcode for every value.
-            Assert.AreNotEqual("5".GetHashCode(), Maybe.From("hi").GetHashCode());
-            Assert.AreNotEqual(1.GetHashCode(), Maybe.From(2).GetHashCode());
-            Assert.AreNotEqual("5".GetHashCode(), Maybe.From(5).GetHashCode());
-            Assert.AreNotEqual(5m.GetHashCode(), Maybe.From(5).GetHashCode());
+            Assert.AreNotEqual(baseHash, Maybe<int>.Not.GetHashCode());
+            Assert.AreNotEqual(baseHash, Maybe<string>.Not.GetHashCode());
+            Assert.AreNotEqual(baseHash, Maybe<bool>.Not.GetHashCode());
         }
 
         [Test]
         public void TestHashSetBehavior()
-
         {
-            /* If you put a nullable int into a hashset, it becomes an int, or null. 
-             * We don't have access to that run-time magic, so we expect there to be collisions
-             * when various value types are put into a hashset.
+            /* Each type of Maybe<> value is its own distinct value, not the same as null, and
+             * not the same as any other Maybe<> type, even if they're based on the same value.
              */
-            var set = new HashSet<object> {Maybe.From(1), Maybe.Not, Maybe.From("1"), 1, null, "1"};
-            Assert.IsTrue(set.SequenceEqual(new object[] {1, Maybe.Not, "1", null}));
-            Assert.IsTrue(set.SequenceEqual(new object[] {Maybe.From(1), Maybe.Not, Maybe.From("1"), null}));
-            var types = set.Select(v => v == null ? typeof (void) : v.GetType()).ToList();
-            Assert.IsTrue(types.SequenceEqual(
-                new object[] {typeof (Maybe<int>), typeof (MaybeNot), typeof (Maybe<string>), typeof (void)}),
-                string.Join(", ", types));
+            var variousValues = new object[] { Maybe.From(1), Maybe.Not, Maybe.From("1"), new Maybe<IEnumerable<char>>("1".AsEnumerable()), 1, null, "1" };
+            Assert.IsTrue(new HashSet<object> (variousValues).SequenceEqual(variousValues));
+            Assert.IsTrue(new HashSet<object> (variousValues.Reverse()).SequenceEqual(variousValues.Reverse()));
 
-            var set2 = new HashSet<object> {1, null, "1", Maybe.From(1), Maybe.Not, Maybe.From("1")};
-//            Assert.IsTrue(set2.SequenceEqual(new object[] {1, null, "1", Maybe.Not}));
-//            Assert.IsTrue(set2.SequenceEqual(new object[] {Maybe.From(1), null, Maybe.From("1"), Maybe.Not}));
-            var types2 = set2.Select(v => v == null ? typeof (void) : v.GetType()).ToList();
-            Assert.IsTrue(types2.SequenceEqual(
-                new object[] {typeof (int), typeof (void), typeof (string), typeof (MaybeNot)}),
-                string.Join(", ", types2));
+            // Maybe<>s of the same type and value should still be treated as the same value.
+            var dupeValues = variousValues.Concat(variousValues).ToArray();
+            Assert.IsTrue(new HashSet<object>(dupeValues).SequenceEqual(variousValues));
+            Assert.IsTrue(new HashSet<object>(dupeValues.Reverse()).SequenceEqual(variousValues.Reverse()));
         }
 
         [Test]
