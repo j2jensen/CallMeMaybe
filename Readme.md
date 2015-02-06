@@ -112,7 +112,7 @@ When working with dictionaries, try using the `.GetMaybe(key)` extension method 
         from car in carsByOwner.GetMaybe(p.PersonId)
         select new {owner = p, car};
 
-## Limitations ##
+## Limitations and Caveats ##
 
 ### No Implicit Casting of `Nullable<>`s ###
 
@@ -128,33 +128,14 @@ It's not possible to create an implicit casting operator from `T?` (i.e. `Nullab
 
 The `Maybe()` extension method is available on all `Nullable<>` types, and there is a corresponding `Nullable()` method on any `Maybe<T>` where T is a value type.
 
-### Covariant equality checking ###
+### Covariance and Equality ###
 
-Even though conceptually a `Maybe<Parent>` and a `Maybe<Child>` should be equivalent if they both have the same backing `Child` value, I can't figure out a way to make that work using either implicit type conversion or equality operators. That means that while `.Equals()` works just fine, the `==` and `!=` operators cannot be applied to `Maybe` objects of different types:
+`Maybe<T>` is intended to be a generically-typed compile-time aid, and can yield unexpected behavior when they are cast as `object`s. If you put `Nullable<int>`s into a `HashSet<object>`, .NET will automatically convert those values into either `int`s or `null` values. However, mere mortals don't have access to the magic required to make this happen. Neither can we convince .NET that `5.Equals(Maybe.From(5)`. So, for consistency, every `Maybe<T>` value will `.Equals()` another object if that other object is *of the same `Maybe<T>` type* and has the same value.
 
-    [Test]
-    public void TestCovariantInheritedClassEquality()
-    {
-        var child = new Child();
-        Assert.IsTrue(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
-        Assert.IsTrue(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
-        // Limitation: any attempt to do a covariant equality check 
-        // results in a compiler error.
-        /*
-        Assert.IsTrue(Maybe.From<Child>(child) == Maybe.From<Parent>(child));
-        Assert.IsFalse(Maybe.From<Child>(child) == Maybe.From<Parent>(new Child()));
-        Assert.IsFalse(Maybe.From<Child>(child) != Maybe.From<Parent>(child));
-        Assert.IsTrue(Maybe.From<Child>(child) != Maybe.From<Parent>(new Child()));
-        */
-    }
+`Maybe.From(5) == 5` and `5 == Maybe.From(5)` will yield `true` because `5` is implicitly cast as a `Maybe<int>`. Also, `Maybe.From((string)null) == null` will yield `true` because `null` can be implicitly cast to a `string`, which then gets implicitly cast to a `Maybe<string>`. However, using the `.Equals(object)` method will not match this behavior. `Maybe.From(5).Equals(5)` yields `false` because `5.Equals(Maybe.From(5))` cannot be true.  
 
-    private class Parent
-    {
-    }
+None of this will be a problem if you only use `Maybe<>` values as compile-time constructs. Don't cast `Maybe<T>`s as `object`s, don't try to compare them to types (even other `Maybe<T>` types), and use the `.Is()` method or the `==` and `!=` operator, rather than `.Equals(object)`.
 
-    private class Child : Parent
-    {
-    }
 
 ### Third-Party Support ###
 
