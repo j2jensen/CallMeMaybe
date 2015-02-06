@@ -469,14 +469,42 @@ namespace TestMeMaybe
         [Test]
         public void TestEmptyEqualsBehavior()
         {
-            // We want Maybe.Not to follow similar rules to `null` when it comes to equality:
-            // every empty Maybe is equal to every other, regardless of type.
-            var maybeNot = Maybe.Not;
-            Assert.IsTrue(maybeNot.Equals(Maybe.Not));
+            // Empty values of any type should be equal to other empty values of 
+            // the same type.
+// ReSharper disable EqualExpressionComparison
+            Assert.IsTrue(Maybe.Not.Equals(Maybe.Not));
+            Assert.IsTrue(Maybe<int>.Not.Equals(Maybe<int>.Not));
+            Assert.IsTrue(Maybe<string>.Not.Equals(Maybe<string>.Not));
+// ReSharper restore EqualExpressionComparison
+            // Users are discouraged from casting Maybe<> values as objects, or
+            // otherwise using them in collections with other Maybe<> types.
+            // However, if they do, the best thing we can do is be consistent.
+            // We cannot create parity to make object.Equals(null, m) return true,
+            // so it doesn't make sense to make object.Equals(m, null) return true.
+            // Each type of Maybe<> can only be considered equal with another Maybe<>
+            // of the same type and value.
 // ReSharper disable SuspiciousTypeConversion.Global
-            Assert.IsTrue(maybeNot.Equals(Maybe<int>.Not));
-            Assert.IsTrue(Maybe<int>.Not.Equals(maybeNot));
-// ReSharper restore SuspiciousTypeConversion.Global
+            Assert.IsFalse(Maybe.Not.Equals(Maybe<int>.Not));
+            Assert.IsFalse(Maybe<int>.Not.Equals(Maybe.Not));
+            Assert.IsFalse(Maybe<string>.Not.Equals(Maybe.Not));
+            Assert.IsFalse(Maybe.Not.Equals(Maybe<string>.Not));
+            Assert.IsFalse(Maybe<string>.Not.Equals(Maybe<int>.Not));
+            Assert.IsFalse(Maybe<int>.Not.Equals(Maybe<string>.Not));
+            // Value types cannot be equal to null, so Maybe<T> for value types can't 
+            // either.
+            Assert.IsFalse(null == Maybe.Not);
+            Assert.IsFalse(null == Maybe<int>.Not);
+            Assert.IsFalse(Maybe.Not == null);
+            Assert.IsFalse(Maybe<int>.Not == null);
+            // null can be implicitly cast to a reference type, and then implicitly
+            // cast into a Maybe<T> of a reference type. This actually works out well
+            // because if someone was using `return null;` in their method, an then
+            // checked `if (value != null)` in a calling method, converting that method
+            // to return a Maybe<> will "just work".
+            Assert.IsTrue(null == Maybe<string>.Not);
+            Assert.IsTrue(Maybe<string>.Not == null);
+            // ReSharper restore SuspiciousTypeConversion.Global
+            // This works because Maybe.Not gets implicitly cast to a Maybe<int>.
             Assert.IsTrue(Maybe<int>.Not == Maybe.Not);
             Assert.IsTrue(Maybe.Not == Maybe<int>.Not);
         }
@@ -484,17 +512,27 @@ namespace TestMeMaybe
         [Test]
         public void TestEmptyGetHashCode()
         {
-            // TODO: Test hash code distribution with multiple different types of "empty" maybes.
-            // (Hint: GetHashCode() needs to be the same any time Equals() would return true.)
             var baseHash = Maybe.Not.GetHashCode();
-            Assert.AreEqual(baseHash, Maybe<int>.Not.GetHashCode());
+            Assert.AreNotEqual(baseHash, Maybe<int>.Not.GetHashCode());
+            Assert.AreNotEqual(baseHash, Maybe<string>.Not.GetHashCode());
+            Assert.AreNotEqual(baseHash, Maybe<bool>.Not.GetHashCode());
         }
 
-        // TODO: Test hash code and equality behavior for non-empty Maybe values.
-        /* If you put a nullable int into a hashset, it becomes an int. How do we want
-         * Maybe<int>s to behave?
-         */
+        [Test]
+        public void TestHashSetBehavior()
+        {
+            /* Each type of Maybe<> value is its own distinct value, not the same as null, and
+             * not the same as any other Maybe<> type, even if they're based on the same value.
+             */
+            var variousValues = new object[] { Maybe.From(1), Maybe.Not, Maybe.From("1"), new Maybe<IEnumerable<char>>("1".AsEnumerable()), 1, null, "1" };
+            Assert.IsTrue(new HashSet<object> (variousValues).SequenceEqual(variousValues));
+            Assert.IsTrue(new HashSet<object> (variousValues.Reverse()).SequenceEqual(variousValues.Reverse()));
 
+            // Maybe<>s of the same type and value should still be treated as the same value.
+            var dupeValues = variousValues.Concat(variousValues).ToArray();
+            Assert.IsTrue(new HashSet<object>(dupeValues).SequenceEqual(variousValues));
+            Assert.IsTrue(new HashSet<object>(dupeValues.Reverse()).SequenceEqual(variousValues.Reverse()));
+        }
 
         [Test]
         public void TestImplicitCasting()
