@@ -78,8 +78,8 @@ namespace TestMeMaybe
             var notNumber2 = Maybe<int>.Not;
             var notName = Maybe<string>.Not;
 
-            Assert.AreEqual(notNumber1, notNumber2, "All not maybes should be object-equal, just as null == null");
-            Assert.AreEqual(notNumber1, notName, "All not maybes should be object-equal, just as null == null");
+            Assert.AreEqual(notNumber1, notNumber2, "Not maybes should be .Equals() with others of the same generic type.");
+            Assert.AreNotEqual(notNumber1, notName, "Maybes should never be .Equals() with Maybes of other generic types");
             Assert.IsTrue(notNumber1 == notNumber2, "All not maybes should be equal, just as null == null");
             Assert.IsFalse(notNumber1 != notNumber2, "All not maybes should be equal, just as null == null");
             Assert.IsFalse(notNumber1 == null, "maybes should never equal null");
@@ -195,6 +195,7 @@ namespace TestMeMaybe
             // ReSharper disable SuspiciousTypeConversion.Global
             Assert.IsFalse(Maybe.From<object>(1).Equals(Maybe.From(1)));
             Assert.IsFalse(Maybe.From(1).Equals(Maybe.From<object>(1)));
+            // ReSharper restore SuspiciousTypeConversion.Global
             Assert.IsTrue(Maybe.From(1) == Maybe.From<object>(1));
             Assert.IsFalse(Maybe.From(1) == Maybe.From<object>(2));
             Assert.IsFalse(Maybe.From(1) != Maybe.From<object>(1));
@@ -216,7 +217,6 @@ namespace TestMeMaybe
             Assert.IsFalse(Maybe.From<Child>(child) != Maybe.From<Parent>(child));
             Assert.IsTrue(Maybe.From<Child>(child) != Maybe.From<Parent>(new Child()));
             */
-            // ReSharper restore SuspiciousTypeConversion.Global
 
             // TODO: See if we can create a stronger version of the Cast and OfType LINQ methods
             // so we can say `parentMaybe.OfType<Child>() == childMaybe`
