@@ -78,8 +78,10 @@ namespace TestMeMaybe
             var notNumber2 = Maybe<int>.Not;
             var notName = Maybe<string>.Not;
 
-            Assert.AreEqual(notNumber1, notNumber2, "Not maybes should be .Equals() with others of the same generic type.");
-            Assert.AreNotEqual(notNumber1, notName, "Maybes should never be .Equals() with Maybes of other generic types");
+            Assert.AreEqual(notNumber1, notNumber2,
+                "Not maybes should be .Equals() with others of the same generic type.");
+            Assert.AreNotEqual(notNumber1, notName,
+                "Maybes should never be .Equals() with Maybes of other generic types");
             Assert.IsTrue(notNumber1 == notNumber2, "All not maybes should be equal, just as null == null");
             Assert.IsFalse(notNumber1 != notNumber2, "All not maybes should be equal, just as null == null");
             Assert.IsFalse(notNumber1 == null, "maybes should never equal null");
@@ -177,7 +179,7 @@ namespace TestMeMaybe
             // ReSharper disable SuspiciousTypeConversion.Global
             Assert.IsFalse(hiName.Equals("hi"));
             Assert.IsFalse("hi".Equals(hiName));
-            Assert.IsFalse(((object)hiName).Equals("hi"));
+            Assert.IsFalse(((object) hiName).Equals("hi"));
             // ReSharper restore SuspiciousTypeConversion.Global
             Assert.IsTrue(hiName == "hi");
             Assert.IsFalse(hiName != "hi");
@@ -208,8 +210,10 @@ namespace TestMeMaybe
         public void TestCovariantInheritedClassEquality()
         {
             var child = new Child();
+// ReSharper disable SuspiciousTypeConversion.Global
             Assert.IsFalse(Maybe.From<Parent>(child).Equals(Maybe.From(child)));
             Assert.IsFalse(Maybe.From(child).Equals(Maybe.From<Parent>(child)));
+// ReSharper restore SuspiciousTypeConversion.Global
             // Limitation: any attempt to do a covariant equality check results in a compiler error.
             /*
             Assert.IsTrue(Maybe.From<Child>(child) == Maybe.From<Parent>(child));
@@ -217,9 +221,6 @@ namespace TestMeMaybe
             Assert.IsFalse(Maybe.From<Child>(child) != Maybe.From<Parent>(child));
             Assert.IsTrue(Maybe.From<Child>(child) != Maybe.From<Parent>(new Child()));
             */
-
-            // TODO: See if we can create a stronger version of the Cast and OfType LINQ methods
-            // so we can say `parentMaybe.OfType<Child>() == childMaybe`
         }
 
         [Test]
@@ -350,8 +351,7 @@ namespace TestMeMaybe
         {
             Assert.AreEqual(0, Maybe<int>.Not.Else(0));
             Assert.AreEqual(1, Maybe<int>.Not.Else(1));
-            // TODO: Create ElseNull method?
-            //Assert.IsNull(Maybe<string>.Not.Else(null));
+            Assert.IsNull(Maybe<string>.Not.Else(() => null));
             Assert.AreEqual("", Maybe<string>.Not.Else(""));
             Assert.AreEqual("hi", Maybe<string>.Not.Else("hi"));
         }
@@ -361,8 +361,7 @@ namespace TestMeMaybe
         {
             Assert.AreEqual(42, Maybe.From(42).Else(0));
             Assert.AreEqual(42, Maybe.From(42).Else(1));
-            // TODO: Create ElseNull Method?
-            //Assert.AreEqual("hi", Maybe.From("hi").Else(null));
+            Assert.AreEqual("hi", Maybe.From("hi").Else(() => null));
             Assert.AreEqual("hi", Maybe.From("hi").Else(""));
             Assert.AreEqual("hi", Maybe.From("hi").Else("hi"));
         }
@@ -524,9 +523,10 @@ namespace TestMeMaybe
             /* Each type of Maybe<> value is its own distinct value, not the same as null, and
              * not the same as any other Maybe<> type, even if they're based on the same value.
              */
-            var variousValues = new object[] { Maybe.From(1), Maybe.Not, Maybe.From("1"), new Maybe<IEnumerable<char>>("1".AsEnumerable()), 1, null, "1" };
-            Assert.IsTrue(new HashSet<object> (variousValues).SequenceEqual(variousValues));
-            Assert.IsTrue(new HashSet<object> (variousValues.Reverse()).SequenceEqual(variousValues.Reverse()));
+            var variousValues = new object[]
+            {Maybe.From(1), Maybe.Not, Maybe.From("1"), new Maybe<IEnumerable<char>>("1".AsEnumerable()), 1, null, "1"};
+            Assert.IsTrue(new HashSet<object>(variousValues).SequenceEqual(variousValues));
+            Assert.IsTrue(new HashSet<object>(variousValues.Reverse()).SequenceEqual(variousValues.Reverse()));
 
             // Maybe<>s of the same type and value should still be treated as the same value.
             var dupeValues = variousValues.Concat(variousValues).ToArray();

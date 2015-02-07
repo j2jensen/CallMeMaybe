@@ -6,6 +6,9 @@ namespace CallMeMaybe
 {
     public static class MaybeExtensions
     {
+        // TODO: Fail-fast checks on all methods (specifically watch for lambdas)
+        // TODO: Comment all methods and types
+
         /// <summary>
         /// Produces a <see cref="Maybe{T}"/> value that will contain the value corresponding 
         /// to the given <see cref="key"/> in the dictionary if one exists, or which will be
@@ -90,6 +93,9 @@ namespace CallMeMaybe
         }
 
         // TODO: TryParse methods
+        // TODO: See if we can create a stronger version of the Cast and OfType LINQ methods
+        // so we can say `parentMaybe.OfType<Child>() == childMaybe`
+        // TODO: Create ElseNull method for reference types?
 
     }
 }

@@ -5,8 +5,6 @@ using System.Linq;
 
 namespace CallMeMaybe
 {
-    // TODO: Fail-fast checks on all methods (specifically watch for lambdas)
-    // TODO: Comment all methods and types
     // TODO: Investigate [EditorBrowsable] and [DebuggerDisplay] attributes
     // TODO: Investigate Resharper annotations: Pure, InstantHandle, and NotNull
     /// <summary>

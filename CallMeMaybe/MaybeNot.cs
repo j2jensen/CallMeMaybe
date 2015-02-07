@@ -47,8 +47,6 @@ namespace CallMeMaybe
         /// Gets whether or not this <see cref="Maybe{T}"/> contains a value.
         /// <remarks>For <see cref="MaybeNot"/> this is always false.</remarks>
         /// </summary>
-        // TODO: Test and figure out what to do about GetHashCode and Equals for  `MaybeNot`s
-        // that aren't cast to Maybe{T}s
         public bool HasValue { get { return false; } }
 
         /// <summary>
