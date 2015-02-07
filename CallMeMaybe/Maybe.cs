@@ -290,7 +290,7 @@ namespace CallMeMaybe
             }
         }
 
-        // TODO: Consider an ElseDo() method: would this really add anything?
+        // TODO: Consider an ElseDo() method: https://bitbucket.org/j2jensen/callmemaybe/issue/11
 
         // TODO: Consider an Or() method (switch to another Maybe<> value if no value). Are there any real use cases for this?
 
