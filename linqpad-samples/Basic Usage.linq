@@ -22,6 +22,12 @@ void TestNumber(int number)
 {
     Console.WriteLine("Testing number " + number);
 
+    // `Is` will tell you whether the value matches another value or criteria.
+    HowLuckyIs(number).Is("So lucky.")
+        .Dump("Is 1");
+    HowLuckyIs(number).Is(s => s.Contains("lucky"))
+        .Dump("Is 2"); 
+
     // `Else` will return the given value if the `Maybe` has no value.
     HowLuckyIs(number).Else("").Contains("lucky")
         .Dump("Else");
