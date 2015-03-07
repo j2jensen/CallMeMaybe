@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Linq;
 
 namespace CallMeMaybe
@@ -387,7 +388,7 @@ namespace CallMeMaybe
             // are not expected to be casting Maybes as objects under normal circumstances.
             if (obj is Maybe<T>)
             {
-                var maybeT = (Maybe<T>)obj;
+                var maybeT = (Maybe<T>) obj;
                 // Leverage the == operator that we've defined explicitly below.
                 return maybeT == this;
             }
@@ -405,7 +406,7 @@ namespace CallMeMaybe
                 // We want to return the same value whenever both the generic
                 // type of this Maybe *and* its value are the same, but otherwise
                 // we'd like to return different values as often as possible.
-                return (typeof(T).GetHashCode() * 397) ^ EqualityComparer<T>.Default.GetHashCode(_value);
+                return (typeof (T).GetHashCode()*397) ^ EqualityComparer<T>.Default.GetHashCode(_value);
             }
         }
 
@@ -618,6 +619,21 @@ namespace CallMeMaybe
                 throw new ArgumentNullException("valueIfTrue");
             }
             return condition ? From(valueIfTrue()) : Maybe<T>.Not;
+        }
+
+        /// <summary>
+        /// A handful of standard parsers.
+        /// If you can't find what you need here, create your own <see cref="MaybeParser{T}"/>.
+        /// </summary>
+        public static readonly MaybeParsers Parsers = new MaybeParsers();
+
+        /// <summary>
+        /// Produces a set of standard parsers that will use the given culture.
+        /// </summary>
+        /// <param name="culture">The desired culture for the parsers to use.</param>
+        public static MaybeParsers ParsersForCulture(CultureInfo culture)
+        {
+            return new MaybeParsers(culture);
         }
     }
 }
