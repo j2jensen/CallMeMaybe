@@ -10,7 +10,7 @@ namespace TestMeMaybe
         [TestMethod]
         public void TestIntParse()
         {
-            var parser = MaybeParser<int>.FromTryParse(int.TryParse);
+            var parser = Maybe.Parsers.FromTryParse<int>(int.TryParse);
             Assert.AreEqual(Maybe<int>.Not, parser.Parse(null));
             Assert.AreEqual(Maybe<int>.Not, parser.Parse(""));
             Assert.AreEqual(Maybe<int>.Not, parser.Parse("hi"));
@@ -22,7 +22,7 @@ namespace TestMeMaybe
         [TestMethod]
         public void TestIntParseWithFormat()
         {
-            var parser = MaybeParser<int>.FromTryParse(((string source, out int value) =>
+            var parser = Maybe.Parsers.FromTryParse(((string source, out int value) =>
                 int.TryParse(source, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value)));
             Assert.AreEqual(Maybe<int>.Not, parser.Parse(null));
             Assert.AreEqual(Maybe<int>.Not, parser.Parse(""));

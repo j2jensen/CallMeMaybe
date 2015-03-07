@@ -623,17 +623,10 @@ namespace CallMeMaybe
 
         /// <summary>
         /// A handful of standard parsers.
-        /// If you can't find what you need here, create your own <see cref="MaybeParser{T}"/>.
+        /// If you can't find what you need here, create your own <see cref="MaybeTryParseWrapper{T}"/>.
         /// </summary>
         public static readonly MaybeParsers Parsers = new MaybeParsers();
 
-        /// <summary>
-        /// Produces a set of standard parsers that will use the given culture.
-        /// </summary>
-        /// <param name="culture">The desired culture for the parsers to use.</param>
-        public static MaybeParsers ParsersForCulture(CultureInfo culture)
-        {
-            return new MaybeParsers(culture);
-        }
+
     }
 }
