@@ -63,6 +63,8 @@
     <Compile Include="MaybeExtensionsTests.cs" />
     <Compile Include="MaybeLinqTests.cs" />
     <Compile Include="MaybeTests.cs" />
+    <Compile Include="ArgumentChecker.cs" />
+    <Compile Include="NamedParameterReplacer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
