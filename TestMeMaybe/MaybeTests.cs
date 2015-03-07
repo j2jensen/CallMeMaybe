@@ -280,9 +280,12 @@ namespace TestMeMaybe
                 Assert.Fail();
                 return true;
             }));
+            ArgumentChecker.For(Maybe.From("hi")).AssertReferenceParametersDisallowNullValues(m => m.Is(t => true));
+        }
 
-            Assert.Throws<ArgumentNullException>(
-                () => Maybe.From("hi").Is((Func<string, bool>) null));
+        [Test]
+        public void TestIsLambdaDisallowsNullLambda()
+        {
         }
 
         [Test]
