@@ -39,8 +39,8 @@
     <Compile Include="Maybe.cs" />
     <Compile Include="MaybeExtensions.cs" />
     <Compile Include="MaybeNot.cs" />
+    <Compile Include="MaybeParseExtensions.cs" />
     <Compile Include="MaybeTryParseWrapper.cs" />
-    <Compile Include="MaybeParsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

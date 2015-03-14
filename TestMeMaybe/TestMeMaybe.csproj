@@ -67,7 +67,7 @@
     <Compile Include="ArgumentChecker.cs" />
     <Compile Include="NamedParameterReplacer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MaybeParserTest.cs" />
+    <Compile Include="MaybeParseExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CallMeMaybe\CallMeMaybe.csproj">
