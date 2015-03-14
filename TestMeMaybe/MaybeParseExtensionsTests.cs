@@ -1,13 +1,13 @@
 ﻿using System.Globalization;
 using CallMeMaybe;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace TestMeMaybe
 {
-	[TestClass]
+	[TestFixture]
 	public class MaybeParseExtensionsTests
 	{
-		[TestMethod]
+		[Test]
 		public void TestIntParse()
 		{
 			Assert.AreEqual(Maybe<int>.Not, Maybe.From((string) null).ParseInt32());
@@ -15,11 +15,11 @@ namespace TestMeMaybe
 			Assert.AreEqual(Maybe<int>.Not, Maybe.From("hi").ParseInt32());
 			Assert.AreEqual(Maybe.From(42), Maybe.From("42").ParseInt32());
 			Assert.AreNotEqual(Maybe.From(66), Maybe.From("42").ParseInt32());
-			Assert.AreEqual(Maybe.Not, Maybe.From("2A").ParseInt32());
-			Assert.AreEqual(Maybe.Not, Maybe.From((int.MaxValue + 1L).ToString(CultureInfo.InvariantCulture)).ParseInt32());
+			Assert.AreEqual(Maybe<int>.Not, Maybe.From("2A").ParseInt32());
+			Assert.AreEqual(Maybe<int>.Not, Maybe.From((int.MaxValue + 1L).ToString(CultureInfo.InvariantCulture)).ParseInt32());
 		}
 
-		[TestMethod]
+		[Test]
 		public void TestLongParse()
 		{
 			Assert.AreEqual(Maybe<long>.Not, Maybe.From((string) null).ParseInt64());
@@ -32,11 +32,11 @@ namespace TestMeMaybe
 				Maybe.From(long.MinValue.ToString(CultureInfo.InvariantCulture)).ParseInt64());
 			Assert.AreNotEqual(Maybe.From(66L), Maybe.From("42").ParseInt64());
 			Assert.AreNotEqual(Maybe.From(42), Maybe.From("42").ParseInt64());
-			Assert.AreEqual(Maybe.Not, Maybe.From("2A").ParseInt64());
-			Assert.AreEqual(Maybe.Not, Maybe.From("2A").ParseInt64());
+			Assert.AreEqual(Maybe<long>.Not, Maybe.From("2A").ParseInt64());
+			Assert.AreEqual(Maybe<long>.Not, Maybe.From("2A").ParseInt64());
 		}
 	
-		[TestMethod]
+		[Test]
 		public void TestBooleanParse()
 		{
 			Assert.AreEqual(Maybe<bool>.Not, Maybe.From((string) null).ParseBoolean());
