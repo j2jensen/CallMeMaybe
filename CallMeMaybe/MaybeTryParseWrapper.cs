@@ -12,6 +12,7 @@
         /// </returns>
         Maybe<T> Parse(string source);
     }
+
     /// <summary>
     /// Converts strings into <see cref="Maybe{T}"/>s.
     /// This is useful when you have access to a TryParse-style method,

@@ -554,6 +554,47 @@ namespace TestMeMaybe
         }
 
         [Test]
+        public void TestOfType()
+        {
+            Assert.IsInstanceOf<Maybe<object>>(Maybe.From("").OfType<object>());
+            Assert.IsTrue(Maybe.From("").HasValue);
+            var child = new ChildClass();
+            Assert.IsNotInstanceOf<Maybe<object>>(Maybe.From(child).OfType<ParentClass>());
+            Assert.IsInstanceOf<Maybe<ParentClass>>(Maybe.From(child).OfType<ParentClass>());
+            Assert.IsTrue(Maybe.From(child).OfType<ParentClass>().HasValue);
+            Assert.IsNotInstanceOf<Maybe<ParentClass>>(Maybe.From(child).OfType<ParentClass>().OfType<ChildClass>());
+            Assert.IsInstanceOf<Maybe<ChildClass>>(Maybe.From(child).OfType<ParentClass>().OfType<ChildClass>());
+            Assert.IsTrue(Maybe.From(child).OfType<ParentClass>().OfType<ChildClass>().HasValue);
+            Assert.AreEqual(child, Maybe.From(child).OfType<ParentClass>().OfType<ChildClass>().Single());
+
+            Assert.IsNotInstanceOf<Maybe<object>>(Maybe.From(child).OfType<IChildClassInterface>());
+            Assert.IsInstanceOf<Maybe<IChildClassInterface>>(Maybe.From(child).OfType<IChildClassInterface>());
+            Assert.IsTrue(Maybe.From(child).OfType<IChildClassInterface>().HasValue);
+
+            var parent = new ParentClass();
+            Assert.IsNotInstanceOf<Maybe<ParentClass>>(Maybe.From(parent).OfType<ChildClass>());
+            Assert.IsInstanceOf<Maybe<ChildClass>>(Maybe.From(parent).OfType<ChildClass>());
+            Assert.IsFalse(Maybe.From(parent).OfType<ChildClass>().HasValue);
+
+            Assert.IsNotInstanceOf<Maybe<object>>(Maybe.From(parent).OfType<IChildClassInterface>());
+            Assert.IsInstanceOf<Maybe<IChildClassInterface>>(Maybe.From(parent).OfType<IChildClassInterface>());
+            Assert.IsFalse(Maybe.From(parent).OfType<IChildClassInterface>().HasValue);
+        }
+
+        public class ParentClass
+        {
+        }
+
+        public class ChildClass : ParentClass, IChildClassInterface
+        {
+        }
+
+        public interface IChildClassInterface
+        {
+        }
+
+
+        [Test]
         public void TestToString()
         {
             Assert.AreEqual("", Maybe<int>.Not.ToString());

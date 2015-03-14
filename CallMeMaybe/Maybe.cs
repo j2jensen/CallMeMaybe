@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Globalization;
 using System.Linq;
 
 namespace CallMeMaybe
@@ -481,6 +480,28 @@ namespace CallMeMaybe
         {
             return _hasValue && _value.Equals(value);
         }
+
+		/// <summary>
+		/// Creates a differently-typed <see cref="Maybe{T}"/> value, which will contain
+		/// this <see cref="Maybe{T}"/>'s value if it is of the given type.
+		/// <remarks>
+		/// This method will not invoke conversion operators (explicit or implicit),
+		/// so the result will only have a value if the given object is actually of the
+		/// given type.
+		/// </remarks>
+		/// </summary>
+		/// <typeparam name="TDest">The desired type to cast the <see cref="Maybe{T}"/> to.</typeparam>
+		/// <returns>
+		/// A <see cref="Maybe{T}"/> with this <see cref="Maybe{T}"/>'s value, if its
+		/// value is of the given type. If this <see cref="Maybe{T}"/> is empty, or if
+		/// its value is not of the given type, and empty <see cref="Maybe{T}"/> will
+		/// be returned.
+		/// </returns>
+	    public Maybe<TDest> OfType<TDest>() where TDest : class
+	    {
+		    return new Maybe<TDest>(_value as TDest);
+	    }
+
     }
 
     /// <summary>
