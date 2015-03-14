@@ -92,9 +92,6 @@ namespace CallMeMaybe
             return maybe.HasValue ? maybe.Single() : default(T?);
         }
 
-        // TODO: TryParse methods
-        // TODO: See if we can create a stronger version of the Cast and OfType LINQ methods
-        // so we can say `parentMaybe.OfType<Child>() == childMaybe`
         // TODO: Create ElseNull method for reference types?
         // TODO: Maybes() or AsMaybes() method? https://bitbucket.org/j2jensen/callmemaybe/issue/10
 
