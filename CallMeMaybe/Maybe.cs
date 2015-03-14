@@ -620,13 +620,5 @@ namespace CallMeMaybe
             }
             return condition ? From(valueIfTrue()) : Maybe<T>.Not;
         }
-
-        /// <summary>
-        /// A handful of standard parsers.
-        /// If you can't find what you need here, create your own <see cref="MaybeTryParseWrapper{T}"/>.
-        /// </summary>
-        public static readonly MaybeParsers Parsers = new MaybeParsers();
-
-
     }
 }
