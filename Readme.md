@@ -122,7 +122,7 @@ When working with dictionaries, try using the `.GetMaybe(key)` extension method 
 
 It's not possible to create an implicit casting operator from `T?` (i.e. `Nullable<T>`) to `Maybe<T>` without restricting `Maybe<>`s to value types.
 
-    public string PrintDate(Maybe<DateTime> dateTime) { ... }
+    public void PrintDate(Maybe<DateTime> dateTime) { ... }
 
     DateTime? d = GetDate();
     // This won't work
@@ -131,6 +131,19 @@ It's not possible to create an implicit casting operator from `T?` (i.e. `Nullab
     PrintDate(d.Maybe());
 
 The `Maybe()` extension method is available on all `Nullable<>` types, and there is a corresponding `Nullable()` method on any `Maybe<T>` where T is a value type.
+
+### No Implicit Casting of Interfaces ###
+
+C# [does not allow implicit casts from interfaces](https://msdn.microsoft.com/en-us/library/aa664464(VS.71).aspx):
+
+    public void PrintHtml(Maybe<IHtmlString> html) { ... }
+
+    IHtmlString html = GetHtml();
+    // This won't work
+    PrintHtml(html);
+    // Instead, try this:
+    PrintHtml(Maybe.From(html));
+
 
 ### Covariance and Equality ###
 
