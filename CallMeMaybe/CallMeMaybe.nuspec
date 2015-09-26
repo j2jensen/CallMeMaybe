@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>CallMeMaybe</id>
-        <version>0.6</version>
+        <version>0.6.1</version>
         <title>Call Me Maybe</title>
         <authors>James Jensen</authors>
         <owners>James Jensen</owners>
@@ -21,7 +21,8 @@ All this leaves us in a position where our best hope of avoiding `NullReferenceE
 
 Well, that's where `Maybe&lt;&gt;` comes in.</description>
         <summary>A C# library to help you deal with optional values.</summary>
-        <releaseNotes>v0.6 Beta. 
+        <releaseNotes>v0.6.1 - Included XML documentation
+v0.6 Beta. 
 - Added parsers, with a couple of basic parsing extension methods.
 - Added OfType&lt;&gt;().
 - Added FirstMaybe() and SingleMaybe() extension methods.
@@ -36,6 +37,7 @@ v 0.1 Alpha release. API subject to change.</releaseNotes>
         <tags>maybe monad option optional</tags>
     </metadata>
     <files>
-        <file src="bin\Release\CallMeMaybe.dll" target="lib\CallMeMaybe.dll" />
+        <file src="lib\CallMeMaybe.dll" target="lib\CallMeMaybe.dll" />
+        <file src="bin\Release\CallMeMaybe.xml" target="lib\CallMeMaybe.xml" />
     </files>
 </package>
