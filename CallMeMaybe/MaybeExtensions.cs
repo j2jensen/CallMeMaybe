@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace CallMeMaybe
 {
+    /// <summary>
+    /// This class contains extension methods for helping <see cref="Maybe{T}"/> interact with
+    /// other types.
+    /// </summary>
     public static class MaybeExtensions
     {
         // TODO: Fail-fast checks on all methods (specifically watch for lambdas)
@@ -14,11 +18,15 @@ namespace CallMeMaybe
         /// to the given <see cref="key"/> in the dictionary if one exists, or which will be
         /// empty otherwise.
         /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dictionary"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <typeparam name="TKey">The type of the source dictionary's key.</typeparam>
+        /// <typeparam name="TValue">The type of the source dictionary's value.</typeparam>
+        /// <param name="dictionary">The dictionary to look in.</param>
+        /// <param name="key">The key to search for.</param>
+        /// <returns>
+        /// A <see cref="Maybe{T}"/> that is empty if the given <paramref name="dictionary"/> 
+        /// does not contain the given <paramref name="key"/></returns>, or if the value
+        /// with that <see cref="key"/> is null. Otherwise, the <see cref="Maybe{T}"/> will
+        /// contain the value with that <see cref="key"/>.
         public static Maybe<TValue> GetMaybe<TKey, TValue>(
             this IDictionary<TKey, TValue> dictionary,
             TKey key)
@@ -31,6 +39,25 @@ namespace CallMeMaybe
             return new Maybe<TValue>();
         }
 
+        /// <summary>
+        /// A LINQ-like flattening method to only select items from non-empty <see cref="Maybe{T}"/>s.
+        /// It's easiest to use LINQ Query Expression syntax for this.
+        /// </summary>
+        /// <example><code>
+        /// var luckyNumbers =
+        ///      from n in Enumerable.Range(1, 20)
+        ///      from s in HowLuckyIs(n)
+        ///      where s.Contains("lucky")
+        ///      select new {number = n, howLucky = s};
+        /// </code></example>
+        /// <typeparam name="TSource">The type of item in the original source.</typeparam>
+        /// <typeparam name="TCollection">The type of item in the <see cref="Maybe{T}"/> that you're selecting.</typeparam>
+        /// <typeparam name="TResult">The type of item to select from the <see cref="Maybe{T}"/></typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="collectionSelector">A function yielding a <see cref="Maybe{T}"/></param>
+        /// <param name="resultSelector">A function which, given a value from the <see cref="Maybe{T}"/>,
+        /// will yield the desired result.</param>
+        /// <returns></returns>
         public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(
             this IEnumerable<TSource> source,
             Func<TSource, Maybe<TCollection>> collectionSelector,
@@ -39,6 +66,19 @@ namespace CallMeMaybe
             return source.SelectMany(t => collectionSelector(t).ToList(), resultSelector);
         }
 
+        /// <summary>
+        /// A LINQ-like flattening method to select items from a given collection or not,
+        /// depending on whether the <paramref name="source"/> has any values in it.
+        /// </summary>
+        /// <typeparam name="TSource">The type of item in the <see cref="Maybe{T}"/></typeparam>
+        /// <typeparam name="TResult">The type of item you wish to select out.</typeparam>
+        /// <param name="source">A <see cref="Maybe{T}"/> value.</param>
+        /// <param name="resultSelector">A function which, given a <typeparamref name="TSource"/>,
+        /// will produce an <see cref="IEnumerable{T}"/> of <typeparamref name="TResult"/>s.</param>
+        /// <returns>
+        /// The collection of items produced by the <paramref name="resultSelector"/> function, if
+        /// <paramref name="source"/> has a value. Otherwise, an empty collection.
+        /// </returns>
         public static IEnumerable<TResult> SelectMany<TSource, TResult>(
             this Maybe<TSource> source,
             Func<TSource, IEnumerable<TResult>> resultSelector)

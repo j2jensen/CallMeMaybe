@@ -1,5 +1,8 @@
 ﻿namespace CallMeMaybe
 {
+    /// <summary>
+    /// A class that contains extension methods with parsing helpers for <see cref="Maybe{T}"/>s.
+    /// </summary>
     public static class MaybeParseExtensions
     {
         private static readonly MaybeTryParseWrapper<int> Int32Parser = WrapTryParse<int>(int.TryParse);
