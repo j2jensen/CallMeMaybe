@@ -494,9 +494,7 @@ namespace TestMeMaybe
             Assert.IsFalse(Maybe<int>.Not.Equals(Maybe<string>.Not));
             // Value types cannot be equal to null, so Maybe<T> for value types can't 
             // either.
-            Assert.IsFalse(null == Maybe.Not);
             Assert.IsFalse(null == Maybe<int>.Not);
-            Assert.IsFalse(Maybe.Not == null);
             Assert.IsFalse(Maybe<int>.Not == null);
             // null can be implicitly cast to a reference type, and then implicitly
             // cast into a Maybe<T> of a reference type. This actually works out well
