@@ -13,11 +13,6 @@
         /// <summary>
         /// Attempts to parse the given string into an <see cref="System.Int32"/>,
         /// using the standard <see cref="int.TryParse(string, out int)"/> overload.
-        /// <remarks>
-        /// This is provided as a convenience method for common scenarios, but if
-        /// you want to create your own parsing method (e.g. for a particular culture), it's easy to do.
-        /// Just wrap a TryParse-patterned delegate in a <see cref="MaybeTryParseWrapper{T}"/>.
-        /// </remarks>
         /// </summary>
         /// <param name="s">The string to parse.</param>
         /// <returns>The parsed integer if parsing was successful,
@@ -31,11 +26,6 @@
         /// <summary>
         /// Attempts to parse the given string into an <see cref="System.Int64"/>,
         /// using the standard <see cref="long.TryParse(string, out long)"/> overload.
-        /// <remarks>
-        /// This is provided as a convenience method for common scenarios, but if
-        /// you want to create your own parsing method (e.g. for a particular culture), it's easy to do.
-        /// Just wrap a TryParse-patterned delegate in a <see cref="MaybeTryParseWrapper{T}"/>.
-        /// </remarks>
         /// </summary>
         /// <param name="s">The string to parse.</param>
         /// <returns>The parsed integer if parsing was successful,
@@ -49,11 +39,6 @@
         /// <summary>
         /// Attempts to parse the given string into a <see cref="bool"/>,
         /// using the standard <see cref="bool.TryParse(string, out bool)"/> overload.
-        /// <remarks>
-        /// This is provided as a convenience method for common scenarios, but if
-        /// you want to create your own parsing method (e.g. for a particular culture), it's easy to do.
-        /// Just wrap a TryParse-patterned delegate in a <see cref="MaybeTryParseWrapper{T}"/>.
-        /// </remarks>
         /// </summary>
         /// <param name="s">The string to parse.</param>
         /// <returns>The parsed integer if parsing was successful,
