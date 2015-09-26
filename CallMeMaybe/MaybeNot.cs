@@ -35,9 +35,9 @@ namespace CallMeMaybe
 
         /// <summary>
         /// Gets whether or not this <see cref="Maybe{T}"/> contains a value.
-        /// <remarks>For <see cref="MaybeNot"/> this is always false.</remarks>
         /// </summary>
-        public bool HasValue { get { return false; } }
+        /// <remarks>For <see cref="MaybeNot"/> this is always false.</remarks>
+        bool IMaybe.HasValue { get { return false; } }
 
         /// <summary>
         /// Attempts to get the value.
