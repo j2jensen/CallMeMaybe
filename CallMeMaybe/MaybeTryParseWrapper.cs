@@ -1,5 +1,11 @@
 ﻿namespace CallMeMaybe
 {
+    /// <summary>
+    /// An interface for an object that can parse strings into a specific value type,
+    /// returning a <see cref="Maybe{T}"/> of that type if successful, or an empty
+    /// <see cref="Maybe{T}"/> if not.
+    /// </summary>
+    /// <typeparam name="T">The type of object that this parser is capable of parsing.</typeparam>
     public interface IMaybeParser<T>
     {
         /// <summary>
@@ -25,6 +31,9 @@
     /// }
     /// </code></example>
     /// </summary>
+    /// <remarks>This is an internal implementation of the public <see cref="IMaybeParser{T}"/>
+    /// interface, and therefore it cannot be used directly. Use the static methods on 
+    /// <see cref="MaybeTryParseWrapper{T}"/> to get one of these.</remarks>
     /// <typeparam name="T">
     /// The Type of value you want to have in the resulting <see cref="Maybe{T}"/>s.
     /// </typeparam>
