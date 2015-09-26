@@ -61,11 +61,10 @@
     }
 
     /// <summary>
-    /// This is just a place for us to keep generically-typed delegates, where
-    /// they have public accessibility."
+    /// This is just a place for us to keep generically-typed delegates.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Delegates<T>
+    internal class Delegates<T>
     {
         /// <summary>
         /// A typical TryParse-patterned method, which takes in a source string,
