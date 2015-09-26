@@ -116,6 +116,26 @@ When working with dictionaries, try using the `.GetMaybe(key)` extension method 
         from car in carsByOwner.GetMaybe(p.PersonId)
         select new {owner = p, car};
 
+### String Parsing ###
+
+Are you tired of using clunky `out` parameters for safe parsing? Convert your string into a `Maybe<string>` to access to some handy parsing extension methods:
+
+    var validInput = Maybe.From(input).ParseInt32().Where(i => i > 0);
+    var errorMessage = Maybe.If(validInput.HasValue, input + " is not a positive number");
+
+Feel free to make your own parsing extension methods, too. Here's how you can do it from a typical `TryParse()` pattern:
+
+    public static class PhoneNumberParsingExtensions
+    {
+        public static Maybe<PhoneNumber> ParsePhoneNumber(this Maybe<string> source)
+        {
+            return source.SelectMany(str => {
+                PhoneNumber number;
+                return Maybe.If(PhoneNumber.TryParse(str, out number), number);
+            });                
+        }
+    }
+
 ## Limitations and Caveats ##
 
 ### No Implicit Casting of `Nullable<>`s ###
