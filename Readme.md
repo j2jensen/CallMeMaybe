@@ -171,7 +171,7 @@ C# [does not allow implicit casts from interfaces](https://msdn.microsoft.com/en
 
 `Maybe.From(5) == 5` and `5 == Maybe.From(5)` will yield `true` because `5` is implicitly cast as a `Maybe<int>`. Also, `Maybe.From((string)null) == null` will yield `true` because `null` can be implicitly cast to a `string`, which then gets implicitly cast to a `Maybe<string>`. However, using the `.Equals(object)` method will not match this behavior. `Maybe.From(5).Equals(5)` yields `false` because `5.Equals(Maybe.From(5))` cannot be true.  
 
-None of this will be a problem if you only use `Maybe<>` values as compile-time constructs. Don't cast `Maybe<T>`s as `object`s, don't try to compare them to types (even other `Maybe<T>` types), and use the `.Is()` method or the `==` and `!=` operators, rather than `.Equals(object)`.
+None of this will be a problem if you only use `Maybe<>` values as compile-time constructs. Don't cast `Maybe<T>`s as `object`s, and use the `.Is()` method or the `==` and `!=` operators, rather than `.Equals(object)`.
 
 
 ### Third-Party Support ###
