@@ -121,7 +121,7 @@ When working with dictionaries, try using the `.GetMaybe(key)` extension method 
 Are you tired of using clunky `out` parameters for safe parsing? Convert your string into a `Maybe<string>` to access to some handy parsing extension methods:
 
     var validInput = Maybe.From(input).ParseInt32().Where(i => i > 0);
-    var errorMessage = Maybe.If(validInput.HasValue, input + " is not a positive number");
+    var errorMessage = Maybe.If(!validInput.HasValue, input + " is not a positive number");
 
 Feel free to make your own parsing extension methods, too. Here's how you can do it from a typical `TryParse()` pattern:
 
