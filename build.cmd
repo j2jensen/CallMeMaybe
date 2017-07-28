@@ -1,6 +1,7 @@
 @ECHO OFF
 
 ECHO.
+ECHO %APPVEYOR_BUILD_NUMBER%
 
 :: ensure we have Version.txt
 IF NOT EXIST Version.txt (
@@ -12,7 +13,7 @@ IF NOT EXIST Version.txt (
 SET RELEASE=
 SET COMMENT=
 FOR /F "skip=1 delims=" %%i IN (Version.txt) DO IF NOT DEFINED RELEASE SET RELEASE=%%i
-FOR /F "skip=2 delims=" %%i IN (Version.txt) DO IF NOT DEFINED COMMENT SET COMMENT=%%i
+FOR /F "skip=2 delims=" %%i%APPVEYOR_BUILD_NUMBER% IN (Version.txt) DO IF NOT DEFINED COMMENT SET COMMENT=%%i
 
 SET VERSION=%RELEASE%
 IF [%COMMENT%] EQU [] (SET VERSION=%RELEASE%) ELSE (SET VERSION=%RELEASE%-%COMMENT%)
