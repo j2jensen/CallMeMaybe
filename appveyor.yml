@@ -7,7 +7,7 @@ init:
 build_script:
   - build.cmd
 
-test:
+test_script:
  - dotnet test CallMeMaybe.UnitTests\CallMeMaybe.UnitTests.csproj --list-tests
 
 # run custom scripts before tests
