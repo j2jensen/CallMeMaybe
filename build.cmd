@@ -4,6 +4,11 @@ ECHO.
 ECHO APPVEYOR_BUILD_NUMBER : %APPVEYOR_BUILD_NUMBER%
 ECHO APPVEYOR_BUILD_VERSION : %APPVEYOR_BUILD_VERSION%
 
+IF EXIST .\artifacts (
+	ECHO Cleaning up artifacts folder
+	DEL .\artifacts /q /s
+) 
+
 :: ensure we have Version.txt
 IF NOT EXIST Version.txt (
 	ECHO Version.txt is missing!
@@ -24,7 +29,8 @@ ECHO Building CallMeMaybe %VERSION%
 ECHO.
 
 CALL dotnet restore CallMeMaybe.sln
-CALL dotnet msbuild CallMeMaybe.sln /p:OutputPath=..\artifacts /p:Configuration=Release
+CALL dotnet msbuild CallMeMaybe.sln /p:Configuration=Release
+CALL dotnet pack CallMeMaybe\CallMeMaybe.csproj --include-symbols -o ..\artifacts
 
 :success
 ECHO.

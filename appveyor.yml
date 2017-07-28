@@ -9,7 +9,7 @@ build_script:
 
 test:
    assemblies:
-      - 'artifacts\CallMeMaybe.UnitTests.dll'
+      - 'CallMeMaybe.UnitTests\bin\Release\**\*Tests.dll'
 
 # run custom scripts before tests
 before_test:
