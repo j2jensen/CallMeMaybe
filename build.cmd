@@ -21,8 +21,8 @@ ECHO.
 ECHO Building CallMeMaybe %VERSION%
 ECHO.
 
-CALL dotnet restore ..\CallMeMaybe.sln
-CALL dotnet msbuild ..\CallMeMaybe.sln /t:Publish /p:OutputPath=..\build\temp\artifacts /p:Configuration=Release
+CALL dotnet restore CallMeMaybe.sln
+CALL dotnet msbuild CallMeMaybe.sln /p:OutputPath=..\artifacts /p:Configuration=Release
 
 :success
 ECHO.
