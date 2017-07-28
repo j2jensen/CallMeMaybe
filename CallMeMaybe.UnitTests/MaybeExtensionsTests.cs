@@ -18,8 +18,7 @@ namespace CallMeMaybe.UnitTests
                     from v in dict.GetMaybe(k)
                     select new {k, v})
                     .ToList();
-            //values2.Count.Should().Be(2);
-            values2.Count.Should().Be(1);
+            values2.Count.Should().Be(2);
             values2[0].v.Should().Be(1);
             values2[0].k.Should().Be("1");
             values2[1].v.Should().Be(2);
