@@ -19,7 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallMeMaybe", "CallMeMaybe\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AAFDE12E-031F-42B0-8C42-A5C96A506C5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallMeMaybe.UnitTests", "CallMeMaybe.UnitTests\CallMeMaybe.UnitTests.csproj", "{D7FAE90B-399E-49A5-9169-174CF6B2C44F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallMeMaybe.UnitTests", "CallMeMaybe.UnitTests\CallMeMaybe.UnitTests.csproj", "{D7FAE90B-399E-49A5-9169-174CF6B2C44F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{360E83AD-7A0F-4292-8961-43F4B4FC3172}"
+	ProjectSection(SolutionItems) = preProject
+		Build\appveyor.yml = Build\appveyor.yml
+		Build\build-appveyor.cmd = Build\build-appveyor.cmd
+		Build\build.cmd = Build\build.cmd
+		Build\Version.txt = Build\Version.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
