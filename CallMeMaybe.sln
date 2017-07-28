@@ -21,12 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AAFDE12E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallMeMaybe.UnitTests", "CallMeMaybe.UnitTests\CallMeMaybe.UnitTests.csproj", "{D7FAE90B-399E-49A5-9169-174CF6B2C44F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{360E83AD-7A0F-4292-8961-43F4B4FC3172}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{2ACF1B35-6795-4CA4-80FE-15675C0C9AC5}"
 	ProjectSection(SolutionItems) = preProject
-		Build\appveyor.yml = Build\appveyor.yml
-		Build\build-appveyor.cmd = Build\build-appveyor.cmd
-		Build\build.cmd = Build\build.cmd
-		Build\Version.txt = Build\Version.txt
+		appveyor.yml = appveyor.yml
+		build.cmd = build.cmd
+		CallMeMaybe\CallMeMaybe.nuspec = CallMeMaybe\CallMeMaybe.nuspec
+		Version.txt = Version.txt
 	EndProjectSection
 EndProject
 Global
