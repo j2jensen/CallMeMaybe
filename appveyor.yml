@@ -2,7 +2,7 @@
 version: 0.6.2.{build}
 
 init:
-  - set MAYBE_PRERELEASE_SUFFIX=
+  - set MAYBE_PRERELEASE_SUFFIX=alpha
 
 build_script:
   - build.cmd
