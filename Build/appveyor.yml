@@ -1,0 +1,26 @@
+# version format
+version: 0.5.0.{build}
+
+init:
+  - set MAYBE_PRERELEASE_SUFFIX=
+
+build_script:
+  - build.cmd
+
+test:
+   assemblies:
+      - '..\CallMeMaybe.UnitTests.dll'
+
+# run custom scripts before tests
+before_test:
+
+deploy:
+  # MyGet Deployment for builds & releases
+  #- provider: NuGet
+  #  server: https://www.myget.org/F/[EDITME]/api/v2/
+  #  symbol_server: https://www.myget.org/F/[EDITME]/api/v2/package
+  #  api_key:
+  #    secure: [KEY]
+  #  artifact: /.*\.nupkg/
+  #  on:
+  #    branch: develop
