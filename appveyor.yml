@@ -10,8 +10,9 @@ build_script:
 test_script:
  - dotnet test CallMeMaybe.UnitTests\CallMeMaybe.UnitTests.csproj
 
-# run custom scripts before tests
-before_test:
+artifacts:
+  # pushing all *.nupkg files in build directory recursively
+  - path: '**\*.nupkg'
 
 deploy:
   # MyGet Deployment for builds & releases
