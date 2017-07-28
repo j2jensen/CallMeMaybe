@@ -9,7 +9,8 @@ build_script:
 
 test:
    assemblies:
-      - 'CallMeMaybe.UnitTests\bin\Release\**\*Tests.dll'
+# Appveyor bug will not detect tests for DotNetCore yet.
+# seealso https://github.com/appveyor/ci/issues/1404
 
 # run custom scripts before tests
 before_test:
