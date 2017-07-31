@@ -1,7 +1,7 @@
 # Call Me Maybe #
-A C# library to help you deal with optional values. It is open-sourced here on [BitBucket](https://bitbucket.org/j2jensen/callmemaybe), and is available from [NuGet](https://www.nuget.org/packages/CallMeMaybe/).
+A C# library to help you deal with optional values. It is open-sourced here on [GitHub](https://github.com/j2jensen/callmemaybe), and is available from [NuGet](https://www.nuget.org/packages/CallMeMaybe/).
 
-##Purpose##
+## Purpose ##
 
 Provides a class and a few extension methods to facilitate common operations with values that may or may not exist.
 
@@ -15,7 +15,7 @@ Our best hope of avoiding `NullReferenceException`s lies in trying to make sure 
 
 Well, that's where `Maybe` comes in.
 
-##Examples##
+## Examples ##
 
 ### Basic Usage ###
 
@@ -194,4 +194,5 @@ Unfortunately, `Maybe<>` is not a part of the BCL (though it probably should be)
 ## Authors ##
 
 - [James Jensen](https://plus.google.com/+JamesJensenCoder)
+- [Rusty Swayne](https://github.com/rustyswayne)
 - (Contribute to add your name here)
