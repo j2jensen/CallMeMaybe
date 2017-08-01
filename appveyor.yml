@@ -1,0 +1,26 @@
+# version format
+version: 0.6.2.{build}
+
+init:
+  - set MAYBE_PRERELEASE_SUFFIX=alpha
+
+build_script:
+  - build.cmd
+
+test_script:
+ - dotnet test CallMeMaybe.UnitTests\CallMeMaybe.UnitTests.csproj
+
+artifacts:
+  # pushing all *.nupkg files in build directory recursively
+  - path: '**\*.nupkg'
+
+deploy:
+  # MyGet Deployment for builds & releases
+  #- provider: NuGet
+  #  server: https://www.myget.org/F/[EDITME]/api/v2/
+  #  symbol_server: https://www.myget.org/F/[EDITME]/api/v2/package
+  #  api_key:
+  #    secure: [KEY]
+  #  artifact: /.*\.nupkg/
+  #  on:
+  #    branch: develop
