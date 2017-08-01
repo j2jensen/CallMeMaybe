@@ -15,7 +15,7 @@ artifacts:
   - path: '**\*.nupkg'
 
 deploy:
-  MyGet Deployment for builds & releases
+  # MyGet Deployment for builds & releases
   - provider: MyGet
     server: https://www.myget.org/F/CallMeMaybe/api/v2/
     symbol_server: https://www.myget.org/F/CallMeMaybe/api/v2/package
