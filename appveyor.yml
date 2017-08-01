@@ -16,7 +16,7 @@ artifacts:
 
 deploy:
   # MyGet Deployment for builds & releases
-  - provider: MyGet
+  - provider: NuGet
     server: https://www.myget.org/F/CallMeMaybe/api/v2/
     symbol_server: https://www.myget.org/F/CallMeMaybe/api/v2/package
     api_key:
