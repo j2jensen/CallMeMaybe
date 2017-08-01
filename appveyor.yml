@@ -16,11 +16,11 @@ artifacts:
 
 deploy:
   # MyGet Deployment for builds & releases
-  #- provider: NuGet
-  #  server: https://www.myget.org/F/[EDITME]/api/v2/
-  #  symbol_server: https://www.myget.org/F/[EDITME]/api/v2/package
-  #  api_key:
-  #    secure: [KEY]
-  #  artifact: /.*\.nupkg/
-  #  on:
-  #    branch: develop
+  - provider: NuGet
+    server: https://www.myget.org/F/callmemaybe/api/v2/package
+    symbol_server: https://www.myget.org/F/callmemaybe/symbols/api/v2/package
+    api_key:
+      secure: OtvTVXmyQayF7ESoz9WFikrxotHNkGrWEwn6ogaedT5175bBDRpvCcL6wvnum+J0
+    artifact: /.*\.nupkg/
+    on:
+      branch: develop
