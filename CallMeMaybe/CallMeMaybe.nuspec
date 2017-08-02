@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>CallMeMaybe</id>
-    <version>0.6.3-alpha</version>
+    <version>0.6.3-alpha</version> 
     <title>Call Me Maybe</title>
     <authors>James Jensen</authors>
     <owners>James Jensen</owners>
