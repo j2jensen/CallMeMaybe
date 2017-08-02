@@ -30,7 +30,7 @@ ECHO.
 
 CALL dotnet restore CallMeMaybe.sln
 CALL dotnet msbuild CallMeMaybe.sln /p:Configuration=Release
-CALL dotnet pack CallMeMaybe\CallMeMaybe.csproj --include-symbols -o ..\artifacts
+CALL dotnet pack CallMeMaybe\CallMeMaybe.csproj --include-symbols /p:NuspecFile=CallMeMaybe.nuspec -o ..\artifacts
 
 :success
 ECHO.

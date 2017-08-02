@@ -38,7 +38,7 @@ v 0.1 Alpha release. API subject to change.</releaseNotes>
         <tags>maybe monad option optional</tags>
     </metadata>
     <files>
-        <file src="bin\Release\CallMeMaybe.dll" target="lib\CallMeMaybe.dll" />
-        <file src="bin\Release\CallMeMaybe.xml" target="lib\CallMeMaybe.xml" />
+        <file src=".\bin\Release\netstandard1.4\CallMeMaybe.dll" target="lib\netstandard1.4\CallMeMaybe.dll" />
+        <file src=".\bin\Release\netstandard1.4\CallMeMaybe.xml" target="lib\netstandard1.4\CallMeMaybe.xml" />
     </files>
 </package>
