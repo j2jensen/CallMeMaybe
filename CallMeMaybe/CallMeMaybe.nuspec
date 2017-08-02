@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-    <metadata>
-        <id>CallMeMaybe</id>
-        <version>0.6.2</version>
-        <title>Call Me Maybe</title>
-        <authors>James Jensen</authors>
-        <owners>James Jensen</owners>
-        <licenseUrl>https://github.com/j2jensen/callmemaybe/wiki/License</licenseUrl>
-        <projectUrl>https://github.com/j2jensen/callmemaybe</projectUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Provides a class and a few extension methods to facilitate common operations with values that may or may not exist.
+  <metadata>
+    <id>CallMeMaybe</id>
+    <version>0.6.3-alpha</version>
+    <title>Call Me Maybe</title>
+    <authors>James Jensen</authors>
+    <owners>James Jensen</owners>
+    <licenseUrl>https://github.com/j2jensen/callmemaybe/wiki/License</licenseUrl>
+    <projectUrl>https://github.com/j2jensen/callmemaybe</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides a class and a few extension methods to facilitate common operations with values that may or may not exist.
 
 Traditionally, programmers often use `null` references to represent values that "aren't there", but the problem is that this was never their intended purpose. 
 
@@ -20,8 +20,8 @@ Traditionally, programmers often use `null` references to represent values that 
 All this leaves us in a position where our best hope of avoiding `NullReferenceException`s lies in trying to make sure that our reference variables are *never* null. But in that case, how do we indicate when a value is *optional*?
 
 Well, that's where `Maybe&lt;&gt;` comes in.</description>
-        <summary>A C# library to help you deal with optional values.</summary>
-        <releaseNotes>v0.6.2 - CallMeMaybe is now ClsCompliant
+    <summary>A C# library to help you deal with optional values.</summary>
+    <releaseNotes>v0.6.2 - CallMeMaybe is now ClsCompliant
 v0.6.1 - Included XML documentation
 v0.6 Beta. 
 - Added parsers, with a couple of basic parsing extension methods.
@@ -34,11 +34,11 @@ v 0.3.5318 Alpha. Added better conversion to/from Nullables. Maybe IMaybe interf
 v 0.3 Alpha release. Added Do() methods and an Else() overload that takes a function parameter. More correct handling of null arguments. And documentation on most of the types and methods!
 v 0.2 Alpha release. API subject to change (but probably not as much as it did last time).
 v 0.1 Alpha release. API subject to change.</releaseNotes>
-        <copyright>2015 James K. Jensen</copyright>
-        <tags>maybe monad option optional</tags>
-    </metadata>
-    <files>
-        <file src=".\bin\Release\netstandard1.4\CallMeMaybe.dll" target="lib\netstandard1.4\CallMeMaybe.dll" />
-        <file src=".\bin\Release\netstandard1.4\CallMeMaybe.xml" target="lib\netstandard1.4\CallMeMaybe.xml" />
-    </files>
+    <copyright>2015 James K. Jensen</copyright>
+    <tags>maybe monad option optional</tags>
+  </metadata>
+  <files>
+    <file src=".\bin\Release\netstandard1.4\CallMeMaybe.dll" target="lib\netstandard1.4\CallMeMaybe.dll" />
+    <file src=".\bin\Release\netstandard1.4\CallMeMaybe.xml" target="lib\netstandard1.4\CallMeMaybe.xml" />
+  </files>
 </package>
