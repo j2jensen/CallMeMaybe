@@ -30,7 +30,10 @@ ECHO.
 
 CALL dotnet restore CallMeMaybe.sln
 CALL dotnet msbuild CallMeMaybe.sln /p:Configuration=Release
-CALL dotnet pack CallMeMaybe\CallMeMaybe.csproj --include-symbols -o ..\artifacts
+
+powershell -Command ".\UpdateNuSpec.ps1 -version " %VERSION%
+
+CALL dotnet pack CallMeMaybe\CallMeMaybe.csproj --include-symbols /p:NuspecFile=CallMeMaybe.nuspec /p:PackageVersion=%VERSION% -o ..\artifacts
 
 :success
 ECHO.
