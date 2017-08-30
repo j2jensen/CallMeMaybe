@@ -9,6 +9,13 @@ namespace CallMeMaybe.UnitTests
     public class MaybeExtensionsTests
     {
         [Fact]
+        public void TestSelectManyIEnumerables()
+        {
+            var values = new int?[] {1, null, 3};
+            var values2 = values.SelectMany(i => Maybe.From(i));
+        }
+
+        [Fact]
         public void TestDictionaryMaybeValue()
         {
             var values = new[] {1, 2, 4};
