@@ -6,8 +6,8 @@
         <title>Call Me Maybe</title>
         <authors>James Jensen</authors>
         <owners>James Jensen</owners>
-        <licenseUrl>https://bitbucket.org/j2jensen/callmemaybe/wiki/License</licenseUrl>
-        <projectUrl>https://bitbucket.org/j2jensen/callmemaybe</projectUrl>
+        <licenseUrl>https://github.com/j2jensen/callmemaybe/wiki/License</licenseUrl>
+        <projectUrl>https://github.com/j2jensen/callmemaybe</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Provides a class and a few extension methods to facilitate common operations with values that may or may not exist.
 
