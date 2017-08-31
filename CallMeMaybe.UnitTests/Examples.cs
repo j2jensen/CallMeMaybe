@@ -52,6 +52,16 @@ namespace CallMeMaybe.UnitTests
         }
 
         [Fact]
+        public void TestSelectManySyntax()
+        {
+            var luckyTexts =
+                  Enumerable.Range(1, 20)
+                  .SelectMany(HowLuckyIs)
+                  .ToList();
+            Assert.Equal("So lucky.", luckyTexts.Single());
+        }
+
+        [Fact]
         public void FizzBuzz()
         {
             for (int i = 0; i < 100; i++)

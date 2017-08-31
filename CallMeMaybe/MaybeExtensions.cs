@@ -57,13 +57,41 @@ namespace CallMeMaybe
         /// <param name="collectionSelector">A function yielding a <see cref="Maybe{T}"/></param>
         /// <param name="resultSelector">A function which, given a value from the <see cref="Maybe{T}"/>,
         /// will yield the desired result.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// A result from the <paramref name="resultSelector"/> for every item in the source
+        /// that yields a non-empty <see cref="Maybe{T}"/> when invoking the <paramref name="collectionSelector"/>.
+        /// </returns>
         public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(
             this IEnumerable<TSource> source,
             Func<TSource, Maybe<TCollection>> collectionSelector,
             Func<TSource, TCollection, TResult> resultSelector)
         {
             return source.SelectMany(t => collectionSelector(t).ToList(), resultSelector);
+        }
+
+        /// <summary>
+        /// A LINQ-like flattening method to only select items from non-empty <see cref="Maybe{T}"/>s.
+        /// </summary>
+        /// <example><code>
+        /// var luckyTexts =
+        ///     Enumerable.Range(1, 20)
+        ///         .SelectMany(HowLuckyIs)
+        ///         .ToList();
+        /// 
+        /// </code></example>
+        /// <typeparam name="TSource">The type of item in the original source.</typeparam>
+        /// <typeparam name="TResult">The type of item in the <see cref="Maybe{T}"/> that you're selecting.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="resultSelector">A function yielding a <see cref="Maybe{T}"/></param>
+        /// <returns>
+        /// A result for every item in the source that yields a non-empty <see cref="Maybe{T}"/>
+        /// when passed into the <paramref name="resultSelector"/>.
+        /// </returns>
+        public static IEnumerable<TResult> SelectMany<TSource, TResult>(
+            this IEnumerable<TSource> source,
+            Func<TSource, Maybe<TResult>> resultSelector)
+        {
+            return source.SelectMany(t => resultSelector(t).ToList());
         }
 
         /// <summary>
