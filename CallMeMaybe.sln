@@ -27,7 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{2ACF1B35
 		appveyor.yml = appveyor.yml
 		build.cmd = build.cmd
 		CallMeMaybe\CallMeMaybe.nuspec = CallMeMaybe\CallMeMaybe.nuspec
-		Version.txt = Version.txt
 	EndProjectSection
 EndProject
 Global
