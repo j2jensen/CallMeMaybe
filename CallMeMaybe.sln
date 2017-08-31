@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DC7ED7B0-54F0-4E04-84F1-69563D66B77F}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,10 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallMeMaybe.UnitTests", "Ca
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{2ACF1B35-6795-4CA4-80FE-15675C0C9AC5}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor-release.yml = appveyor-release.yml
 		appveyor.yml = appveyor.yml
 		build.cmd = build.cmd
 		CallMeMaybe\CallMeMaybe.nuspec = CallMeMaybe\CallMeMaybe.nuspec
-		Version.txt = Version.txt
 	EndProjectSection
 EndProject
 Global
@@ -49,5 +49,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D7FAE90B-399E-49A5-9169-174CF6B2C44F} = {AAFDE12E-031F-42B0-8C42-A5C96A506C5A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81FE7471-0B59-4C81-9EB0-F68034A2F0DA}
 	EndGlobalSection
 EndGlobal

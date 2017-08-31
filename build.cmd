@@ -9,20 +9,19 @@ IF EXIST .\artifacts (
 	DEL .\artifacts /q /s
 ) 
 
-:: ensure we have Version.txt
-IF NOT EXIST Version.txt (
-	ECHO Version.txt is missing!
-	GOTO error
-)
-
-:: get the version and comment from Version.txt lines 2 and 3
 SET RELEASE=%APPVEYOR_BUILD_VERSION%
 SET COMMENT=%MAYBE_PRERELEASE_SUFFIX%
-FOR /F "skip=1 delims=" %%i IN (Version.txt) DO IF NOT DEFINED RELEASE SET RELEASE=%%i
-FOR /F "skip=2 delims=" %%i IN (Version.txt) DO IF NOT DEFINED COMMENT SET COMMENT=%%i
+IF [%COMMENT%]==[] (SET VERSION=%RELEASE%) ELSE (SET VERSION=%RELEASE%-%COMMENT%)
+IF NOT [%1]==[] (SET VERSION=%1)
 
-SET VERSION=%RELEASE%
-IF [%COMMENT%] EQU [] (SET VERSION=%RELEASE%) ELSE (SET VERSION=%RELEASE%-%COMMENT%)
+ECHO arg is %1
+ECHO version is [%VERSION%]==[]
+
+IF [%VERSION%]==[] (
+	ECHO No version was provided, either via command line or appveyor environment variables.
+	ECHO   Example: build 0.1.1-alpha
+	GOTO :error
+)
 
 ECHO.
 ECHO Building CallMeMaybe %VERSION%
@@ -30,7 +29,10 @@ ECHO.
 
 CALL dotnet restore CallMeMaybe.sln
 CALL dotnet msbuild CallMeMaybe.sln /p:Configuration=Release
-CALL dotnet pack CallMeMaybe\CallMeMaybe.csproj --include-symbols -o ..\artifacts
+
+powershell -Command ".\UpdateNuSpec.ps1 -version " %VERSION%
+
+CALL dotnet pack CallMeMaybe\CallMeMaybe.csproj --include-symbols /p:NuspecFile=CallMeMaybe.nuspec /p:PackageVersion=%VERSION% -o ..\artifacts
 
 :success
 ECHO.

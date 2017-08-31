@@ -1,7 +1,12 @@
 # version format
-version: 0.6.2.{build}
+version: "0.6.6"
+
+branches:
+  only:
+  - master
 
 init:
+  - set MAYBE_PRERELEASE_SUFFIX=
 
 build_script:
   - build.cmd
