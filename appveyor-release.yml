@@ -1,5 +1,9 @@
 # version format
-version: "0.6.3"
+version: "0.6.5"
+
+branches:
+  only:
+  - master
 
 init:
   - set MAYBE_PRERELEASE_SUFFIX=
