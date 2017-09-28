@@ -181,7 +181,7 @@ Unfortunately, `Maybe<>` is not a part of the BCL (though it probably should be)
 
 ## License ##
 
-*Call Me Maybe* is open-sourced under the MIT License, as set forth [here](https://bitbucket.org/j2jensen/callmemaybe/wiki/License).
+*Call Me Maybe* is open-sourced under the MIT License, as set forth [here](https://github.com/j2jensen/CallMeMaybe/blob/develop/LICENSE).
 
 ## Acknowledgements ##
 
