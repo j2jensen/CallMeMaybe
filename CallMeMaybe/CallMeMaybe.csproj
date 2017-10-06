@@ -29,9 +29,5 @@
 		<DependentUpon>Extensions.cs</DependentUpon>
 	</Compile>
 	</ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
   
 </Project>
