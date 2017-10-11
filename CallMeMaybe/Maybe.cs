@@ -60,7 +60,7 @@ namespace CallMeMaybe
         }
 
         /// <summary>
-        /// Implicitly casts a value of type <see cref="T"/> to a <see cref="Maybe{T}"/>
+        /// Implicitly casts a value of type <typeparamref name="T"/> to a <see cref="Maybe{T}"/>
         /// </summary>
         /// <param name="value">
         /// The value the <see cref="Maybe{T}"/> should contain. If null, the

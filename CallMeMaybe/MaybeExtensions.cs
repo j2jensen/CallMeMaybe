@@ -15,7 +15,7 @@ namespace CallMeMaybe
 
         /// <summary>
         /// Produces a <see cref="Maybe{T}"/> value that will contain the value corresponding 
-        /// to the given <see cref="key"/> in the dictionary if one exists, or which will be
+        /// to the given <paramref name="key"/> in the dictionary if one exists, or which will be
         /// empty otherwise.
         /// </summary>
         /// <typeparam name="TKey">The type of the source dictionary's key.</typeparam>
@@ -25,8 +25,8 @@ namespace CallMeMaybe
         /// <returns>
         /// A <see cref="Maybe{T}"/> that is empty if the given <paramref name="dictionary"/> 
         /// does not contain the given <paramref name="key"/></returns>, or if the value
-        /// with that <see cref="key"/> is null. Otherwise, the <see cref="Maybe{T}"/> will
-        /// contain the value with that <see cref="key"/>.
+        /// with that <paramref name="key"/> is null. Otherwise, the <see cref="Maybe{T}"/> will
+        /// contain the value with that <paramref name="key"/>.
         public static Maybe<TValue> GetMaybe<TKey, TValue>(
             this IDictionary<TKey, TValue> dictionary,
             TKey key)
@@ -367,7 +367,7 @@ namespace CallMeMaybe
         /// </summary>
         /// <typeparam name="T">The type of object the <see cref="Maybe{T}"/> will hold.</typeparam>
         /// <param name="nullable">A nullable object to convert to a <see cref="Maybe{T}"/></param>
-        /// <returns>A <see cref="Maybe{T}"/> that is empty if <see cref="nullable"/> does not have a value,
+        /// <returns>A <see cref="Maybe{T}"/> that is empty if <paramref name="nullable"/> does not have a value,
         /// or which contains the value if it does.</returns>
         /// <remarks>This is useful because nullables cannot be implicitly cast to <see cref="Maybe{T}"/>s,
         /// so we need an easy shortcut for passing a <see cref="Nullable{T}"/> into a method that
@@ -383,7 +383,7 @@ namespace CallMeMaybe
         /// </summary>
         /// <typeparam name="T">The type of object the <see cref="Nullable{T}"/> will hold.</typeparam>
         /// <param name="maybe">A nullable object to convert to a <see cref="Nullable{T}"/></param>
-        /// <returns>A <see cref="Nullable{T}"/> that is "null" if <see cref="maybe"/> does not have a value,
+        /// <returns>A <see cref="Nullable{T}"/> that is "null" if <paramref name="maybe"/> does not have a value,
         /// or which contains the value if it does.</returns>
         public static T? Nullable<T>(this Maybe<T> maybe) where T : struct
         {
