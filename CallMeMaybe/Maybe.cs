@@ -24,10 +24,7 @@ namespace CallMeMaybe
         /// <summary>
         /// Gets whether or not this <see cref="Maybe{T}"/> contains a value.
         /// </summary>
-        public bool HasValue
-        {
-            get { return _hasValue; }
-        }
+        public bool HasValue => _hasValue;
 
         /// <summary>
         /// Constructs a <see cref="Maybe{T}"/> that contains the given value, or
@@ -45,14 +42,7 @@ namespace CallMeMaybe
             _value = value;
         }
 
-        /// <summary>
-        /// Attempts to get the value.
-        /// </summary>
-        /// <param name="value">
-        /// An out parameter that will be set to the value inside this <see cref="Maybe{T}"/>
-        /// if it has one, or the default value for type <see cref="T"/> if not.
-        /// </param>
-        /// <returns>True if this <see cref="Maybe{T}"/> has a value, false otherwise.</returns>
+        /// <inheritdoc />
         bool IMaybe.TryGetValue(out object value)
         {
             value = _value;
@@ -60,7 +50,7 @@ namespace CallMeMaybe
         }
 
         /// <summary>
-        /// Implicitly casts a value of type <see cref="T"/> to a <see cref="Maybe{T}"/>
+        /// Implicitly casts a value of type <typeparamref name="T"/> to a <see cref="Maybe{T}"/>
         /// </summary>
         /// <param name="value">
         /// The value the <see cref="Maybe{T}"/> should contain. If null, the
@@ -80,9 +70,8 @@ namespace CallMeMaybe
             if (typeof (T) == typeof (object) && value is IMaybe)
             {
                 var otherMaybe = (IMaybe) value;
-                object otherValue;
 
-                if (otherMaybe.TryGetValue(out otherValue))
+                if (otherMaybe.TryGetValue(out var otherValue))
                 {
                     value = (T) otherValue;
                 }
@@ -111,10 +100,7 @@ namespace CallMeMaybe
         /// <summary>
         /// Gets a <see cref="Maybe{T}"/> without a value.
         /// </summary>
-        public static Maybe<T> Not
-        {
-            get { return default (Maybe<T>); }
-        }
+        public static Maybe<T> Not => default (Maybe<T>);
 
         #region LINQ Methods
 
@@ -156,7 +142,7 @@ namespace CallMeMaybe
         {
             if (criteria == null)
             {
-                throw new ArgumentNullException("criteria");
+                throw new ArgumentNullException(nameof(criteria));
             }
             return _hasValue && criteria(_value) ? this : default(Maybe<T>);
         }
@@ -181,7 +167,7 @@ namespace CallMeMaybe
         {
             if (resultSelector == null)
             {
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             }
 
             return _hasValue ? resultSelector(_value) : default(Maybe<TResult>);
@@ -216,11 +202,11 @@ namespace CallMeMaybe
         {
             if (otherSelector == null)
             {
-                throw new ArgumentNullException("otherSelector");
+                throw new ArgumentNullException(nameof(otherSelector));
             }
             if (resultSelector == null)
             {
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             }
 
             if (_hasValue)
@@ -282,7 +268,7 @@ namespace CallMeMaybe
         {
             if (action == null)
             {
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             }
             if (_hasValue)
             {
@@ -316,7 +302,7 @@ namespace CallMeMaybe
         {
             if (getValueIfNot == null)
             {
-                throw new ArgumentNullException("getValueIfNot");
+                throw new ArgumentNullException(nameof(getValueIfNot));
             }
             return _hasValue ? _value : getValueIfNot();
         }
@@ -385,9 +371,8 @@ namespace CallMeMaybe
             // Each different type of Maybe<T> will be different, even if they have the
             // same internal value. This is so we can maintain consistent behavior: users
             // are not expected to be casting Maybes as objects under normal circumstances.
-            if (obj is Maybe<T>)
+            if (obj is Maybe<T> maybeT)
             {
-                var maybeT = (Maybe<T>) obj;
                 // Leverage the == operator that we've defined explicitly below.
                 return maybeT == this;
             }
@@ -456,7 +441,7 @@ namespace CallMeMaybe
         {
             if (criteria == null)
             {
-                throw new ArgumentNullException("criteria");
+                throw new ArgumentNullException(nameof(criteria));
             }
             return Where(criteria).HasValue;
         }
@@ -637,7 +622,7 @@ namespace CallMeMaybe
         {
             if (valueIfTrue == null)
             {
-                throw new ArgumentNullException("valueIfTrue");
+                throw new ArgumentNullException(nameof(valueIfTrue));
             }
             return condition ? From(valueIfTrue()) : Maybe<T>.Not;
         }
