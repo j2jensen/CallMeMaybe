@@ -22,6 +22,7 @@ All this leaves us in a position where our best hope of avoiding `NullReferenceE
 Well, that's where `Maybe&lt;&gt;` comes in.</description>
     <summary>A C# library to help you deal with optional values.</summary>
     <releaseNotes>
+v0.6.8 - Bug fixes
 v0.6.7 - CallMeMaybe is ClsCompliant again.
 v0.6.6 - Added `SelectMany` overload.
 v0.6.2 - CallMeMaybe is now ClsCompliant
@@ -44,4 +45,10 @@ v 0.1 Alpha release. API subject to change.</releaseNotes>
     <file src=".\bin\Release\netstandard1.4\CallMeMaybe.dll" target="lib\netstandard1.4\CallMeMaybe.dll" />
     <file src=".\bin\Release\netstandard1.4\CallMeMaybe.xml" target="lib\netstandard1.4\CallMeMaybe.xml" />
   </files>
+  <dependencies>
+    <group targetFramework="netstandard1.4">
+      <dependency id="System.Diagnostics.Contracts" version="4.3.0"/>      
+      <dependency id="System.Linq.Queryable" version="4.3.0"/>
+    </group>
+  </dependencies>
 </package>
