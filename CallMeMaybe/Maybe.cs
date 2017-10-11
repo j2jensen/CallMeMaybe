@@ -45,14 +45,7 @@ namespace CallMeMaybe
             _value = value;
         }
 
-        /// <summary>
-        /// Attempts to get the value.
-        /// </summary>
-        /// <param name="value">
-        /// An out parameter that will be set to the value inside this <see cref="Maybe{T}"/>
-        /// if it has one, or the default value for type <see cref="T"/> if not.
-        /// </param>
-        /// <returns>True if this <see cref="Maybe{T}"/> has a value, false otherwise.</returns>
+        /// <inheritdoc />
         bool IMaybe.TryGetValue(out object value)
         {
             value = _value;
