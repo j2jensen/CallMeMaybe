@@ -44,4 +44,10 @@ v 0.1 Alpha release. API subject to change.</releaseNotes>
     <file src=".\bin\Release\netstandard1.4\CallMeMaybe.dll" target="lib\netstandard1.4\CallMeMaybe.dll" />
     <file src=".\bin\Release\netstandard1.4\CallMeMaybe.xml" target="lib\netstandard1.4\CallMeMaybe.xml" />
   </files>
+  <dependencies>
+    <group targetFramework="netstandard1.4">
+      <dependency id="System.Diagnostics.Contracts" version="4.3.0"/>      
+      <dependency id="System.Linq.Queryable" version="4.3.0"/>
+    </group>
+  </dependencies>
 </package>
