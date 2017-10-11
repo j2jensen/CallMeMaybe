@@ -175,10 +175,12 @@ namespace CallMeMaybe
         /// </returns>
         public static Maybe<T> FirstMaybe<T>(this IEnumerable<T> source)
         {
-            var enumerator = source.GetEnumerator();
-            return enumerator.MoveNext()
-                ? new Maybe<T>(enumerator.Current)
-                : new Maybe<T>(); 
+            using (var enumerator = source.GetEnumerator())
+            {
+                return enumerator.MoveNext()
+                    ? new Maybe<T>(enumerator.Current)
+                    : new Maybe<T>();
+            }
         }
 
 
@@ -231,10 +233,12 @@ namespace CallMeMaybe
         public static Maybe<T> FirstMaybe<T>(this IEnumerable<T?> source)
             where T : struct
         {
-            var enumerator = source.GetEnumerator();
-            return enumerator.MoveNext()
-                ? enumerator.Current.Maybe()
-                : new Maybe<T>();
+            using (var enumerator = source.GetEnumerator())
+            {
+                return enumerator.MoveNext()
+                    ? enumerator.Current.Maybe()
+                    : new Maybe<T>();
+            }
         }
 
         // Note: I've made a conscious decision not to implement a LastMaybe 
@@ -285,17 +289,19 @@ namespace CallMeMaybe
         /// </exception>
         public static Maybe<T> SingleMaybe<T>(this IEnumerable<T> source)
         {
-            var enumerator = source.GetEnumerator();
-            if (!enumerator.MoveNext())
+            using (var enumerator = source.GetEnumerator())
             {
-                return new Maybe<T>();
+                if (!enumerator.MoveNext())
+                {
+                    return new Maybe<T>();
+                }
+                T value = enumerator.Current;
+                if (enumerator.MoveNext())
+                {
+                    throw new InvalidOperationException("Sequence contains more than one element");
+                }
+                return value;
             }
-            T value = enumerator.Current;
-            if (enumerator.MoveNext())
-            {
-                throw new InvalidOperationException("Sequence contains more than one element");
-            }
-            return value;
         }
 
         /// <summary>
@@ -339,17 +345,19 @@ namespace CallMeMaybe
         public static Maybe<T> SingleMaybe<T>(this IEnumerable<T?> source)
             where T : struct
         {
-            var enumerator = source.GetEnumerator();
-            if (!enumerator.MoveNext())
+            using (var enumerator = source.GetEnumerator())
             {
-                return new Maybe<T>();
+                if (!enumerator.MoveNext())
+                {
+                    return new Maybe<T>();
+                }
+                T? value = enumerator.Current;
+                if (enumerator.MoveNext())
+                {
+                    throw new InvalidOperationException("Sequence contains more than one element");
+                }
+                return value.Maybe();
             }
-            T? value = enumerator.Current;
-            if (enumerator.MoveNext())
-            {
-                throw new InvalidOperationException("Sequence contains more than one element");
-            }
-            return value.Maybe();
         }
 
         // TODO: SumMaybe/MaxMaybe/MinMaybe methods
