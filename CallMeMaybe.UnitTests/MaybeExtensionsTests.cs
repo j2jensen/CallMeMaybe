@@ -16,7 +16,8 @@ namespace CallMeMaybe.UnitTests
         public void TestSelectManyIEnumerables()
         {
             var values = new int?[] {1, null, 3};
-            var values2 = values.SelectMany(i => Maybe.From(i));
+            var values2 = values.SelectMany(Maybe.From);
+            values2.Should().BeEquivalentTo(1, 3);
         }
 
         [Fact]
