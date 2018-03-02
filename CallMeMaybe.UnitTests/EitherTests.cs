@@ -20,19 +20,41 @@ namespace CallMeMaybe.UnitTests
         [Fact]
         public void TestMatch()
         {
-            var eitherA = new Either<string, B>("foo");
+            var eitherA = new Either<string, A>("foo");
             eitherA.Match(
                     ifLeft: v => v + "bar",
                     ifRight: v => throw new Exception())
                 .Should().Be("foobar");
 
-            var eitherB = new Either<A, string>("foo");
+
+            var eitherB = new Either<B, string>("foo");
             eitherB.Match(
                     ifLeft: v => throw new Exception(),
                     ifRight: v => v + "bar")
                 .Should().Be("foobar");
+
+
+            var notMatching = new Either<string, A>(new A());
+            Action action = () => {
+                notMatching.Match(
+                    ifLeft: v => v + "bar",
+                    ifRight: v => throw new Exception()); };
+            action.ShouldThrow<Exception>();
         }
 
+        [Fact]
+        public void TestFlip()
+        {
+            var eitherA = new Either<A, string>(new A());
+            var flippedA = eitherA.Flip();
+            flippedA.IsRight.Should().BeTrue();
+            flippedA.IsLeft.Should().BeFalse();
+
+            var eitherB = new Either<string, B>(new B());
+            var flippedB = eitherB.Flip();
+            flippedB.IsLeft.Should().BeTrue();
+            flippedB.IsRight.Should().BeFalse();
+        }
 
         [Fact]
         public void TestImplicitCasting()
