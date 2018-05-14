@@ -250,9 +250,6 @@ namespace CallMeMaybe
 
         #endregion
 
-        // TODO: Consider making this method return `this` so that we can chain calls,
-        // especially if we implement the ElseDo idea below. 
-
         /// <summary>
         /// Performs the given action if this <see cref="Maybe{T}"/> has a value.
         /// Otherwise, this will do nothing at all.
@@ -264,7 +261,8 @@ namespace CallMeMaybe
         /// <exception cref="ArgumentNullException">
         /// Thrown if the <paramref name="action"/> parameter is null.
         /// </exception>
-        public void Do(Action<T> action)
+        /// <returns>The original <see cref="Maybe{T}"/>.</returns>
+        public Maybe<T> Do(Action<T> action)
         {
             if (action == null)
             {
@@ -274,9 +272,34 @@ namespace CallMeMaybe
             {
                 action(_value);
             }
+
+            return this;
         }
 
-        // TODO: Consider an ElseDo() method: https://bitbucket.org/j2jensen/callmemaybe/issue/11
+        /// <summary>
+        /// Performs the given <paramref name="action"/> if this <see cref="Maybe{T}"/> does NOT have a value.
+        /// Otherwise, this will do nothing at all.
+        /// </summary>
+        /// <param name="action">
+        /// The action to perform if this <see cref="Maybe{T}"/> does NOT have a value.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if the <paramref name="action"/> parameter is null.
+        /// </exception>
+        /// <returns>The original <see cref="Maybe{T}"/>.</returns>
+        public Maybe<T> ElseDo(Action action)
+        {
+            if(action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+            if (!_hasValue)
+            {
+                action();
+            }
+
+            return this;
+        }
 
         // TODO: Consider an Or() method (switch to another Maybe<> value if no value). Are there any real use cases for this?
 
