@@ -57,7 +57,12 @@ Notice how the internal code of this method is exactly the same as before? It's 
     bool isLucky6 = HowLuckyIs(number).HasValue;
 
     // `Do` will only do something if the `Maybe` has a value.
+    // The original Maybe object is returned to facilitate method chaining.
     HowLuckyIs(number).Do(n => Console.WriteLine(n.Contains("lucky")));
+
+    // `ElseDo` will only do something if the `Maybe` does NOT have a value.
+    // The original Maybe object is returned to facilitate method chaining.
+    HowLuckyIs(number).ElseDo(() => Console.WriteLine("Not so lucky"));
 
 Notice that `Select` and `Single` behave just they way any LINQ user would expect them to. The same is true of several other LINQ operators, which makes `Maybe` work very smoothly in LINQ syntax:
 
