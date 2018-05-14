@@ -324,8 +324,7 @@ namespace CallMeMaybe.UnitTests
         {
             Assert.True(false);
         }
-
-
+        
         [Fact]
         public void TestDoOnValue()
         {
@@ -343,6 +342,30 @@ namespace CallMeMaybe.UnitTests
                 called = true;
                 Assert.Equal(value, v);
             });
+            Assert.True(called);
+        }
+
+        [Fact]
+        public void TestElseDoOnNot()
+        {
+            CheckElseDoIsCalled<int>();
+            CheckElseDoIsCalled<string>();
+        }
+
+
+        [Fact]
+        public void TestElseDoOnValue()
+        {
+            Maybe.From(0).ElseDo(() => Assert.True(false));
+            Maybe.From(1).ElseDo(() => Assert.True(false));
+            Maybe.From("").ElseDo(() => Assert.True(false));
+            Maybe.From("hello").ElseDo(() => Assert.True(false));
+        }
+
+        private static void CheckElseDoIsCalled<T>()
+        {
+            var called = false;
+            Maybe<T>.Not.ElseDo(() => called = true);
             Assert.True(called);
         }
 
@@ -409,6 +432,15 @@ namespace CallMeMaybe.UnitTests
             CheckArgumentNullException(() => Maybe.From(0).Do(null));
             CheckArgumentNullException(() => Maybe<string>.Not.Do(null));
             CheckArgumentNullException(() => Maybe.From("hi").Do(null));
+        }
+
+        [Fact]
+        public void TestElseDoThrowsExceptionForNullLambda()
+        {
+            CheckArgumentNullException(() => Maybe<int>.Not.ElseDo(null));
+            CheckArgumentNullException(() => Maybe.From(0).ElseDo(null));
+            CheckArgumentNullException(() => Maybe<string>.Not.ElseDo(null));
+            CheckArgumentNullException(() => Maybe.From("hi").ElseDo(null));
         }
 
         [Fact]
