@@ -5,6 +5,14 @@
     <AssemblyVersion>0.5.0.0</AssemblyVersion>
     <FileVersion>0.5.0.0</FileVersion>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Copyright>2014-2018 James K Jensen</Copyright>
+    <PackageProjectUrl>https://github.com/j2jensen/callmemaybe</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/j2jensen/CallMeMaybe/blob/develop/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/j2jensen/callmemaybe</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>James K Jensen, Rusty Swayne</Authors>
+    <Company>James K Jensen</Company>
+    <Description>A C# library to help you deal with optional values.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
