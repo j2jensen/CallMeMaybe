@@ -22,6 +22,7 @@ All this leaves us in a position where our best hope of avoiding `NullReferenceE
 Well, that's where `Maybe&lt;&gt;` comes in.</description>
     <summary>A C# library to help you deal with optional values.</summary>
     <releaseNotes>
+v0.7.1 - Added copyright and other project information to assembly.
 v0.7.0 - `Do()` returns the source `Maybe` to allow chaining. Added `ElseDo()`.
 v0.6.8 - Bug fixes
 v0.6.7 - CallMeMaybe is ClsCompliant again.
@@ -38,7 +39,8 @@ v 0.4 Alpha. Added "Is()" method, and "Values()" extension method, plus lots of 
 v 0.3.5318 Alpha. Added better conversion to/from Nullables. Maybe IMaybe interface public. Added LINQPad sample.
 v 0.3 Alpha release. Added Do() methods and an Else() overload that takes a function parameter. More correct handling of null arguments. And documentation on most of the types and methods!
 v 0.2 Alpha release. API subject to change (but probably not as much as it did last time).
-v 0.1 Alpha release. API subject to change.</releaseNotes>
+v 0.1 Alpha release. API subject to change.
+    </releaseNotes>
     <copyright>2015 James K. Jensen</copyright>
     <tags>maybe monad option optional</tags>
   </metadata>
