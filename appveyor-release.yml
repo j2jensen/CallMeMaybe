@@ -22,7 +22,7 @@ deploy:
   # NuGet Deployment for builds & releases
   - provider: NuGet
     api_key:
-      secure: IY6agMq2688v7szuA4Gdz433XY3olqrT5SMv3iVker6rKzcWXUz8wrRb15sSPFA3
+      secure: +AkYMPLm7DmRNlKEr9qydTRyA79b5mjrJ3tLw4yksRiA70GIRY9WYDgS9BaIVQbd
     artifact: /.*\.nupkg/
     on:
       branch: master
